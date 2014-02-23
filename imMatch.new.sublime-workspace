@@ -1,0 +1,508 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"la",
+				"launchd_plist_filepath"
+			],
+			[
+				"ca",
+				"capitalize"
+			],
+			[
+				"mac_ar",
+				"mac_archs"
+			],
+			[
+				"me",
+				"messageService"
+			],
+			[
+				"wor",
+				"WorkingRoot"
+			],
+			[
+				"Wor",
+				"WorkingRoot"
+			],
+			[
+				"Pro",
+				"ProjectWorkspace"
+			],
+			[
+				"YES",
+				"YES_ERROR"
+			],
+			[
+				"co",
+				"console"
+			],
+			[
+				"call",
+				"callbackData"
+			],
+			[
+				"can",
+				"canvasAdapter"
+			],
+			[
+				"get",
+				"getMyViewport"
+			],
+			[
+				"v",
+				"viewports"
+			],
+			[
+				"add",
+				"addChild"
+			],
+			[
+				"child",
+				"childID"
+			],
+			[
+				"ret",
+				"return"
+			],
+			[
+				"re",
+				"return"
+			],
+			[
+				"pa",
+				"pageY"
+			],
+			[
+				"id",
+				"identifier"
+			],
+			[
+				"getC",
+				"getChildID"
+			],
+			[
+				"canvas",
+				"CanvasAdapter"
+			],
+			[
+				"_c",
+				"_canvas"
+			],
+			[
+				"device",
+				"devicePixelRatio"
+			],
+			[
+				"m",
+				"mousedown"
+			],
+			[
+				"fun",
+				"function"
+			]
+		]
+	},
+	"build_system": "",
+	"command_palette":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"console":
+	{
+		"height": 0.0,
+		"history":
+		[
+		]
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"file_history":
+	[
+		"/Users/kf/Documents/imMatch/imMatch.new/Gruntfile.js",
+		"/Users/kf/Documents/imMatch/imMatch.new/example/index.js",
+		"/Users/kf/Documents/imMatch/imMatch/immatch/example/index.js",
+		"/Users/kf/Documents/imMatch/imMatch.new/example/index.html",
+		"/Users/kf/Documents/imMatch/imMatch/immatch/example/index-newjs.js",
+		"/Users/kf/Documents/imMatch/imMatch/immatch/src/js/check-jquery.js",
+		"/Users/kf/Documents/imMatch/imMatch/immatch/src/common/intro-strict.js",
+		"/Users/kf/Documents/imMatch/imMatch/immatch/src/js/configuration.js",
+		"/Users/kf/Documents/imMatch/imMatch/immatch/src/common/outro.js",
+		"/Users/kf/Documents/imMatch/imMatch/immatch/example/index.html",
+		"/Users/kf/Documents/imMatch/imMatch/immatch/example/index-newjs.html",
+		"/Users/kf/Documents/imMatch/imMatch/immatch/Gruntfile.js",
+		"/Users/kf/Documents/imMatch/imMatch/immatch/package.json",
+		"/Users/kf/Documents/imMatch/imMatch/immatch/src/common/intro.js",
+		"/Users/kf/Documents/imMatch/imMatch/wiki/Home.wiki",
+		"/Users/kf/Documents/imMatch/imMatch/imMatch.sublime-project",
+		"/Library/WebServer/Documents/immatch/index.html",
+		"/Library/WebServer/Documents/immatch/index.js",
+		"/Users/kf/Documents/imMatch/imMatch/immatch/dist/immatch-ws-server-1.0.0pre.js",
+		"/Users/kf/Downloads/jquery-master/package.json",
+		"/Users/kf/Documents/TrendMicro/Gaia_Workspace_Mac/Consumer/Gaia_Client/Dev/Gaia_Client-1.0/Gaia_Client/src/Lib/FunctionProvidersLib/FunctionProvidersLib.gyp",
+		"/Users/kf/Desktop/warning.txt",
+		"/Users/kf/Documents/TrendMicro/Gaia_Workspace_Mac/Consumer/Gaia_Client/Dev/Gaia_Client-1.0/Gaia_Client/Prebuild/Mac/PackageSetting/LICENSE.txt",
+		"/Users/kf/Documents/TrendMicro/Gaia_Workspace_Mac/Consumer/Gaia_Client/Dev/Gaia_Client-1.0/Gaia_Client/Prebuild/Mac/PackageSetting/README.txt",
+		"/Users/kf/Documents/TrendMicro/Gaia_Workspace_Mac/Consumer/Gaia_Client/Dev/Gaia_Client-1.0/Gaia_Client/Prebuild/Mac/PackageSetting/TM-LICENSE.txt",
+		"/Users/kf/Desktop/pre-installation.sh",
+		"/Users/kf/Desktop/GaiaInstaller/GaiaInstaller.pkg/Scripts",
+		"/Users/kf/Documents/TrendMicro/Gaia_Workspace_Mac/Consumer/Gaia_Client/Dev/Gaia_Client-1.0/Gaia_Client/src/rake.d/P002_PreparePackage.rake",
+		"/Library/Application Support/TrendMicro/GaiaClient/Setting.json",
+		"/private/var/log/TrendMicro/GaiaClientHostService.log",
+		"/Users/kf/Documents/TrendMicro/Gaia_Workspace_Mac/Consumer/Gaia_Client/Dev/Gaia_Client-1.0/Gaia_Client/src/rake.d/B001_BuildGaia.rake",
+		"/Users/kf/Documents/TrendMicro/Gaia_Workspace_Mac/Consumer/Gaia_Client/Dev/Gaia_Client-1.0/Gaia_Client/src/rake.d/P001_PrepareSDK.rake",
+		"/Users/kf/Documents/TrendMicro/CIBuild.command",
+		"/Users/kf/Documents/TrendMicro/Gaia_Workspace_Mac/Consumer/Gaia_Client/Dev/Gaia_Client-1.0/Gaia_Client/output/mac/runtime/Debug/a",
+		"/Users/kf/Documents/TrendMicro/Gaia_Workspace_Mac/Consumer/Gaia_Client/Dev/Gaia_Client-1.0/Gaia_Client/output/mac/runtime/Debug/test",
+		"/Users/kf/Documents/TrendMicro/Gaia_Workspace_Mac/Consumer/Gaia_Client/Dev/Gaia_Client-1.0/Gaia_Client/src/BuildAll.gyp",
+		"/Users/kf/Documents/TrendMicro/Gaia_Workspace_Mac/Consumer/Gaia_Client/Dev/Gaia_Client-1.0/Gaia_Client/BuildTools/gyp/test/mac/xctest/test.gyp",
+		"/Users/kf/Documents/TrendMicro/Gaia_Workspace_Mac/Consumer/Gaia_Client/Dev/Gaia_Client-1.0/Gaia_Client/BuildTools/gyp/tools/Xcode/Specifications/gyp.pbfilespec",
+		"/Users/kf/Documents/TrendMicro/Gaia_Workspace_Mac/Consumer/Gaia_Client/Dev/Gaia_Client-1.0/Gaia_Client/BuildTools/gyp/tools/Xcode/Specifications/gyp.xclangspec",
+		"/Users/kf/Documents/TrendMicro/Gaia_Workspace_Mac/Consumer/Gaia_Client/Dev/Gaia_Client-1.0/Gaia_Client/BuildTools/gyp/tools/Xcode/README",
+		"/Users/kf/Documents/TrendMicro/Gaia_Workspace_Mac/Consumer/Gaia_Client/Dev/Gaia_Client-1.0/Gaia_Client/src/Common/TmCommon/TmComn_DbgLog.h",
+		"/Users/kf/Documents/TrendMicro/Gaia_Workspace_Mac/Consumer/Gaia_Client/Dev/Gaia_Client-1.0/Gaia_Client/src/Service/HostService/HostService.gyp",
+		"/Users/kf/Documents/imMatch/imMatch/immatch/gruntPackage.json",
+		"/Users/kf/Downloads/jquery-master/build/tasks/build.js",
+		"/Users/kf/Downloads/jquery-2.1.0.min.map",
+		"/Users/kf/Dropbox/_vsnwprintf_s.cpp",
+		"/Users/kf/Documents/TrendMicro/Gaia_Workspace_Mac/Consumer/Gaia_Client/Dev/Gaia_Client-1.0/Gaia_Client/src/Service/HostService/com.trendmicro.gaia.hostservice.plist",
+		"/Users/kf/Downloads/SampleD/com.apple.dts.SampleD.plist",
+		"/Users/kf/Downloads/SampleD/com.apple.dts.SampleD 2.plist",
+		"/Users/kf/Documents/TrendMicro/Gaia_Workspace_Mac/Consumer/Gaia_Client/Dev/Gaia_Client-1.0/Gaia_Client/src/Utility/utilTmCommon/utilTmCommon.gyp",
+		"/Users/kf/Documents/TrendMicro/Gaia_Workspace_Mac/Consumer/Gaia_Client/Dev/Gaia_Client-1.0/Gaia_Client/src/Testing/UnitTest/Utility/utilTmCommon_UT/utilTmCommon_UT.gyp",
+		"/Users/kf/Documents/TrendMicro/Gaia_Workspace_Mac/Consumer/Gaia_Client/Dev/Gaia_Client-1.0/Gaia_Client/src/Lib/ProviderManager/ProviderManager.gyp",
+		"/Users/kf/Documents/TrendMicro/Gaia_Workspace_Mac/Consumer/Gaia_Client/Dev/Gaia_Client-1.0/Gaia_Client/src/Lib/FunctionProviders/SettingProvider/SettingProvider.gyp",
+		"/Users/kf/Documents/TrendMicro/Gaia_Workspace_Mac/Consumer/Gaia_Client/Dev/Gaia_Client-1.0/Gaia_Client/src/Common/settings/common_settings.gypi",
+		"/private/tmp/kf(p4v)/kfteki-MacBook-Pro.local_tw-p4proxya_1667/Consumer/Gaia_Client/Dev/Gaia_Client-1.0/Gaia_Client/src/Service/HostService/HostService#2.gyp",
+		"/Users/kf/Documents/TrendMicro/Gaia_Workspace_Mac/Consumer/Gaia_Client/Dev/Gaia_Client-1.0/Gaia_Client/src/Lib/FunctionProviders/RPCProvider/RPCProvider.gyp",
+		"/Users/kf/Documents/TrendMicro/Gaia_Workspace_Mac/Consumer/Gaia_Client/Dev/Gaia_Client-1.0/Gaia_Client/src/Utility/TmConfig/TmConfig.gyp",
+		"/Users/kf/Documents/TrendMicro/Gaia_Workspace_Mac/Consumer/Gaia_Client/Dev/Gaia_Client-1.0/Gaia_Client/src/Lib/SDKLib/SDKLib.gyp",
+		"/Users/kf/Documents/TrendMicro/Gaia_Workspace_Mac/Consumer/Gaia_Client/Dev/Gaia_Client-1.0/Gaia_Client/src/UI/TmWeb/TmWeb.gyp",
+		"/Users/kf/Documents/TrendMicro/Gaia_Workspace_Mac/Consumer/Gaia_Client/Dev/Gaia_Client-1.0/Gaia_Client/src/Tool/GoogleTestResultsGenerator/GoogleTestResultsGenerator.gyp",
+		"/Users/kf/Documents/TrendMicro/Gaia_Workspace_Mac/Consumer/Gaia_Client/Dev/Gaia_Client-1.0/Gaia_Client/src/Tool/GaiaEzDownloader/GaiaEzDownloader.gyp",
+		"/Users/kf/Documents/TrendMicro/Gaia_Workspace_Mac/Consumer/Gaia_Client/Dev/Gaia_Client-1.0/Gaia_Client/src/Testing/UnitTest/Lib/FunctionProviders/SettingProvider_UT/SettingProvider_UT.gyp",
+		"/Users/kf/Documents/TrendMicro/Gaia_Workspace_Mac/Consumer/Gaia_Client/Dev/Gaia_Client-1.0/Gaia_Client/src/Testing/FakeProductMain/FakeProductMain.gyp",
+		"/Users/kf/Documents/TrendMicro/Gaia_Workspace_Mac/Consumer/Gaia_Client/Dev/Gaia_Client-1.0/Gaia_Client/3rd_party/jsoncpp/src/lib_json/lib_json.gyp",
+		"/Users/kf/Documents/TrendMicro/Gaia_Workspace_Mac/Consumer/Gaia_Client/Dev/Gaia_Client-1.0/Gaia_Client/src/Common/settings/unittest_settings.gypi",
+		"/Users/kf/Documents/TrendMicro/Gaia_Workspace_Mac/Consumer/Gaia_Client/Dev/Gaia_Client-1.0/Gaia_Client/src/Common/settings/common_paths.gypi",
+		"/Users/kf/Documents/TrendMicro/Gaia_Workspace_Mac/Consumer/Gaia_Client/Dev/Gaia_Client-1.0/Gaia_Client/src/Installer/InstallerLauncher/InstallerLauncher.gyp",
+		"/Users/kf/Documents/TrendMicro/Gaia_Workspace_Mac/Consumer/Gaia_Client/Dev/Gaia_Client-1.0/Gaia_Client/src/Testing/FakeProductMain/FakeProductMain_.gyp",
+		"/private/tmp/kf(p4v)/kfteki-MacBook-Pro.local_tw-p4proxya_1667/Consumer/Gaia_Client/Dev/Gaia_Client-1.0/Gaia_Client/src/Service/HostService/HostService@=1781018.gyp",
+		"/Users/kf/Documents/TrendMicro/Gaia_Workspace_Mac/Consumer/Gaia_Client/Dev/Gaia_Client-1.0/Gaia_Client/src/Tool/GaiaEncryptionTool/GETool.gyp",
+		"/Users/kf/Documents/TrendMicro/Gaia_Workspace_Mac/Consumer/Gaia_Client/Dev/Gaia_Client-1.0/Gaia_Client/src/Utility/TmDbgLog/TmDbgLog.gyp",
+		"/Library/LaunchDaemons/com.trendmicro.icore.wp.plist",
+		"/Users/kf/Library/LaunchAgents/com.trendmicro.hellodaemon.plist",
+		"/Users/kf/Library/LaunchAgents/com.trendmicro.itis.uninstaller.plist",
+		"/Users/kf/Applications/p4_rbtool/p4rb_tool.conf",
+		"/Users/kf/Desktop/ImportCodeReviewClient.xml",
+		"/Users/kf/Applications/p4_rbtool/logging.conf",
+		"/Users/kf/Desktop/dist/p4_rbtool/logging.conf",
+		"/Users/kf/Documents/TrendMicro/Gaia_Workspace_Mac/rbtool.log",
+		"/Users/kf/Desktop/POC/HelloDaemon/com.trendmicro.hellodaemon.plist",
+		"/Library/LaunchDaemons/com.trendmicro.icore.main.plist",
+		"/Library/LaunchDaemons/com.microsoft.office.licensing.helper.plist",
+		"/Library/LaunchDaemons/com.trendmicro.itis.plugin.plist",
+		"/Users/kf/Desktop/POC/HelloDaemon/com.trendmicro.itis.uninstaller.plist",
+		"/Library/LaunchDaemons/com.trendmicro.icore.av.plist",
+		"/Users/kf/Downloads/com.bluelotussoftware.examples.Daemon",
+		"/System/Library/LaunchDaemons/com.apple.backupd-auto.plist",
+		"/System/Library/LaunchDaemons/bootps.plist",
+		"/System/Library/LaunchDaemons/ssh.plist",
+		"/Library/LaunchAgents/com.trendmicro.itis.uimgmt.agent.plist",
+		"/Users/kf/Desktop/HelloDaemon/com.trendmicro.hellodaemon.plist",
+		"/Users/kf/Documents/imMatch/imMatch.sublime-project",
+		"/Users/kf/Library/LaunchAgents/test.plist",
+		"/Users/kf/Desktop/test.plist",
+		"/Library/LaunchAgents/com.trendmicro.hellodaemon.plist",
+		"/Library/LaunchDaemons/com.trendmicro.hellodaemon.plist",
+		"/Users/kf/tmp/HelloDaemon.txt",
+		"/Users/kf/Desktop/com.trendmicro.hellodaemon.plist",
+		"/Users/kf/Desktop/Question2.txt",
+		"/Library/Application Support/TrendMicro/TmccMac/TMMacUninstaller.app/Contents/Resources/uninstaller_monitor.sh",
+		"/Applications/Sublime Text.app/Contents/MacOS/changelog.txt",
+		"/Users/kf/Documents/TrendMicro/Gaia_Workspace_Mac/Consumer/Gaia_Client/PD/Gaia_Client-1.0/Gaia_Client/BuildTools/rake/project.rb",
+		"/Users/kf/Documents/TrendMicro/Gaia_Workspace_Mac/Consumer/Gaia_Client/PD/Gaia_Client-1.0/Gaia_Client/doc/SCM/How_To_CI.txt",
+		"/Users/kf/Desktop/CIBuild.sh",
+		"/Users/kf/Documents/TrendMicro/Gaia_Workspace_Mac/Consumer/Gaia_Client/PD/Gaia_Client-1.0/Gaia_Client/src/Tool/GaiaEzDownloader/GaiaEzDownloader.gyp",
+		"/Users/kf/Documents/TrendMicro/Gaia_Workspace_Mac/Consumer/Gaia_Client/PD/Gaia_Client-1.0/Gaia_Client/src/Service/HostService/HostService.gyp",
+		"/Users/kf/Downloads/Outlook/租借裝備費用.txt",
+		"/Users/kf/Documents/TrendMicro/Gaia_Workspace_Mac/Consumer/Gaia_Client/PD/Gaia_Client-1.0/Gaia_Client/BuildTools/gyp/pylib/gyp/generator/xcode.py",
+		"/Users/kf/Documents/TrendMicro/Gaia_Workspace_Mac/Consumer/Gaia_Client/PD/Gaia_Client-1.0/Gaia_Client/BuildTools/gyp/tools/Xcode/Specifications/gyp.pbfilespec",
+		"/Users/kf/Documents/TrendMicro/Gaia_Workspace_Mac/Consumer/Gaia_Client/PD/Gaia_Client-1.0/Gaia_Client/BuildTools/gyp/tools/Xcode/Specifications/gyp.xclangspec",
+		"/Users/kf/Documents/TrendMicro/Gaia_Workspace_Mac/Consumer/Gaia_Client/PD/Gaia_Client-1.0/Gaia_Client/BuildTools/gyp/tools/README",
+		"/Users/kf/Documents/TrendMicro/Gaia_Workspace_Mac/Consumer/Gaia_Client/PD/Gaia_Client-1.0/Gaia_Client/BuildTools/gyp/tools/Xcode/README",
+		"/Users/kf/Documents/TrendMicro/Gaia_Workspace_Mac/Consumer/Gaia_Client/PD/Gaia_Client-1.0/Gaia_Client/BuildTools/gyp/gyp_main.pyc",
+		"/Users/kf/Documents/TrendMicro/Gaia_Workspace_Mac/Consumer/Gaia_Client/PD/Gaia_Client-1.0/Gaia_Client/src/Testing/CompatibilityTest/Utility/utilTmCommon_CT/utilTmCommon_CT.gyp",
+		"/Users/kf/Documents/TrendMicro/Gaia_Workspace_Mac/Consumer/Gaia_Client/PD/Gaia_Client-1.0/Gaia_Client/src/Testing/FakeProductMain/FakeProductMain.gyp",
+		"/Users/kf/Documents/TrendMicro/Gaia_Workspace_Mac/Consumer/Gaia_Client/PD/Gaia_Client-1.0/Gaia_Client/src/Testing/UnitTest/Utility/utilTmCommon_UT/utilTmCommon_UT.gyp",
+		"/Users/kf/Documents/TrendMicro/Gaia_Workspace_Mac/Consumer/Gaia_Client/PD/Gaia_Client-1.0/Gaia_Client/src/Testing/UnitTest/Lib/FunctionProviders/SettingProvider_UT/SettingProvider_UT.gyp",
+		"/Users/kf/Documents/TrendMicro/Gaia_Workspace_Mac/Consumer/Gaia_Client/PD/Gaia_Client-1.0/Gaia_Client/src/Common/settings/common_settings.gypi",
+		"/Users/kf/Documents/TrendMicro/Gaia_Workspace_Mac/Consumer/Gaia_Client/PD/Gaia_Client-1.0/Gaia_Client/src/Common/settings/unittest_settings.gypi",
+		"/Users/kf/Documents/TrendMicro/Gaia_Workspace_Mac/Consumer/Gaia_Client/PD/Gaia_Client-1.0/Gaia_Client/src/Common/settings/gaia_mt.gypi",
+		"/Users/kf/Documents/TrendMicro/Gaia_Workspace_Mac/Consumer/Gaia_Client/PD/Gaia_Client-1.0/Gaia_Client/src/Common/settings/common_paths.gypi",
+		"/Users/kf/Documents/TrendMicro/Gaia_Workspace_Mac/Consumer/Gaia_Client/PD/Gaia_Client-1.0/Gaia_Client/src/Utility/TmDbgLog/TmDbgLog.gyp",
+		"/Users/kf/Documents/TrendMicro/Gaia_Workspace_Mac/Consumer/Gaia_Client/PD/Gaia_Client-1.0/Gaia_Client/src/Utility/utilTmCommon/utilTmCommon.gyp",
+		"/Users/kf/Documents/TrendMicro/Gaia_Workspace_Mac/Consumer/Gaia_Client/PD/Gaia_Client-1.0/Gaia_Client/BuildTools/gyp/test/rules/src/external/external.gyp",
+		"/Users/kf/Documents/TrendMicro/Gaia_Workspace_Mac/Consumer/Gaia_Client/PD/Gaia_Client-1.0/Gaia_Client/BuildTools/gyp/test/mac/postbuild-multiple-configurations/test.gyp",
+		"/Users/kf/Documents/TrendMicro/Gaia_Workspace_Mac/Consumer/Gaia_Client/PD/Gaia_Client-1.0/Gaia_Client/BuildTools/gyp/test/mac/xcode-gcc/test.gyp",
+		"/Users/kf/Documents/TrendMicro/Gaia_Workspace_Mac/Consumer/Gaia_Client/PD/Gaia_Client-1.0/Gaia_Client/BuildTools/gyp/test/mac/strip/test-defaults.gyp",
+		"/Users/kf/Documents/TrendMicro/Gaia_Workspace_Mac/Consumer/Gaia_Client/PD/Gaia_Client-1.0/Gaia_Client/BuildTools/gyp/test/mac/bundle-resources/test.gyp"
+	],
+	"find":
+	{
+		"height": 23.0
+	},
+	"find_in_files":
+	{
+		"height": 93.0,
+		"where_history":
+		[
+			"/Users/kf/Documents/TrendMicro/Gaia_Workspace_Mac/Consumer/Gaia_Client/PD/Gaia_Client-1.0/Gaia_Client/BuildTools/gyp"
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			"description",
+			"VERSIon",
+			"library",
+			"defines",
+			"setting",
+			"Setting.json",
+			"preparePkgModules",
+			"imMatch  ",
+			"SDK",
+			"]",
+			"srcHintOptions",
+			"watch",
+			"dispatch",
+			"suite_TmComn_StringCrypt",
+			"CONFIGURATION",
+			"ONLY_ACTIVE_ARCH",
+			"/Users/kf",
+			"C:\\dist\\p4_rbtool.exe",
+			"Common_ExecuteRake",
+			"execute",
+			"BuildHelper",
+			"ProjectWorkspace",
+			"lib",
+			"include_dirs",
+			"Library",
+			"GCC_OPTIMIZATION_LEVEL",
+			"debug",
+			"path = *;",
+			"path",
+			"xcode",
+			"include_dirs",
+			"buildSettings",
+			"MACOSX_DEPLOYMENT_TARGET",
+			"scheme",
+			"ONLY_ACTIVE_ARCH",
+			"\\",
+			"workspace",
+			"DEPLOYMENT_LOCATION",
+			"GCC_SYMBOLS_PRIVATE_EXTERN",
+			"GCC_PREPROCESSOR_DEFINITIONS",
+			"ARCHS",
+			"DEPLOYMENT_LOCATION",
+			"AAB066A2183F4E9A00E5FBFC",
+			"TmComn_Dbg",
+			"library",
+			"arflags",
+			"buildBoostForiPhoneOS",
+			"configure",
+			"pkg",
+			"macOS",
+			"mac",
+			"mac os",
+			"mac",
+			".a",
+			"mac os",
+			"mac",
+			"72157635455958833",
+			"72157635459220321",
+			"不",
+			"9550801583",
+			"test",
+			"test()",
+			"test",
+			"ㄔ",
+			"trim",
+			"contents",
+			"json",
+			"ajax",
+			"call",
+			".call",
+			"call",
+			"core_hasOwn",
+			"core_trim",
+			"core_serialize",
+			"core_deSerialize",
+			"datatype",
+			"json",
+			"setRequestHeader",
+			"application/x-www-form-urlencode",
+			"dataType",
+			"responseText",
+			"readyState",
+			"isFunction",
+			"noop",
+			"send",
+			"onreadystatechange",
+			"ajax",
+			"success",
+			"onready",
+			"ppi",
+			"onGlobalCanvas",
+			"onLocalCanvas",
+			"drawImage",
+			"local2Global",
+			"viewport.update",
+			"moveworld",
+			"update",
+			"公館",
+			"canvas",
+			"drawProgress",
+			"loadFromList",
+			"_onLoadListeners",
+			"XMLHttpRequest",
+			"ActiveXObject",
+			"ajax",
+			"_draw",
+			"canvas",
+			"add",
+			"on:",
+			"on",
+			"width:",
+			"width",
+			"scale",
+			"expando",
+			"getName",
+			"classof",
+			"type",
+			"fix",
+			"dispatch",
+			"fix",
+			"dispatch",
+			"isImmediateDomPropagationStopped",
+			"event",
+			"DOMContentLoaded",
+			"bindReady",
+			"ready",
+			"isDefaultPrevented",
+			"returnfalse"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+			"SDK",
+			"",
+			"~",
+			"/Users/kf/Applications/p4_rbtool/p4_rbtool",
+			"/"
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"incremental_find":
+	{
+		"height": 23.0
+	},
+	"input":
+	{
+		"height": 31.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.exec":
+	{
+		"height": 100.0
+	},
+	"output.find_results":
+	{
+		"height": 0.0
+	},
+	"replace":
+	{
+		"height": 42.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_symbol":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"settings":
+	{
+	},
+	"show_minimap": true,
+	"show_open_files": false,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 192.0,
+	"status_bar_visible": true,
+	"template_settings":
+	{
+	}
+}
