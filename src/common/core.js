@@ -1,4 +1,14 @@
-var imMatch = {};
+var imMatch = {},
+
+    stringify = JSON.stringify;
+
+function returnTrue() {
+    return true;
+}
+
+function returnFalse() {
+    return false;
+}
 
 jQuery.extend(imMatch, jQuery);
 
@@ -10,5 +20,10 @@ imMatch.extend({
         }
         
         return (imMatch.isNumeric(object.x) && imMatch.isNumeric(object.y));
+    },
+
+    // Determine if object is undefined or null
+    isEmpty: function(object) {
+        return (object === undefined || object === null);
     }
 });

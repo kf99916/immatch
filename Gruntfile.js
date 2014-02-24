@@ -19,7 +19,7 @@ module.exports = function(grunt) {
 	grunt.initConfig({
 		pkg: grunt.file.readJSON("package.json"),
 		meta: {
-			imMatch: {
+			imMatchWebsocketClient: {
 				minBanner: "/*! <%= pkg.title %> v<%= pkg.version %> Client Javascript Library <%= pkg.homepage %> | <%= pkg.licenses[0].type %> license */",
 				banner: "/*! <%= pkg.title %> v<%= pkg.version %> Client Javascript Library\n" + 
 						" * <%= pkg.homepage %>\n" + 
@@ -30,30 +30,60 @@ module.exports = function(grunt) {
 						" *\n" +
 						" * Date: <%= grunt.template.today('yyyy-mm-dd') %>\n" + 
 						" */"
-			}
+			},
+            imMatchWebsocketServer:
+            {
+                minBanner: "/*! <%= pkg.title %> v<%= pkg.version %> Websocket Server <%= pkg.homepage %> | <%= pkg.licenses[0].type %> license */",
+                banner: "/*! <%= pkg.title %> v<%= pkg.version %> Websocket Server\n" + 
+                        " * <%= pkg.homepage %>\n" + 
+                        " *\n" +
+                        " * Copyright 2012 <%= pkg.author.name %>\n" +
+                        " * Released under the <%= pkg.licenses[0].type %> license\n" +
+                        " * <%= pkg.licenses[0].url %>\n" +
+                        " *\n" +
+                        " * Date: <%= grunt.template.today('yyyy-mm-dd') %>\n" + 
+                        " */"
+            }
 		},
 		concat: {
 			options: {
 		      stripBanners: true
 		    },
-			imMatch: {
+			imMatchWebsocketClient: {
 				options: {
-					banner: "<%= meta.imMatch.banner %>"
+					banner: "<%= meta.imMatchWebsocketClient.banner %>",
+                    process: function(src, filepath) {
+                      return src.replace("@WEBSOCKET_URL", grunt.config.get("pkg.configurations.webSocketURL"));
+                    }
 				},
-				src:["src/intro.js", 
-					"src/check-libraries.js",
-					"src/core.js",
-					"src/device.js",
-					"src/log.js",
-					"src/math.js",
-					"src/event.js",
-					"src/bind-touchevents.js",
-					"src/sync-gesture.js",
-					"src/socket-client.js",
-					"src/exports.js", 
-					"src/outro.js"],
+				src:["src/common/intro.js",
+                    "src/websocket-client/3rd-party/*.js",
+                    "src/common/core.js",
+                    "src/common/log.js",
+                    "src/common/math.js",
+					"src/websocket-client/check-libraries.js",
+                    "src/websocket-client/device.js",
+                    "src/websocket-client/event.js",
+                    "src/websocket-client/bind-touchevents.js",
+                    "src/websocket-client/sync-gesture.js",
+                    "src/websocket-client/socket-client.js",
+					"src/websocket-client/exports.js", 
+					"src/common/outro.js"],
 				dest:"dist/immatch.js"
-			}
+			},
+            imMatchWebsocketServer: {
+                options: {
+                    banner: "<%= meta.imMatchWebsocketServer.banner %>"
+                },
+                src: ["src/common/intro.js",
+                    "src/websocket-server/import.js",
+                    "src/common/core.js",
+                    "src/common/log.js",
+                    "src/common/math.js",
+                    "src/websocket-server/*.js",
+                    "src/common/outro.js"],
+                dest: "dist/immatch-ws-server.js"
+            }
 		},
 		jsonlint: {
 			pkg: {
@@ -70,28 +100,12 @@ module.exports = function(grunt) {
 				}
 			},
 			dist: {
-				src: [
-					"dist/immatch.js", 
-				],
-				options: srcHintOptions
-			}
-		},
-		"regex-replace": {
-			imMatch: {
-				src: ["dist/immatch.js"],
-				actions: [
-					{
-						name: "WebSocket URL",
-						search: "@WEBSOCKET_URL",
-						replace: "<%= pkg.configurations.webSocketURL %>"
-					},
-					{
-						name: "WebSocket Protocols",
-						search: "@WEBSOCKET_PROTOCOLS",
-						replace: "<%= pkg.configurations.webSocketProtocols %>"
-					}
-				]
-			}
+                src: [
+                    "dist/immatch.js", 
+                    "dist/immatch-ws-server.js"
+                ],
+                options: srcHintOptions
+            }
 		},
 		uglify: {
 			my_target: {
@@ -106,14 +120,34 @@ module.exports = function(grunt) {
 					beautify: {
 						ascii_only: true
 					},
-					banner: "<%= meta.imMatch.minBanner %>",
+					banner: "<%= meta.imMatchWebsocketClient.minBanner %>",
 					compress: {
 						hoist_funs: false,
 						loops: false,
 						unused: false
 					}
 				}
-			}
+			},
+            my_advanced_target: {
+                files: {
+                    "dist/immatch-ws-server.min.js": ["dist/immatch-ws-server.js"]
+                },
+                options: {
+                    preserveComments: false,
+                    sourceMap: "dist/immatch-ws-server.min.map",
+                    sourceMappingURL: "immatch-ws-server.min.map",
+                    report: "min",
+                    beautify: {
+                        ascii_only: true
+                    },
+                    banner: "<%= meta.imMatchWebsocketServer.minBanner %>",
+                    compress: {
+                        hoist_funs: false,
+                        loops: false,
+                        unused: false
+                    }
+                }
+            }
 		},
 		copy: {
 			main: {
@@ -129,8 +163,8 @@ module.exports = function(grunt) {
 	require( "load-grunt-tasks" )( grunt );
 
 	// Watch task
-	grunt.registerTask( "watch", ["jsonlint", "concat", "regex-replace", "uglify", "copy"]);
+	grunt.registerTask( "watch", ["jsonlint", "concat", "uglify", "copy"]);
 
 	// Default grunt.
-	grunt.registerTask("default", ["jsonlint", "concat", "regex-replace", "uglify"]);
+	grunt.registerTask("default", ["jsonlint", "concat", "uglify"]);
 };

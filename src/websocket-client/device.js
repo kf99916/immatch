@@ -7,8 +7,7 @@ imMatch.Device = {
             bottom: 0.7,
             left: 0.7,
             right: 0.7
-        },
-        devicePixelRatio: window.devicePixelRatio || 1
+        }
     },
 
     iPhone: {
@@ -19,8 +18,7 @@ imMatch.Device = {
             bottom: (4.5 - 480 / 163) / 2,
             left: (2.31 - 320 / 163) / 2,
             right: (2.31 - 320 / 163) / 2
-        },
-        devicePixelRatio: window.devicePixelRatio || 1
+        }
     },
 
     iPhone5: {
@@ -31,8 +29,7 @@ imMatch.Device = {
             bottom: (4.87 - 1136 / 326) / 2,
             left: (2.31 - 640 / 326) / 2,
             right: (2.31 - 640 / 326) / 2
-        },
-        devicePixelRatio: window.devicePixelRatio || 1
+        }
     },
 
     iPad: {
@@ -43,8 +40,7 @@ imMatch.Device = {
             bottom: (9.5 - 1024 / 132) / 2,
             left: (7.31 - 768 / 132) / 2,
             right: (7.31 - 768 / 132) / 2
-        },
-        devicePixelRatio: window.devicePixelRatio || 1
+        }
     },
 };
 
@@ -68,3 +64,6 @@ else if (MobileEsp.DetectIphoneOrIpod()) {
 else if (MobileEsp.DetectIpad()) {
     window.device = imMatch.Device.iPad;
 }
+
+
+window.device.devicePixelRatio = window.devicePixelRatio || 1;

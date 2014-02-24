@@ -1,11 +1,3 @@
-function returnTrue() {
-    return true;
-}
-
-function returnFalse() {
-    return false;
-}
-
 imMatch.extend(imMatch.event, {
     fixTouchMouseEvent: function(event, touchMouse) {
         touchMouse.identifier = touchMouse.identifier || 0;

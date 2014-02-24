@@ -3,6 +3,7 @@ imMatch.SocketClient = function() {
     if ( !(this instanceof imMatch.SocketClient) ) {
         return new imMatch.SocketClient();
     }
+    var self = this;
 
     // Connection
     // For Firefox 
@@ -13,8 +14,13 @@ imMatch.SocketClient = function() {
         return;
     }
 
-    this.webSocket = new window.WebSocket(@WEBSOCKET_URL, @WEBSOCKET_PROTOCOLS);
+    this.webSocket = new window.WebSocket(@WEBSOCKET_URL);
     this.webSocket.onopen = function(event) {
+        if (this.readyState != WebSocket.OPEN) {
+
+        }
+
+        //self.send({action: "connection"});
     };
 
     this.webSocket.onmessage = function(event) {
@@ -26,3 +32,17 @@ imMatch.SocketClient = function() {
     this.webSocket.onerror = function(event) {
     };
 };
+
+imMatch.SocketClient.prototype = {
+    send: function(data) {
+        if (!data || !data.action) {
+            imMatch.logError("[SocketClient.send] The format of message is wrong! Message: " + data);
+            return this;
+        }
+
+        this.webSocket.send(stringify(data));
+        return this;
+    }
+};
+
+window.socketClient = new imMatch.SocketClient;
