@@ -11,39 +11,61 @@ imMatch.engine = {
     mode: Mode.ALONE,
 
     lastRunTimestamp: 0,
+
+    frame: 0,
     
     run: function(timestamp) {
-        imMatch.trigger("contextWillbeDrawn");
+        var stamp = {
+            time: timestamp,
+            frame: this.frame
+        };
+
+        imMatch.trigger("contextWillbeDrawn", stamp);
 
         this.canvasAdapter.clear();
-        imMatch.trigger("contextDraw");
+        imMatch.trigger("contextDraw", stamp);
 
-        imMatch.trigger("contextDidbeDrawn");
+        imMatch.trigger("contextDidbeDrawn", stamp);
 
-        this.updateInterval(timestamp);
+        this.updateInterval(stamp);
         this.lastRunTimestamp = timestamp;
-        switch(imMatch.engine.mode) {
+        ++this.frame;
+
+        switch(this.mode) {
             case Mode.STITCHED:
                 setTimeout(this.run, this.interval, Date.now() + this.interval);
             break;
             case Mode.ALONE: default:
-                window.requestAnimFrame(imMatch.engine.run);
+                window.requestAnimationFrame(this.run.bind(this));
             break;
         }
     },
 
-    updateInterval: function(timestamp) {
+    updateInterval: function(stamp) {
         switch(imMatch.engine.mode) {
             case Mode.STITCHED:
+            // TODO
             break;
             case Mode.ALONE: default:
-                this.interval = timestamp - lastRunTimestamp;
+                this.interval = stamp.time - this.lastRunTimestamp;
             break;
         }
+    },
+
+    addScene: function(scene) {
+        if (jQuery.isEmptyObject(scene)) {
+            imMatch.logError("[imMatch.engine.addScene] Scene is empty.");
+            return this;
+        }
+
+        imMatch.scenes.push(scene);
+        imMatch.scenes.sort(function(a, b) {
+            return b.z - a.z;
+        });
     }
 };
 
-imMatch.extend({
+jQuery.extend(imMatch, {
     run: function(canvasID) {
         imMatch.engine.canvasAdapter = new imMatch.CanvasAdapter(canvasID);
         imMatch.engine.lastRunTimestamp = Date.now();

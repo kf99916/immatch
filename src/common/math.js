@@ -1,7 +1,7 @@
-imMatch.extend({
+jQuery.extend(imMatch, {
     // Rotate (x, y) with a specified point as rotation center
     rotate: function(point, rad, /* Optional */ center) {
-        if (!imMatch.isNumeric(rad) || rad === 0 || imMatch.isEmpty(point.x) || imMatch.isEmpty(point.y)) {
+        if (!jQuery.isNumeric(rad) || rad === 0 || imMatch.isEmpty(point.x) || imMatch.isEmpty(point.y)) {
             return point;
         }
 
@@ -26,9 +26,9 @@ imMatch.extend({
         var target = arguments[0], 
             result = {index:-1, value: +Infinity};
 
-        if (!imMatch.isArrayLike(target)) {
+        if (!jQuery.isArrayLike(target)) {
             target = [];
-            imMatch.each(arguments, function(i, argument) {
+            jQuery.each(arguments, function(i, argument) {
                 core_push.call(target, argument);
             });
         }
@@ -44,9 +44,9 @@ imMatch.extend({
         var target = arguments[0], 
             result = {index:-1, value: -Infinity};
 
-        if (!imMatch.isArrayLike(target)) {
+        if (!jQuery.isArrayLike(target)) {
             target = [];
-            imMatch.each(arguments, function(i, argument) {
+            jQuery.each(arguments, function(i, argument) {
                 core_push.call(target, argument);
             });
         }

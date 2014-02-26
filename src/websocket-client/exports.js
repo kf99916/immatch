@@ -6,7 +6,7 @@ var
     _$im = window.$im;
 
 imMatch.noConflict = function(deep) {
-    if (window.$im === jQuery) {
+    if (window.$im === imMatch) {
         window.$im = _$im;
     }
 

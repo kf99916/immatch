@@ -8,25 +8,14 @@ var isTouchSupported = "ontouchstart" in window,
     isMouseDragged = returnFalse,
     mouseId = -1;
 
-imMatch.extend({
+jQuery.extend(imMatch, {
     touchMouseHandler: function(event) {
-        imMatch.each(event.changedTouches, function(i, touch) {
-            var touchMouseEvent = imMatch.event.fixTouchMouseEvent(event, touch);
+        jQuery.each(event.changedTouches, function(i, touch) {
+            var touchMouseEvent = imMatch.fixTouchMouseEvent(event, touch);
 
             imMatch.logInfo("[" + touchMouseEvent.type + "] " + touchMouseEvent.x + ", " + 
                 touchMouseEvent.y + "(" + touchMouseEvent.id + ")");
 
-            // 1. Synchronous Gesture Recognition
-            imMatch.syncGesture.recognize(touchMouseEvent);
-
-            if (imMatch.engine.mode != Mode.STITCHED) {
-                return;
-            }
-
-            // 2. Transform touchMouseEvent from a local coordinate to a global coordinate
-            
-
-            // 3. Put touchMouseEvents into the touchMouseEvent cache
             imMatch.socketClient.caches.queue("touchMouseEvent", touchMouseEvent);
         });
     },
@@ -95,14 +84,14 @@ imMatch.extend({
 });
 
 if (isTouchSupported) {
-    imMatch.event.add(window, "touchstart", imMatch.touchstartHandler);
-    imMatch.event.add(window, "touchmove", imMatch.touchmoveHandler);
-    imMatch.event.add(window, "touchend", imMatch.touchendHandler);
-    imMatch.event.add(window, "touchcancel", imMatch.touchcancelHandler);
+    jQuery(window).touchstart(imMatch.touchstartHandler);
+    jQuery(window).touchmove(imMatch.touchmoveHandler);
+    jQuery(window).touchend(imMatch.touchendHandler);
+    jQuery(window).touchcancel(imMatch.touchcancelHandler);
 }
 else {
-    imMatch.event.add(window, "mousedown", imMatch.mousedownHandler);
-    imMatch.event.add(window, "mousemove", imMatch.mousemoveHandler);
-    imMatch.event.add(window, "mouseup", imMatch.mouseupHandler);
-    imMatch.event.add(window, "mouseout", imMatch.mouseoutHandler);
+    jQuery(window).mousedown(imMatch.mousedownHandler);
+    jQuery(window).mousemove(imMatch.mousemoveHandler);
+    jQuery(window).mouseup(imMatch.mouseupHandler);
+    jQuery(window).mouseout(imMatch.mouseoutHandler);
 }

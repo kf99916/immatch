@@ -6,8 +6,8 @@ imMatch.CanvasAdapter = function CanvasAdapter(canvasID) {
 
     canvasID = canvasID || "canvas";
     this.canvas = document.getElementById(canvasID);
-    if (imMatch.isEmptyObject(this.canvas)) {
-        imMatch.error("[imMatch.CanvasAdapter] CanvasID: " + canvasID + " does not exist.");
+    if (jQuery.isEmptyObject(this.canvas)) {
+        jQuery.error("[imMatch.CanvasAdapter] CanvasID: " + canvasID + " does not exist.");
         this.createCanvas(canvasID);
     }
 
@@ -31,3 +31,5 @@ imMatch.CanvasAdapter.prototype = {
         return this;
     },
 };
+
+imMatch.canvas = new imMatch.CanvasAdapter();

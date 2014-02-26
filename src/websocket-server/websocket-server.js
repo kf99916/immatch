@@ -11,7 +11,7 @@ imMatch.webSocketServer = new WebSocketServer({port: 8080, host:null});
 // Private member variables
 var _groupID = 0, _deviceID = 0;
 
-imMatch.extend(server, {
+jQuery.extend(server, {
     // Lifetime about candidate
     LIFETIME_CANDIDATE: 700,
 
@@ -68,14 +68,14 @@ imMatch.extend(server, {
 
         } catch(error) {
             imMatch.logError("[imMatch.Group.addGroup] " + error.message);
-            imMatch.error("[imMatch.Group.addGroup] Adding group fails.");
+            jQuery.error("[imMatch.Group.addGroup] Adding group fails.");
         }
 
         return group;
     },
 
     monitorCandidates: function() {
-        var self = this, now = imMatch.now(), i = 0, length = this.candidates.length;
+        var self = this, now = Date.now(), i = 0, length = this.candidates.length;
         for (; i < length;) {
             if (Math.abs(now - this.candidates[i].timestamp) > this.LIFETIME_CANDIDATE) {
                 imMatch.remove(this.candidates, i);
@@ -111,7 +111,7 @@ imMatch.extend(server, {
         error: function(error, webSocket) {
             imMatch.logError("[imMatch.Group.response.error] " + error.message + 
                 " deviceID = " + webSocket.deviceID + ", groupID = " + webSocket.groupID);
-            imMatch.error("[imMatch.Group.response.error] WebSocket error.");
+            jQuery.error("[imMatch.Group.response.error] WebSocket error.");
 
             return server;
         },
@@ -144,7 +144,7 @@ imMatch.extend(server, {
 
             imMatch.logInfo("[imMatch.webSocketServer.tryToStitch] DeviceID = " + data.deviceID + ", " + server.candidates.length);
 
-            imMatch.each(server.candidates, function(i, stitchInfo) {
+            jQuery.each(server.candidates, function(i, stitchInfo) {
                 if (stitchInfo.data.gestureType === data.gestureType && stitchInfo.data.deviceID !== data.deviceID &&
                     Math.abs(now - stitchInfo.timestamp) <= server.LIFETIME_CANDIDATE) {
                     data1 = stitchInfo.data;
@@ -322,7 +322,7 @@ imMatch.webSocketServer.on("connection", function(webSocket) {
     response.connection(webSocket);
 
     webSocket.on("message", function(message) {
-        var packet = imMatch.parseJSON(message);
+        var packet = jQuery.parseJSON(message);
         if (response[packet.action]) {
             response[packet.action](packet);
         }

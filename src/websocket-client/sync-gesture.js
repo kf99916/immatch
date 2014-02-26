@@ -19,15 +19,15 @@ imMatch.Cursor = function(points) {
 imMatch.Cursor.prototype = {
     add: function(points) {
         var numPoints, self = this;
-        if (imMatch.isEmptyObject(points)) {
+        if (jQuery.isEmptyObject(points)) {
             return;
         }
 
-        if(!imMatch.isArray(points)) {
+        if(!jQuery.isArray(points)) {
             points = [points];
         }
 
-        imMatch.each(points, function(i, point) {
+        jQuery.each(points, function(i, point) {
             self.points.push(point);
         });
 
@@ -38,7 +38,7 @@ imMatch.Cursor.prototype = {
 
     isStraight: function() {
         var result = true, lastPoint = this.points[0], lastVelocity;
-        imMatch.each(this.points, function(i, point) {
+        jQuery.each(this.points, function(i, point) {
             // Sampling each Threadshold.SAMPLING_TIME ms
             var duration = point.timestamp - lastPoint.timestamp, velocity;
             if (duration < Threadshold.SAMPLING_TIME) {
@@ -49,7 +49,7 @@ imMatch.Cursor.prototype = {
                 y: (point.y - lastPoint.y) / duration
             };
 
-            if (!imMatch.isEmptyObject(lastVelocity) && 
+            if (!jQuery.isEmptyObject(lastVelocity) && 
                 imMatch.rad(velocity, lastVelocity) > Threadshold.STRAIGHT) {
                 result = false;
                 return false;
@@ -78,18 +78,18 @@ imMatch.CursorGroup = function(cursors) {
 imMatch.CursorGroup.prototype = {
     add: function(cursors) {
         var self = this;
-        if (imMatch.isEmptyObject(cursors)) {
+        if (jQuery.isEmptyObject(cursors)) {
             return;
         }
 
-        if(!imMatch.isArray(cursors)) {
+        if(!jQuery.isArray(cursors)) {
             cursors = [cursors];
         }
 
-        imMatch.each(cursors, function(i, cursor) {
+        jQuery.each(cursors, function(i, cursor) {
             if (!self.cursors[cursor.id]) {
                 self.cursors[cursor.id] = {};
-                imMatch.extend(self.cursors[cursor.id], cursor);
+                jQuery.extend(self.cursors[cursor.id], cursor);
             }
             else {
                 self.cursors[cursor.id].add(cursor.points);
@@ -106,7 +106,7 @@ imMatch.CursorGroup.prototype = {
 
     hasConatinPoint: function(point) {
         var result = false;
-        imMatch.each(this.cursors, function(cursorID, cursor) {
+        jQuery.each(this.cursors, function(cursorID, cursor) {
             var lastPoint = cursor.points[cursor.points.length - 1];
             if (imMatch.norm(point, lastPoint) <= Threadshold.DISTANCE) {
                 result = true;
@@ -119,7 +119,7 @@ imMatch.CursorGroup.prototype = {
 
     isAllCursorsUp: function() {
         var numUpCursors = 0;
-        imMatch.each(this.cursors, function(cursorID, cursor) {
+        jQuery.each(this.cursors, function(cursorID, cursor) {
             if (cursor.type == TouchMouseEvent.UP || cursor.type == TouchMouseEvent.CANCEL) {
                 ++numUpCursors;
             }
@@ -134,7 +134,7 @@ imMatch.CursorGroup.prototype = {
 
     isAllCursorsStraight: function() {
         var result = true;
-        imMatch.each(this.cursors, function(cursorID, cursor) {
+        jQuery.each(this.cursors, function(cursorID, cursor) {
             if (!cursor.isStraight()) {
                 result = false;
                 return false;
@@ -177,7 +177,7 @@ imMatch.syncGesture = {
         var containGroup = this.searchContainCursorGroup(touchMouseEvent),
             ownGroup = this.searchOwnCursorGroup(touchMouseEvent);
 
-        if (imMatch.isEmptyObject(containGroup) || imMatch.isEmptyObject(ownGroup)) {
+        if (jQuery.isEmptyObject(containGroup) || jQuery.isEmptyObject(ownGroup)) {
             imMatch.logError("The containGroup is empty: " + containGroup + " or the ownGroup is empty: " + containGroup);
             return;
         }
@@ -198,7 +198,7 @@ imMatch.syncGesture = {
 
     searchOwnCursorGroup: function(touchMouseEvent) {
         var targetGroup;
-        imMatch.each(cursorGroups, function(groupID, group) {
+        jQuery.each(cursorGroups, function(groupID, group) {
             if (group.hasOwnPoint(touchMouseEvent)) {
                 targetGroup = group;
                 return false;
@@ -210,7 +210,7 @@ imMatch.syncGesture = {
 
     searchContainCursorGroup: function(touchMouseEvent) {
         var targetGroup, ownGroup;
-        imMatch.each(cursorGroups, function(groupID, group) {
+        jQuery.each(cursorGroups, function(groupID, group) {
             if (group.hasOwnPoint(touchMouseEvent)) {
                 ownGroup = group;
                 return;

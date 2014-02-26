@@ -14,7 +14,7 @@ window.console.info = console.info || function(message) {window.console.log(mess
 window.console.warn = console.warn || function(message) {window.console.log(message);};
 window.console.error = console.error || function(message) {window.console.log(message);};
 
-imMatch.extend({
+jQuery.extend(imMatch, {
     logDebug: function(message) {
         if (imMatch.isEmpty(message) || this.logLevel > DEBUG) {
             return this;
@@ -53,6 +53,13 @@ imMatch.extend({
         window.console.error(fixMessage(message, "ERROR"));
 
         return this;
+    },
+
+    allLogLevels: {
+        debug: DEBUG,
+        info: INFO,
+        warn: WARN,
+        error: ERROR
     },
 
     logLevel: ERROR

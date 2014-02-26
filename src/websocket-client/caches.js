@@ -7,7 +7,7 @@ imMatch.Cache = function() {
 
 imMatch.Cache.prototype = {
     queue: function(type, data) {
-        if (imMatch.isEmpty(type) || imMatch.isEmptyObject(data)) {
+        if (imMatch.isEmpty(type) || jQuery.isEmptyObject(data)) {
             imMatch.logError("[imMatch.Cache.queue] Type is null: " + type + " or data is empty: " + data);
             return this;
         }
@@ -19,7 +19,7 @@ imMatch.Cache.prototype = {
 
     dequeue: function(type) {
         var result;
-        if (imMatch.isEmpty(type) || imMatch.isEmptyObject(this[type])) {
+        if (imMatch.isEmpty(type) || jQuery.isEmptyObject(this[type])) {
             imMatch.logError("[imMatch.Cache.dequeue] Type is null: " + type + " or the cache is empty: " + this[type]);
             return null;
         }
@@ -34,7 +34,7 @@ imMatch.Cache.prototype = {
 
     get: function(type, cmp) {
         var results = [];
-        if (imMatch.isEmpty(type) || imMatch.isEmptyObject(this[type])) {
+        if (imMatch.isEmpty(type) || jQuery.isEmptyObject(this[type])) {
             imMatch.logError("[imMatch.Cache.get] Type is null: " + type + " or the cache is empty: " + this[type]);
             return null;
         }
@@ -43,7 +43,7 @@ imMatch.Cache.prototype = {
             return this[type];
         }
 
-        imMatch.each(this[type], function(i, data) {
+        jQuery.each(this[type], function(i, data) {
             if (cmp(data)) {
                 results.push(data);
             }
@@ -53,7 +53,7 @@ imMatch.Cache.prototype = {
     },
 
     remove: function(type, cmp) {
-        if (imMatch.isEmpty(type) || imMatch.isEmptyObject(this[type])) {
+        if (imMatch.isEmpty(type) || jQuery.isEmptyObject(this[type])) {
             imMatch.logError("[imMatch.Cache.remove] Type is null: " + type + " or the cache is empty: " + this[type]);
             return this;
         }
@@ -63,7 +63,7 @@ imMatch.Cache.prototype = {
             return this;
         }
 
-        this[type] = imMatch.grep(this[type], function(data) {
+        this[type] = jQuery.grep(this[type], function(data) {
             return cmp(data);
         });
 
