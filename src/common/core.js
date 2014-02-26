@@ -10,6 +10,8 @@ function returnFalse() {
     return false;
 }
 
+Date.now = Date.now || function now() { return new Date().getTime(); };
+
 jQuery.extend(imMatch, jQuery);
 
 imMatch.extend({

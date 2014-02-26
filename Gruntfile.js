@@ -53,7 +53,7 @@ module.exports = function(grunt) {
 				options: {
 					banner: "<%= meta.imMatchWebsocketClient.banner %>",
                     process: function(src, filepath) {
-                      return src.replace("@WEBSOCKET_URL", grunt.config.get("pkg.configurations.webSocketURL"));
+                      return src.replace(/@WEBSOCKET_URL/g, grunt.config.get("pkg.configurations.webSocketURL"));
                     }
 				},
 				src:["src/common/intro.js",
@@ -66,7 +66,10 @@ module.exports = function(grunt) {
                     "src/websocket-client/event.js",
                     "src/websocket-client/bind-touchevents.js",
                     "src/websocket-client/sync-gesture.js",
+                    "src/websocket-client/caches.js",
                     "src/websocket-client/socket-client.js",
+                    "src/websocket-client/engine.js",
+                    "src/websocket-client/scene.js",
 					"src/websocket-client/exports.js", 
 					"src/common/outro.js"],
 				dest:"dist/immatch.js"

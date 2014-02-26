@@ -14,35 +14,88 @@ imMatch.SocketClient = function() {
         return;
     }
 
+    this.caches = new imMatch.Cache();
     this.webSocket = new window.WebSocket(@WEBSOCKET_URL);
     this.webSocket.onopen = function(event) {
-        if (this.readyState != WebSocket.OPEN) {
-
-        }
-
-        //self.send({action: "connection"});
+        imMatch.logInfo("[WebSocket.onopen] A websocket opened. URL: " + @WEBSOCKET_URL);
     };
 
     this.webSocket.onmessage = function(event) {
+        if (imMatch.isEmptyObject(event) || imMatch.isEmpty(event.action)) {
+            imMatch.logError("[WebSocket.onmessage] The format of message is wrong! Message: " + event);
+            return this;
+        }
+
+        imMatch.logInfo("[WebSocket.onmessage] The websocket received message: " + event.data);
+        var jsonObject = imMatch.parseJSON(event.data);
+        if (self.response[jsonObject.action]) {
+            self.response[jsonObject.action](jsonObject);
+        }
+        else {
+            imMatch.logWarn("[imMatch.webSocketServer.on] Unknown json object action: " + jsonObject.action);
+        }
     };
                 
     this.webSocket.onclose = function(event) {
+        imMatch.logWarn("[WebSocket.onclose] A websocket closed. code: " + 
+            event.code + ", reason: " + event.reason + ", wasClean: " + event.wasClean);
     };
                 
     this.webSocket.onerror = function(event) {
+        imMatch.logError("[imMatch.WebSocketListener] " + error.message);
+        imMatch.error("[imMatch.WebSocketListener] Socket error.");
     };
 };
 
 imMatch.SocketClient.prototype = {
     send: function(data) {
-        if (!data || !data.action) {
+        if (imMatch.isEmptyObject(data) || imMatch.isEmpty(data.action)) {
             imMatch.logError("[SocketClient.send] The format of message is wrong! Message: " + data);
+            return this;
+        }
+
+        if (this.webSocket.readyState != window.WebSocket.OPEN) {
+            imMatch.logError("[SocketClient.send] WebSocket is not ready. ready state: " + this.webSocket.readyState);
             return this;
         }
 
         this.webSocket.send(stringify(data));
         return this;
+    },
+
+    response: {
+        connectionSuccess: function(jsonObject) {
+            imMatch.device.id = jsonObject.deviceID;
+        },
+        
+        synchronize: function(jsonObject) {
+
+        },
+
+        idle: function(jsonObject) {
+
+        },
+
+        stitchStart: function(jsonObject) {
+
+        },
+
+        exchangeData: function(jsonObject) {
+
+        },
+
+        exchangeDataDone: function(jsonObject) {
+
+        },
+
+        unstitchStart: function(jsonObject) {
+
+        },
+
+        unstitchDone: function(jsonObject) {
+            
+        }
     }
 };
 
-window.socketClient = new imMatch.SocketClient;
+imMatch.socketClient = new imMatch.SocketClient;

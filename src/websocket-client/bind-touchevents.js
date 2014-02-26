@@ -12,10 +12,22 @@ imMatch.extend({
     touchMouseHandler: function(event) {
         imMatch.each(event.changedTouches, function(i, touch) {
             var touchMouseEvent = imMatch.event.fixTouchMouseEvent(event, touch);
+
+            imMatch.logInfo("[" + touchMouseEvent.type + "] " + touchMouseEvent.x + ", " + 
+                touchMouseEvent.y + "(" + touchMouseEvent.id + ")");
+
             // 1. Synchronous Gesture Recognition
             imMatch.syncGesture.recognize(touchMouseEvent);
-            // 2. Put touchMouseEvents into the touchMouseEvent pool
-            //imMatch.socketClient.putPool(touchMouseEvent);
+
+            if (imMatch.engine.mode != Mode.STITCHED) {
+                return;
+            }
+
+            // 2. Transform touchMouseEvent from a local coordinate to a global coordinate
+            
+
+            // 3. Put touchMouseEvents into the touchMouseEvent cache
+            imMatch.socketClient.caches.queue("touchMouseEvent", touchMouseEvent);
         });
     },
     // Touch Handlers

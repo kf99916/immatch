@@ -19,7 +19,7 @@ imMatch.Cursor = function(points) {
 imMatch.Cursor.prototype = {
     add: function(points) {
         var numPoints, self = this;
-        if (!points) {
+        if (imMatch.isEmptyObject(points)) {
             return;
         }
 
@@ -49,7 +49,7 @@ imMatch.Cursor.prototype = {
                 y: (point.y - lastPoint.y) / duration
             };
 
-            if (lastVelocity && 
+            if (!imMatch.isEmptyObject(lastVelocity) && 
                 imMatch.rad(velocity, lastVelocity) > Threadshold.STRAIGHT) {
                 result = false;
                 return false;
@@ -78,7 +78,7 @@ imMatch.CursorGroup = function(cursors) {
 imMatch.CursorGroup.prototype = {
     add: function(cursors) {
         var self = this;
-        if (!cursors) {
+        if (imMatch.isEmptyObject(cursors)) {
             return;
         }
 
@@ -149,8 +149,6 @@ cursorGroups = {};
 
 imMatch.syncGesture = {
     recognize: function(touchMouseEvent) {
-        imMatch.logError("[" + touchMouseEvent.type + "] " + touchMouseEvent.x + ", " + 
-            touchMouseEvent.y + "(" + touchMouseEvent.id + ")");
         var handler = touchMouseEvent.type + "Handler";
         if (!this[handler]) {
             return;
@@ -179,15 +177,14 @@ imMatch.syncGesture = {
         var containGroup = this.searchContainCursorGroup(touchMouseEvent),
             ownGroup = this.searchOwnCursorGroup(touchMouseEvent);
 
-        if (!containGroup) {
-            imMatch.logError("containGroup: " + containGroup);
-        }
-        if (!ownGroup) {
-            imMatch.logError("ownGroup: " + ownGroup);
+        if (imMatch.isEmptyObject(containGroup) || imMatch.isEmptyObject(ownGroup)) {
+            imMatch.logError("The containGroup is empty: " + containGroup + " or the ownGroup is empty: " + containGroup);
+            return;
         }
 
         if (containGroup.id != ownGroup.id) {
-            imMatch.logError("meger agroup" + containGroup.id + ", " + ownGroup.id);
+            imMatch.logInfo("[syncGesture.touchmousemoveHandler] Merge the group: " + containGroup.id + 
+                " with another group: " + ownGroup.id);
             containGroup.add(ownGroup);
             delete cursorGroups[ownGroup.id];
         }
@@ -246,7 +243,7 @@ imMatch.syncGesture = {
     tryToStitch: function(group) {
         // Criteria 1: Cursor is straight
         if (!group.isAllCursorsStraight()) {
-            imMatch.logError("isAllCursorsStraight");
+            imMatch.logDebug("[syncGesture.tryToStitch] All of cursors is not straight!");
             return;   
         }
 
@@ -254,6 +251,6 @@ imMatch.syncGesture = {
 
         // Criteria 3: Cursor is perpendicular to the boundary of window
 
-        imMatch.logError("tryToStitch");
+        imMatch.logInfo("[syncGesture.tryToStitch] Try to stitch!");
     }
 };

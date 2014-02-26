@@ -129,41 +129,45 @@ imMatch.Group.prototype = {
     synchronize: function(data) {
         var bRet = false;
 
-        if (data) {
-            // Send ack
-            this.broadcast({
-                action: "synchronize", 
-                executeChunk: data.executeChunk, // unit: frame
-                deviceId: data.deviceID,        // TODO: deviceId -> deviceID
-                imageProgress: data.imageProgress,
-                touchPoints: data.touchPoints
-            });
+        if (imMatch.isEmptyObject(data)) {
+            imMatch.logWarn("[imMatch.Group.synchronize] Data is empty.");
+            return this;
+        }
 
-            imMatch.logDebug("[imMatch.Group.synchronize] Receive \"clientSync\" message" + 
-                " and broadcast \"clientSync\" message." + " deviceID = " + data.deviceID + 
-                ", executeChunk = " + data.executeChunk);
+        // Send ack
+        this.broadcast({
+            action: "synchronize", 
+            executeChunk: data.executeChunk, // unit: frame
+            deviceId: data.deviceID,        // TODO: deviceId -> deviceID
+            imageProgress: data.imageProgress,
+            touchPoints: data.touchPoints
+        });
 
-            this.numSyncAt[data.executeChunk] = (this.numSyncAt[data.executeChunk])? 
-                                                    this.numSyncAt[data.executeChunk] + 1 : 1;
+        imMatch.logDebug("[imMatch.Group.synchronize] Receive \"clientSync\" message" + 
+            " and broadcast \"clientSync\" message." + " deviceID = " + data.deviceID + 
+            ", executeChunk = " + data.executeChunk);
 
-            if (this.numSyncAt[data.executeChunk] >= this.getLength()) {
-                imMatch.remove(this.numSyncAt, data.executeChunk);
+        this.numSyncAt[data.executeChunk] = (this.numSyncAt[data.executeChunk])? 
+                                                this.numSyncAt[data.executeChunk] + 1 : 1;
 
-                bRet = this.startUnstitch(this.unstitchInfo, data.executeChunk);
-                if (!bRet) {
-                    bRet = this.startStitch(this.stitchInfo, data.executeChunk);
-                }
-                if (!bRet) {
-                    this.broadcast({
-                        action: "idle",
-                        executeChunk: data.executeChunk
-                    });
+        if (this.numSyncAt[data.executeChunk] >= this.getLength()) {
+            imMatch.remove(this.numSyncAt, data.executeChunk);
 
-                    imMatch.logDebug("[imMatch.Group.synchronize] Broadcast \"idle\" message." + 
-                        " deviceID = " + data.deviceID + ", executeChunk = " + data.executeChunk);
-                }
+            bRet = this.startUnstitch(this.unstitchInfo, data.executeChunk);
+            if (!bRet) {
+                bRet = this.startStitch(this.stitchInfo, data.executeChunk);
+            }
+            if (!bRet) {
+                this.broadcast({
+                    action: "idle",
+                    executeChunk: data.executeChunk
+                });
+
+                imMatch.logDebug("[imMatch.Group.synchronize] Broadcast \"idle\" message." + 
+                    " deviceID = " + data.deviceID + ", executeChunk = " + data.executeChunk);
             }
         }
+        
         return this;
     },
 

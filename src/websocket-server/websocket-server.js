@@ -1,5 +1,5 @@
 // Include WebSocketServer and child_process
-var WebSocketServer = require("ws").Server;
+var WebSocketServer = ws.Server;
 
 // Levels: DEBUG, INFO, WARN, ERROR
 imMatch.logLevel = INFO;
@@ -129,7 +129,7 @@ imMatch.extend(server, {
         tryToStitch: function(data) {
             var now = imMatch.now(), data1, data1Index, group1, group2,
                 i = 0, length = server.candidates.length;
-            if (!data) {
+            if (imMatch.isEmptyObject(data)) {
                 imMatch.logWarn("[imMatch.webSocketServer.tryToStitch] NO data.");
                 return server;
             }
@@ -322,7 +322,7 @@ imMatch.webSocketServer.on("connection", function(webSocket) {
     response.connection(webSocket);
 
     webSocket.on("message", function(message) {
-        var packet = jQuery.parseJSON(message);
+        var packet = imMatch.parseJSON(message);
         if (response[packet.action]) {
             response[packet.action](packet);
         }

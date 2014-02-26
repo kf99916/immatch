@@ -54,16 +54,16 @@ imMatch.extend(MobileEsp, {
     }
 });
 
-window.device = imMatch.Device.MacBookPro;
+imMatch.device = imMatch.Device.MacBookPro;
 if (MobileEsp.DetectIphone5()) {
-    window.device = imMatch.Device.iPhone5;
+    imMatch.device = imMatch.Device.iPhone5;
 }
 else if (MobileEsp.DetectIphoneOrIpod()) {
-    window.device = imMatch.Device.iPhone;
+    imMatch.device = imMatch.Device.iPhone;
 }
 else if (MobileEsp.DetectIpad()) {
-    window.device = imMatch.Device.iPad;
+    imMatch.device = imMatch.Device.iPad;
 }
 
 
-window.device.devicePixelRatio = window.devicePixelRatio || 1;
+imMatch.device.devicePixelRatio = window.devicePixelRatio || 1;
