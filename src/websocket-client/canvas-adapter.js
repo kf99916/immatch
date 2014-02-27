@@ -11,8 +11,8 @@ imMatch.CanvasAdapter = function CanvasAdapter(canvasID) {
         this.createCanvas(canvasID);
     }
 
-    this.canvas.width = window.innerWidth;
-    this.canvas.height = window.innerHeight;
+    this.canvas.width = imMatch.viewport.width;
+    this.canvas.height = imMatch.viewport.height;
     this.context = this.canvas.getContext("2d");
 };
 

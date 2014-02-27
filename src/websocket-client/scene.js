@@ -6,9 +6,12 @@ imMatch.Scene = function() {
         return new imMatch.Scene();
     }
 
+    // Global Coordinate
     this.x = imMatch.viewport.x;
     this.y = imMatch.viewport.y;
     this.z = sceneZ++;
+    this.width = imMatch.viewport.width;
+    this.height = imMatch.viewport.height;
     this.rad = imMatch.viewport.rad;
     this.viewports = [imMatch.viewport];
     

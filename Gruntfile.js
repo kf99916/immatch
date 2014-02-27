@@ -62,6 +62,7 @@ module.exports = function(grunt) {
                     "src/common/core.js",
                     "src/common/log.js",
                     "src/common/math.js",
+                    "src/common/AffineTransform.js",
                     "src/websocket-client/device.js",
                     "src/websocket-client/event.js",
                     "src/websocket-client/bind-touchevents.js",

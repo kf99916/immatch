@@ -11,12 +11,18 @@ var isTouchSupported = "ontouchstart" in window,
 jQuery.extend(imMatch, {
     touchMouseHandler: function(event) {
         jQuery.each(event.changedTouches, function(i, touch) {
-            var touchMouseEvent = imMatch.fixTouchMouseEvent(event, touch);
+            var touchMouseEvent = imMatch.fixTouchMouseEvent(event, touch),
+                globalTouchMouse = imMatch.viewport.transformFromLocal2Global(touchMouseEvent);
+
+            touchMouseEvent.x = globalTouchMouse.x;
+            touchMouseEvent.y = globalTouchMouse.y;
 
             imMatch.logInfo("[" + touchMouseEvent.type + "] " + touchMouseEvent.x + ", " + 
                 touchMouseEvent.y + "(" + touchMouseEvent.id + ")");
 
-            imMatch.socketClient.caches.queue("touchMouseEvent", touchMouseEvent);
+            imMatch.socketClient.caches.queue("touchMouseEvent", touchMouseEvent, function(a, b) {
+                return a.order - b.order;
+            });
         });
     },
     // Touch Handlers

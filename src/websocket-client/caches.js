@@ -6,22 +6,26 @@ imMatch.Cache = function() {
 };
 
 imMatch.Cache.prototype = {
-    queue: function(type, data) {
+    queue: function(type, data, cmp) {
         if (imMatch.isEmpty(type) || jQuery.isEmptyObject(data)) {
-            imMatch.logError("[imMatch.Cache.queue] Type is null: " + type + " or data is empty: " + data);
             return this;
         }
 
         this[type] = this[type] || [];
         this[type].push(data);
+
+        if (!jQuery.isFunction(cmp)) {
+            return this;
+        }
+
+        this[type].sort(cmp);
         return this;
     },
 
     dequeue: function(type) {
-        var result;
+        var result = {};
         if (imMatch.isEmpty(type) || jQuery.isEmptyObject(this[type])) {
-            imMatch.logError("[imMatch.Cache.dequeue] Type is null: " + type + " or the cache is empty: " + this[type]);
-            return null;
+            return result;
         }
 
         result = this[type].shift();
@@ -35,11 +39,10 @@ imMatch.Cache.prototype = {
     get: function(type, cmp) {
         var results = [];
         if (imMatch.isEmpty(type) || jQuery.isEmptyObject(this[type])) {
-            imMatch.logError("[imMatch.Cache.get] Type is null: " + type + " or the cache is empty: " + this[type]);
-            return null;
+            return results;
         }
 
-        if (imMatch.isEmpty(cmp)) {
+        if (jQuery.isFunction(cmp)) {
             return this[type];
         }
 
@@ -52,21 +55,50 @@ imMatch.Cache.prototype = {
         return results;
     },
 
-    remove: function(type, cmp) {
+    getNRemove: function(type, cmp) {
+        var results = [];
         if (imMatch.isEmpty(type) || jQuery.isEmptyObject(this[type])) {
-            imMatch.logError("[imMatch.Cache.remove] Type is null: " + type + " or the cache is empty: " + this[type]);
-            return this;
+            return results;
         }
 
-        if (imMatch.isEmpty(cmp)) {
+        if (!jQuery.isFunction(cmp)) {
+            imMatch.swap(results, this[type]);
             delete this[type];
-            return this;
+            return results;
         }
 
-        this[type] = jQuery.grep(this[type], function(data) {
-            return cmp(data);
+        jQuery.each(this[type], function(i, data) {
+            if (cmp(data)) {
+                results.push(data);
+            }
         });
 
-        return this;
+        imMatch.swap(results, this[type]);
+        return results;
+    },
+
+    remove: function(type, cmp) {
+        var removeItems = [], remainingItems = [];
+        if (imMatch.isEmpty(type) || jQuery.isEmptyObject(this[type])) {
+            return removeItems;
+        }
+
+        if (!jQuery.isFunction(cmp)) {
+            imMatch.swap(removeItems, this[type]);
+            delete this[type];
+            return removeItems;
+        }
+
+        jQuery.each(this[type], function(i, data) {
+            if (cmp(data)) {
+                removeItems.push(data);
+            }
+            else {
+                remainingItems.push(data);
+            }
+        });
+
+        imMatch.swap(remainingItems, this[type]);
+        return removeItems;
     }
 };

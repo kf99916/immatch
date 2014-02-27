@@ -1,15 +1,12 @@
 jQuery.extend(imMatch, {
     // Rotate (x, y) with a specified point as rotation center
     rotate: function(point, rad, /* Optional */ center) {
+        var vec, cos, sin;
         if (!jQuery.isNumeric(rad) || rad === 0 || imMatch.isEmpty(point.x) || imMatch.isEmpty(point.y)) {
             return point;
         }
 
-        if (!center) {
-            center = {x:0, y:0};
-        }
-
-        var vec, cos, sin;
+        center = center || {x:0, y:0};
 
         vec = {x: point.x - center.x, y: point.y - center.y};
         cos = Math.cos(rad);

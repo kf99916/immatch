@@ -6,6 +6,7 @@ jQuery.extend(imMatch, {
         touchMouse.pageY = touchMouse.pageY || 0;
         touchMouse.timestamp = touchMouse.timestamp || Date.now();
 
+        // Local Coordinate
         return new jQuery.Event(event, {
                     id: touchMouse.identifier,
                     x: touchMouse.pageX / imMatch.device.ppi,

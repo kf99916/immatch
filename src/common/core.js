@@ -38,12 +38,19 @@ jQuery.extend(imMatch, {
         }
         
         if (jQuery.isArray(object)) {
-            core_splice.call(object, name, 1);
+            slice.call(object, name, 1);
         }
         else if (jQuery.isPlainObject(object)) {
             delete object[name];
         }
 
         return object;
+    },
+
+    swap: function(obj1, obj2) {
+        var temp = obj1;
+        obj1 = obj2;
+        obj2 = temp;
+        return this;
     }
 });
