@@ -7,12 +7,12 @@ imMatch.CanvasAdapter = function CanvasAdapter(canvasID) {
     canvasID = canvasID || "canvas";
     this.canvas = document.getElementById(canvasID);
     if (jQuery.isEmptyObject(this.canvas)) {
-        jQuery.error("[imMatch.CanvasAdapter] CanvasID: " + canvasID + " does not exist.");
         this.createCanvas(canvasID);
     }
 
-    this.canvas.width = imMatch.viewport.width;
-    this.canvas.height = imMatch.viewport.height;
+    this.canvas.width = imMatch.viewport.width * imMatch.device.ppi;
+    this.canvas.height = imMatch.viewport.height * imMatch.device.ppi;
+
     this.context = this.canvas.getContext("2d");
 
     imMatch.on("contextDraw", this.contextDrawHandler);
@@ -22,7 +22,7 @@ imMatch.CanvasAdapter.prototype = {
     createCanvas: function(canvasID) {
         this.canvas = document.createElement("canvas");
         this.canvas.id = canvasID;
-        document.body.appendChild(canvas);
+        document.body.appendChild(this.canvas);
 
         return this;
     },
@@ -34,6 +34,6 @@ imMatch.CanvasAdapter.prototype = {
     },
 
     contextDrawHandler: function(event, stamp) {
-        
+        imMatch.canvas.clear();
     }
 };

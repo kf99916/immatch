@@ -20,7 +20,6 @@ imMatch.engine = {
 
         imMatch.trigger("contextWillbeDrawn", stamp);
 
-        imMatch.canvas.clear();
         imMatch.trigger("contextDraw", stamp);
 
         imMatch.trigger("contextDidbeDrawn", stamp);
@@ -53,6 +52,10 @@ imMatch.engine = {
 
 jQuery.extend(imMatch, {
     run: function(canvasID) {
+        if (!imMatch.isReady()) {
+            jQuery.error("Please invoke $im.ready(fn).");
+        }
+
         imMatch.socketClient = new imMatch.SocketClient;
         imMatch.canvas = new imMatch.CanvasAdapter(canvasID);
 

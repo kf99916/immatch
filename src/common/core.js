@@ -1,4 +1,7 @@
-var arr = [],
+var 
+    // Use the correct document accordingly with window argument (sandbox)
+    document = window.document,
+    arr = [],
 
     stringify = JSON.stringify,
 
@@ -17,6 +20,20 @@ function returnFalse() {
 Date.now = Date.now || function now() { return new Date().getTime(); };
 
 jQuery.extend(imMatch, {
+    isReady: returnFalse,
+
+    ready: function(fn) {
+        if (imMatch.isReady()) {
+            return this;
+        }
+
+        jQuery(document).ready(function() {
+            imMatch.loader.load(fn);
+        });
+
+        return this;
+    },
+
     // Determine if object is a 2D vector
     is2DVector: function(object) {
         if (object == null) {

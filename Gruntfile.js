@@ -76,6 +76,7 @@ module.exports = function(grunt) {
                     "src/websocket-client/viewport.js",
                     "src/websocket-client/sprite.js",
                     "src/websocket-client/canvas-adapter.js",
+                    "src/websocket-client/loader.js",
 					"src/websocket-client/exports.js", 
 					"src/common/outro.js"],
 				dest:"dist/immatch.js"
