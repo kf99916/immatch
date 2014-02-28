@@ -6,13 +6,12 @@ imMatch.Scene = function() {
         return new imMatch.Scene();
     }
 
-    // Global Coordinate: The origin is initialized as the center of imMatch.viewport
-    this.x = imMatch.viewport.x;
-    this.y = imMatch.viewport.y;
     this.z = sceneZ++;
     this.width = imMatch.viewport.width;
     this.height = imMatch.viewport.height;
-    this.rad = imMatch.viewport.rad;
+
+    this.affineTransform = new imMatch.AffineTransform;
+
     this.id = Math.uuidFast();
 
     this.sprites = [];
@@ -27,12 +26,15 @@ imMatch.Scene.prototype = {
     },
 
     isTouched: function(point) {
+        var scenePoint;
         if (!imMatch.is2DVector(point)) {
             return false;
         }
 
-        if (this.x - this.width / 2 <= point.x && point.x <= this.x + this.width / 2 &&
-            this.y - this.height / 2 <= point.y && point.y <= this.y + this.height / 2) {
+        scenePoint = this.transformFromGlobal2Scene(point);
+
+        if (-this.width / 2 <= scenePoint.x && scenePoint.x <= this.width / 2 &&
+            -this.height / 2 <= scenePoint.y && scenePoint.y <= this.height / 2) {
             return true;
         }
     },
@@ -56,6 +58,14 @@ imMatch.Scene.prototype = {
         });
 
         return this;
+    },
+
+    transformFromGlobal2Scene: function(vec) {
+        return this.affineTransform.transform(vec);
+    },
+
+    transformFromScene2Global: function(vec) {
+        return this.affineTransform.createInverse().transform(vec);
     }
 };
 

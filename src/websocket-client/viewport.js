@@ -8,18 +8,16 @@ imMatch.viewport = {
 
     height: window.innerHeight / imMatch.device.ppi,
 
-    rad: 0,
-
-    affineTransformation: null,
+    affineTransform: null,
 
     transformFromLocal2Global: function(vec) {
-        return this.affineTransformation.transform(vec);
+        return this.affineTransform.transform(vec);
     },
 
     transformFromGlobal2Local: function(vec) {
-        return this.affineTransformation.createInverse.transform(vec);
+        return this.affineTransform.createInverse().transform(vec);
     },
 };
 
-imMatch.viewport.affineTransformation = imMatch.AffineTransform.getTranslationInstance({
+imMatch.viewport.affineTransform = imMatch.AffineTransform.getTranslationInstance({
         x: -imMatch.viewport.width / 2, y: -imMatch.viewport.height / 2});

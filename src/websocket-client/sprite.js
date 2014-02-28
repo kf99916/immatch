@@ -4,21 +4,24 @@ imMatch.Sprite = function() {
         return new imMatch.Sprite();
     }
 
-    this.x = 0;
-    this.y = 0;
+    // Global Coordinate: The origin is initialized as the center of imMatch.viewport
     this.z = 0;
-    this.rad = 0;
-    this.scale = 1;
+    this.width = 0;
+    this.height = 0;
     this.alpha = 1;
+    this.maxScale = 1.0;
+    this.minScale = 1.0;
+
+    this.touchMouseEvents = {};
+    this.affineTransform = new imMatch.AffineTransform;
+
+    this.image = null;
 
     this.touchable = true;
     this.movable = true;
     this.rotatable = true;
     this.scalable = true;
-
-    this.maxScale = 1.0;
-    this.minScale = 1.0;
-}
+};
 
 imMatch.Sprite.prototype = {
     setContainedScene: function(scene) {
@@ -30,16 +33,57 @@ imMatch.Sprite.prototype = {
         this.z = scene.z * scene.maxNumSprites + scene.spriteZ;
     },
 
+    setImage: function(image) {
+        this.image = image;
+        this.width = image.width / image.ppi;
+        this.height = image.height / image.ppi;
+    },
+
     isTouched: function(touchMouseEvent) {
+        var spritePoint;
         if (!this.touchable) {
             return false;
         }
-        
-        // TODO
-        return true;
+
+        if (!imMatch.is2DVector(touchMouseEvent)) {
+            return false;
+        }
+
+        spritePoint = this.transformFromGlobal2Scene(touchMouseEvent);
+
+        if (-this.width / 2 <= spritePoint.x && spritePoint.x <= this.width / 2 &&
+            -this.height / 2 <= spritePoint.y && spritePoint.y <= this.height / 2) {
+            return true;
+        }
     },
 
     updateTransform: function(touchMouseEvent) {
-        
+        if (this.movable) {
+
+        }
+    },
+
+    transformFromScene2Sprite: function(vec) {
+        return this.affineTransform.transform(vec);
+    },
+
+    transformSprite2Scene: function(vec) {
+        return this.affineTransform.createInverse().transform(vec);
+    },
+
+    translate: function(translationFacotr) {
+        this.affineTransform.translate(translationFacotr);
+    },
+
+    rotate: function(rad) {
+        this.affineTransform.rotate(rad);
+    },
+
+    scale: function(scalingFactor) {
+        this.affineTransform.scale(scalingFactor);
+    },
+
+    shear: function(shearFactor) {
+        this.affineTransform.shear(shearFactor);
     }
-}
+};

@@ -19,9 +19,7 @@ imMatch.engine = {
         };
 
         imMatch.trigger("contextWillbeDrawn", stamp);
-
-        imMatch.trigger("contextDraw", stamp);
-
+        imMatch.canvas.draw(stamp);
         imMatch.trigger("contextDidbeDrawn", stamp);
 
         this.updateInterval(stamp);

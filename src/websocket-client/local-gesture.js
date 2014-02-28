@@ -18,7 +18,7 @@ imMatch.localGesture = {
         }
 
         this.spriteMap[touchMouseEvent.id] = sprite;
-        sprite.updateTransform(touchMouseEvent);
+        sprite.touchMouseEvents[touchMouseEvent.id] = touchMouseEvent;
     },
 
     touchmousemoveHandler: function(touchMouseEvent) {
