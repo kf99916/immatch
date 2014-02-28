@@ -1,4 +1,4 @@
-var touchOrder = 0;
+var touchOrder = 0; // Be reset if there is no any touchMouseEvent in cache. Please check it in geture-recognizer.js
 jQuery.extend(imMatch, {
     fixTouchMouseEvent: function(event, touchMouse) {
         touchMouse.identifier = touchMouse.identifier || 0;
@@ -6,7 +6,7 @@ jQuery.extend(imMatch, {
         touchMouse.pageY = touchMouse.pageY || 0;
         touchMouse.timestamp = touchMouse.timestamp || Date.now();
 
-        // Local Coordinate
+        // Local Coordinate: The origin is initialized as the upper left corner of imMatch.viewport
         return new jQuery.Event(event, {
                     id: touchMouse.identifier,
                     x: touchMouse.pageX / imMatch.device.ppi,

@@ -45,12 +45,5 @@ jQuery.extend(imMatch, {
         }
 
         return object;
-    },
-
-    swap: function(obj1, obj2) {
-        var temp = obj1;
-        obj1 = obj2;
-        obj2 = temp;
-        return this;
     }
 });

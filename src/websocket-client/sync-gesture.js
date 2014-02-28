@@ -1,19 +1,19 @@
 var cursorGroups,
-    cursorGroupID = 0,
+    cursorGroupID = 0,  // Be reset if there is no any cursor group.
     Threadshold = {
         DISTANCE: 2,
         SAMPLING_TIME: 50, // ms
         STRAIGHT: Math.PI / 20 // rad
     };
 
-imMatch.Cursor = function(points) {
+imMatch.Cursor = function(touchMouseEvent) {
     // Allow instantiation without the 'new' keyword
     if ( !(this instanceof imMatch.Cursor) ) {
         return new imMatch.Cursor(touchMouseEvent);
     }
 
     this.points = [];
-    this.add(points);
+    this.add(touchMouseEvent);
 };
 
 imMatch.Cursor.prototype = {
@@ -161,24 +161,12 @@ imMatch.syncGesture = {
         this.addCursorGroup(touchMouseEvent);
     },
 
-    touchmouseupHandler: function(touchMouseEvent) {
-        var group = this.searchContainCursorGroup(touchMouseEvent);
-        this.touchmousemoveHandler(touchMouseEvent);
-
-        if (!group.isAllCursorsUp()) {
-            return;
-        }
-
-        this.tryToStitch(group);
-        delete cursorGroups[group.id];
-    },
-
     touchmousemoveHandler: function(touchMouseEvent) {
         var containGroup = this.searchContainCursorGroup(touchMouseEvent),
             ownGroup = this.searchOwnCursorGroup(touchMouseEvent);
 
         if (jQuery.isEmptyObject(containGroup) || jQuery.isEmptyObject(ownGroup)) {
-            imMatch.logError("The containGroup is empty: " + containGroup + " or the ownGroup is empty: " + containGroup);
+            imMatch.logError("The containGroup is empty: " + containGroup + " or the ownGroup is empty: " + ownGroup);
             return;
         }
 
@@ -190,6 +178,22 @@ imMatch.syncGesture = {
         }
 
         containGroup.cursors[touchMouseEvent.id].add(touchMouseEvent);
+    },
+
+    touchmouseupHandler: function(touchMouseEvent) {
+        var group = this.searchContainCursorGroup(touchMouseEvent);
+        this.touchmousemoveHandler(touchMouseEvent);
+
+        if (!group.isAllCursorsUp()) {
+            return;
+        }
+
+        this.tryToStitch(group);
+        
+        delete cursorGroups[group.id];
+        if (Object.keys(cursorGroups).length == 0) {
+            cursorGroupID = 0;
+        }
     },
 
     touchmousecancelHandler:function(touchMouseEvent) {

@@ -1,5 +1,5 @@
-// Global Coordinate
 imMatch.viewport = {
+    // Global Coordinate: The origin is initialized as the center of imMatch.viewport
     x: 0,
 
     y: 0,

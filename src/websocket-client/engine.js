@@ -6,13 +6,11 @@ var Mode = {
 imMatch.engine = {
     interval: 0,
 
-    canvasAdapter: null,
-
     mode: Mode.ALONE,
 
     lastRunTimestamp: 0,
 
-    frame: 0,
+    frame: 0, // Be reset if there is no any touchMouseEvent in cache. Please check it in geture-recognizer.js
     
     run: function(timestamp) {
         var stamp = {
@@ -22,7 +20,7 @@ imMatch.engine = {
 
         imMatch.trigger("contextWillbeDrawn", stamp);
 
-        this.canvasAdapter.clear();
+        imMatch.canvas.clear();
         imMatch.trigger("contextDraw", stamp);
 
         imMatch.trigger("contextDidbeDrawn", stamp);
@@ -50,24 +48,17 @@ imMatch.engine = {
                 this.interval = stamp.time - this.lastRunTimestamp;
             break;
         }
-    },
-
-    addScene: function(scene) {
-        if (jQuery.isEmptyObject(scene)) {
-            imMatch.logError("[imMatch.engine.addScene] Scene is empty.");
-            return this;
-        }
-
-        imMatch.scenes.push(scene);
-        imMatch.scenes.sort(function(a, b) {
-            return b.z - a.z;
-        });
     }
 };
 
 jQuery.extend(imMatch, {
     run: function(canvasID) {
-        imMatch.engine.canvasAdapter = new imMatch.CanvasAdapter(canvasID);
+        imMatch.socketClient = new imMatch.SocketClient;
+        imMatch.canvas = new imMatch.CanvasAdapter(canvasID);
+
+        imMatch.addTouchMouseHandlers();
+        imMatch.on("contextWillbeDrawn", imMatch.gestureRecognizer.contextWillbeDrawnHandler);
+
         imMatch.engine.lastRunTimestamp = Date.now();
         imMatch.engine.run(imMatch.engine.lastRunTimestamp);
     }

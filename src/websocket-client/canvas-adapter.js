@@ -14,6 +14,8 @@ imMatch.CanvasAdapter = function CanvasAdapter(canvasID) {
     this.canvas.width = imMatch.viewport.width;
     this.canvas.height = imMatch.viewport.height;
     this.context = this.canvas.getContext("2d");
+
+    imMatch.on("contextDraw", this.contextDrawHandler);
 };
 
 imMatch.CanvasAdapter.prototype = {
@@ -30,6 +32,8 @@ imMatch.CanvasAdapter.prototype = {
 
         return this;
     },
-};
 
-imMatch.canvas = new imMatch.CanvasAdapter();
+    contextDrawHandler: function(event, stamp) {
+        
+    }
+};

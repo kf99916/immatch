@@ -5,6 +5,11 @@ imMatch.gestureRecognizer = {
             return (touchMouseEvent.frame == stamp.frame);
         });
 
+        if (touchMouseEvents.length == 0) {
+            touchOrder = 0;
+            imMatch.engine.frame = 0;
+        }
+
         jQuery.each(touchMouseEvents, function(i, touchMouseEvent) {
             // 2. Synchronous Gesture Recognition
             imMatch.syncGesture.recognize(touchMouseEvent);
@@ -14,5 +19,3 @@ imMatch.gestureRecognizer = {
         });
     }
 };
-
-imMatch.on("contextWillbeDrawn", imMatch.gestureRecognizer.contextWillbeDrawnHandler);

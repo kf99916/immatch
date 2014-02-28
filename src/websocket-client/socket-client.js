@@ -15,7 +15,7 @@ imMatch.SocketClient = function() {
     }
 
     this.caches = new imMatch.Cache();
-    /*this.webSocket = new window.WebSocket(@WEBSOCKET_URL);
+    this.webSocket = new window.WebSocket(@WEBSOCKET_URL);
     this.webSocket.onopen = function(event) {
         imMatch.logInfo("[WebSocket.onopen] A websocket opened. URL: " + @WEBSOCKET_URL);
     };
@@ -42,9 +42,9 @@ imMatch.SocketClient = function() {
     };
                 
     this.webSocket.onerror = function(event) {
-        imMatch.logError("[imMatch.WebSocketListener] " + event.message);
-        imMatch.error("[imMatch.WebSocketListener] Socket error.");
-    };*/
+        imMatch.logError("[WebSocket.onerror] " + event.message);
+        imMatch.error("[WebSocket.onerror] Socket error.");
+    };
 };
 
 imMatch.SocketClient.prototype = {
@@ -97,5 +97,3 @@ imMatch.SocketClient.prototype = {
         }
     }
 };
-
-imMatch.socketClient = new imMatch.SocketClient;

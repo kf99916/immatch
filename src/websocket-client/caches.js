@@ -56,24 +56,15 @@ imMatch.Cache.prototype = {
     },
 
     getNRemove: function(type, cmp) {
-        var results = [];
+        return this.remove(type, cmp);
         if (imMatch.isEmpty(type) || jQuery.isEmptyObject(this[type])) {
-            return results;
+            return [];
         }
 
-        if (!jQuery.isFunction(cmp)) {
-            imMatch.swap(results, this[type]);
-            delete this[type];
-            return results;
-        }
+        console.log("type = " + this[type].length);
+        var results = this.remove(type, cmp);
+        console.log("results = " + results.length + ", " + this[type].length);
 
-        jQuery.each(this[type], function(i, data) {
-            if (cmp(data)) {
-                results.push(data);
-            }
-        });
-
-        imMatch.swap(results, this[type]);
         return results;
     },
 
@@ -84,7 +75,7 @@ imMatch.Cache.prototype = {
         }
 
         if (!jQuery.isFunction(cmp)) {
-            imMatch.swap(removeItems, this[type]);
+            jQuery.extend(removeItems, this[type]);
             delete this[type];
             return removeItems;
         }
@@ -98,7 +89,7 @@ imMatch.Cache.prototype = {
             }
         });
 
-        imMatch.swap(remainingItems, this[type]);
+        this[type] = remainingItems;
         return removeItems;
     }
 };
