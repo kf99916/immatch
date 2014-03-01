@@ -6,7 +6,13 @@ $im.ready(function() {
     $im.logError("4 " + $im.rad({x: 1, y:1}, {x:-1, y:-1}) * 180 / Math.PI);
 
 
-    $im.addScene(new imMatch.Scene());
+    var sprite = new imMatch.Sprite(),
+        scene = new imMatch.Scene();
+
+    sprite.setImage("taipei101");
+    scene.addSprite(sprite);
+
+    $im.addScene(scene);
 
     $im.run();
 });

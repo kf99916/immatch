@@ -12,8 +12,12 @@ imMatch.CanvasAdapter = function CanvasAdapter(canvasID) {
 
     this.canvas.width = imMatch.viewport.width * imMatch.device.ppi;
     this.canvas.height = imMatch.viewport.height * imMatch.device.ppi;
-    this.canvas.style.width = this.canvas.width + "px";
-    this.canvas.style.height = this.canvas.height + "px";
+    this.canvas.style = "width: " + this.canvas.width  + "px; " +
+                        "height: " + this.canvas.height + "px; " +
+                        "position: absolute; top: 50%; left: 50%; " +
+                        "margin-left: " + -this.canvas.width / 2 + "px; " + 
+                        "margin-top: " + -this.canvas.height / 2 + "px;";
+    this.canvas.style.border = "1px solid red";
 
     this.context = this.canvas.getContext("2d");
     this.adjustCanvasSize();
@@ -38,8 +42,9 @@ imMatch.CanvasAdapter.prototype = {
             ratio = imMatch.device.devicePixelRatio / backingStoreRatio;
 
         if (ratio != 1) {
+            this.ratio = ratio;
             this.canvas.width *= ratio;
-            this.canvas.heifht *= ratio;
+            this.canvas.height *= ratio;
             this.context.scale(ratio, ratio);
         }
 
@@ -53,25 +58,27 @@ imMatch.CanvasAdapter.prototype = {
     },
 
     draw: function(stamp) {
+        var self = this;
         jQuery.each(imMatch.scenes.reverse(), function(i, scene) {
             var affineTransformFromScene2Local = 
                 imMatch.viewport.affineTransform.createInverse().concatenate(scene.affineTransform.createInverse);
-
             jQuery.each(scene.sprites.reverse(), function(i, sprite) {
                 var affineTransformFromSprite2Local = 
-                    sprite.affineTransform.createInverse().preConcatenate(affineTransformFromScene2Local);
+                    sprite.affineTransform.createInverse().preConcatenate(affineTransformFromScene2Local),
+                    width = sprite.width * sprite.image.ppi, height = sprite.height * sprite.image.ppi;
 
-                this.context.save();
+                self.context.save();
 
-                this.context.setTransform(
-                    affineTransformFromSprite2Local.m00, affineTransformFromSprite2Local.m10, affineTransformFromSprite2Local.m01,
-                    affineTransformFromSprite2Local.m11, affineTransformFromSprite2Local.m02, affineTransformFromSprite2Local.m12);
+                self.context.setTransform(
+                    affineTransformFromSprite2Local.m00, affineTransformFromSprite2Local.m10,
+                    affineTransformFromSprite2Local.m01, affineTransformFromSprite2Local.m11,
+                    affineTransformFromSprite2Local.m02 * imMatch.device.ppi * self.ratio, 
+                    affineTransformFromSprite2Local.m12 * imMatch.device.ppi * self.ratio);
 
-                this.context.globalAlpha *= alpha;
+                self.context.globalAlpha *= sprite.alpha;
+                self.context.drawImage(sprite.image, -width / 2, - height / 2, width, height);
 
-                this.context.drawImage(sprite.image, 0, 0, sprite.width * sprite.image.ppi, sprite.height * sprite.image.ppi);
-
-                this.context.restore();
+                self.context.restore();
             });
         });
     }

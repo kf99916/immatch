@@ -1,5 +1,5 @@
 imMatch.gestureRecognizer = {
-    contextWillbeDrawnHandler: function(event, stamp) {
+    recognize: function(stamp) {
         // 1. Get all touchMouseEvent in the frame
         var touchMouseEvents = imMatch.socketClient.caches.getNRemove("touchMouseEvent", function(touchMouseEvent) {
             return (touchMouseEvent.frame == stamp.frame);
@@ -17,5 +17,7 @@ imMatch.gestureRecognizer = {
             // 3. Local Gesture Recognition
             imMatch.localGesture.recognize(touchMouseEvent);
         });
+
+        return touchMouseEvents.length;
     }
 };

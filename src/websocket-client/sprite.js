@@ -33,10 +33,16 @@ imMatch.Sprite.prototype = {
         this.z = scene.z * scene.maxNumSprites + scene.spriteZ;
     },
 
-    setImage: function(image) {
-        this.image = image;
-        this.width = image.width / image.ppi;
-        this.height = image.height / image.ppi;
+    setImage: function(id) {
+        if (imMatch.isEmpty(id)) {
+            return this;
+        }
+
+        this.image = imMatch.loader.images[id];
+        this.width = this.image.width / this.image.ppi;
+        this.height = this.image.height / this.image.ppi;
+
+        return this;
     },
 
     isTouched: function(touchMouseEvent) {
@@ -49,7 +55,7 @@ imMatch.Sprite.prototype = {
             return false;
         }
 
-        spritePoint = this.transformFromGlobal2Scene(touchMouseEvent);
+        spritePoint = this.transformFromScene2Sprite(touchMouseEvent);
 
         if (-this.width / 2 <= spritePoint.x && spritePoint.x <= this.width / 2 &&
             -this.height / 2 <= spritePoint.y && spritePoint.y <= this.height / 2) {

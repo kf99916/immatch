@@ -18,9 +18,14 @@ imMatch.engine = {
             frame: this.frame
         };
 
-        imMatch.trigger("contextWillbeDrawn", stamp);
-        imMatch.canvas.draw(stamp);
-        imMatch.trigger("contextDidbeDrawn", stamp);
+        imMatch.trigger("gestureWillbeRecognized", stamp);
+        if (this.frame == 0 || imMatch.gestureRecognizer.recognize(stamp) != 0) {
+            imMatch.trigger("gestureDidbeRecognized", stamp);
+
+            imMatch.trigger("contextWillbeDrawn", stamp);
+            imMatch.canvas.draw(stamp);
+            imMatch.trigger("contextDidbeDrawn", stamp);
+        }
 
         this.updateInterval(stamp);
         this.lastRunTimestamp = timestamp;
@@ -28,7 +33,7 @@ imMatch.engine = {
 
         switch(this.mode) {
             case Mode.STITCHED:
-                setTimeout(this.run, this.interval, Date.now() + this.interval);
+                setTimeout(this.run.bind(this), this.interval, Date.now() + this.interval);
             break;
             case Mode.ALONE: default:
                 window.requestAnimationFrame(this.run.bind(this));
@@ -58,7 +63,6 @@ jQuery.extend(imMatch, {
         imMatch.canvas = new imMatch.CanvasAdapter(canvasID);
 
         imMatch.addTouchMouseHandlers();
-        imMatch.on("contextWillbeDrawn", imMatch.gestureRecognizer.contextWillbeDrawnHandler);
 
         imMatch.engine.lastRunTimestamp = Date.now();
         imMatch.engine.run(imMatch.engine.lastRunTimestamp);

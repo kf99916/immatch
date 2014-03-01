@@ -17,14 +17,9 @@ imMatch.Scene = function() {
     this.sprites = [];
     this.spriteZ = 0;
     this.maxNumSprites = 100;
-    
-    imMatch.on("contextWillbeDrawn", this.contextWillbeDrawnHandler);
 };
 
 imMatch.Scene.prototype = {
-    contextWillbeDrawnHandler: function(event) {
-    },
-
     isTouched: function(point) {
         var scenePoint;
         if (!imMatch.is2DVector(point)) {

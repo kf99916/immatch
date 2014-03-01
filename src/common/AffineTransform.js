@@ -8,10 +8,10 @@
 imMatch.AffineTransform = function(m00, m10, m01, m11, m02, m12) {
     // Allow instantiation without the 'new' keyword
     if ( !(this instanceof imMatch.AffineTransform) ) {
-        return new imMatch.AffineTransform(m00, m01, m02, m10, m11, m12);
+        return new imMatch.AffineTransform(m00, m10, m01, m11, m02, m12);
     }
 
-    this.setTransform(m00, m01, m02, m10, m11, m12);
+    this.setTransform(m00, m10, m01, m11, m02, m12);
 };
 
 imMatch.AffineTransform.getScaleInstance = function(scalingFactor) {
@@ -199,7 +199,7 @@ imMatch.AffineTransform.prototype = {
         var det = this.getDeterminant();
         return new imMatch.AffineTransform(this.m11 / det, -this.m10 / det, -this.m01 / det,
                 this.m00 / det, (this.m01 * this.m12 - this.m11 * this.m02) / det,
-                (this.m10 * this.m02_- this.m00 * this.m12) / det);
+                (this.m10 * this.m02- this.m00 * this.m12) / det);
     },
 
     setToScale: function(scalingFactor) {
@@ -234,5 +234,12 @@ imMatch.AffineTransform.prototype = {
             anchorPoint.x - anchorPoint.x * cos + anchorPoint.y * sin, 
             anchorPoint.y - anchorPoint.x * sin - anchorPoint.y * cos);
 
+    },
+
+    print: function() {
+        console.log("[ " + this.m00 + " " + this.m01 + " " + this.m02 + " ]");
+        console.log("[ " + this.m10 + " " + this.m11 + " " + this.m12 + " ]");
+        console.log("[ 0 0 1 ]");
+        console.log();
     }
 };
