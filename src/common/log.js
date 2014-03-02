@@ -1,12 +1,3 @@
-var DEBUG = 0x00,
-    INFO = 0x01,
-    WARN = 0x02,
-    ERROR = 0x04;
-
-function fixMessage(message, mode) {
-    return "[" + mode.toUpperCase() + "] " + Date() + " : " + message;
-}
-
 window.console = window.console || {};
 window.console.log = console.log || function(message) {return message;};
 window.console.debug = console.debug || function(message) {window.console.log(message);};
@@ -15,8 +6,16 @@ window.console.warn = console.warn || function(message) {window.console.log(mess
 window.console.error = console.error || function(message) {window.console.log(message);};
 
 jQuery.extend(imMatch, {
+    debugLevel: 0,
+
+    infoLevel: 1,
+
+    warnLevel: 2,
+
+    errorLevel: 3,
+    
     logDebug: function(message) {
-        if (imMatch.isEmpty(message) || this.logLevel > DEBUG) {
+        if (imMatch.isEmpty(message) || this.logLevel > imMatch.debugLevel) {
             return this;
         }
 
@@ -26,7 +25,7 @@ jQuery.extend(imMatch, {
     },
 
     logInfo: function(message) {
-        if (imMatch.isEmpty(message) || this.logLevel > INFO) {
+        if (imMatch.isEmpty(message) || this.logLevel > imMatch.infoLevel) {
             return this;
         }
 
@@ -36,7 +35,7 @@ jQuery.extend(imMatch, {
     },
 
     logWarn: function(message) {
-        if (imMatch.isEmpty(message) || this.logLevel > WARN) {
+        if (imMatch.isEmpty(message) || this.logLevel > imMatch.warnLevel) {
             return this;
         }
 
@@ -46,7 +45,7 @@ jQuery.extend(imMatch, {
     },
 
     logError: function(message) {
-        if (imMatch.isEmpty(message) || this.logLevel > ERROR) {
+        if (imMatch.isEmpty(message) || this.logLevel > imMatch.errorLevel) {
             return this;
         }
 
@@ -55,12 +54,5 @@ jQuery.extend(imMatch, {
         return this;
     },
 
-    allLogLevels: {
-        debug: DEBUG,
-        info: INFO,
-        warn: WARN,
-        error: ERROR
-    },
-
-    logLevel: ERROR
+    logLevel: imMatch.errorLevel
 });

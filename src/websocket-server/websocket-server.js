@@ -1,8 +1,7 @@
 // Include WebSocketServer and child_process
 var WebSocketServer = ws.Server;
 
-// Levels: DEBUG, INFO, WARN, ERROR
-imMatch.logLevel = INFO;
+imMatch.logLevel = imMatch.infoLevel;
 
 imMatch.webSocketServer = new WebSocketServer({port: 8080, host:null});
 

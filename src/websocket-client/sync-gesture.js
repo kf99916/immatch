@@ -1,10 +1,12 @@
-var cursorGroups,
-    cursorGroupID = 0,  // Be reset if there is no any cursor group.
-    Threadshold = {
-        DISTANCE: 2,
-        SAMPLING_TIME: 50, // ms
-        STRAIGHT: Math.PI / 20 // rad
-    };
+jQuery.extend(imMatch, {
+    cursorGroups: {},
+
+    threadsholdAboutSyncGesture: {
+        distance: 2,
+        smaplingTime: 50, // ms
+        straight: Math.PI / 20
+    }
+});
 
 imMatch.Cursor = function(touchMouseEvent) {
     // Allow instantiation without the 'new' keyword
@@ -39,9 +41,9 @@ imMatch.Cursor.prototype = {
     isStraight: function() {
         var result = true, lastPoint = this.points[0], lastVelocity;
         jQuery.each(this.points, function(i, point) {
-            // Sampling each Threadshold.SAMPLING_TIME ms
+            // Sampling each imMatch.threadsholdAboutSyncGesture.samplingTime ms
             var duration = point.timestamp - lastPoint.timestamp, velocity;
-            if (duration < Threadshold.SAMPLING_TIME) {
+            if (duration < imMatch.threadsholdAboutSyncGesture.samplingTime) {
                 return;
             }
             velocity = {
@@ -50,7 +52,7 @@ imMatch.Cursor.prototype = {
             };
 
             if (!jQuery.isEmptyObject(lastVelocity) && 
-                imMatch.rad(velocity, lastVelocity) > Threadshold.STRAIGHT) {
+                imMatch.rad(velocity, lastVelocity) > imMatch.threadsholdAboutSyncGesture.straight) {
                 result = false;
                 return false;
             }
@@ -108,7 +110,7 @@ imMatch.CursorGroup.prototype = {
         var result = false;
         jQuery.each(this.cursors, function(cursorID, cursor) {
             var lastPoint = cursor.points[cursor.points.length - 1];
-            if (imMatch.norm(point, lastPoint) <= Threadshold.DISTANCE) {
+            if (imMatch.norm(point, lastPoint) <= imMatch.threadsholdAboutSyncGesture.distance) {
                 result = true;
                 return false;
             }
@@ -120,7 +122,7 @@ imMatch.CursorGroup.prototype = {
     isAllCursorsUp: function() {
         var numUpCursors = 0;
         jQuery.each(this.cursors, function(cursorID, cursor) {
-            if (cursor.type == TouchMouseEvent.UP || cursor.type == TouchMouseEvent.CANCEL) {
+            if (cursor.type == imMatch.touchMouseEventType.up || cursor.type == imMatch.touchMouseEventType.cancel) {
                 ++numUpCursors;
             }
         });
@@ -144,8 +146,6 @@ imMatch.CursorGroup.prototype = {
         return result;
     }
 };
-
-cursorGroups = {};
 
 imMatch.syncGesture = {
     recognize: function(touchMouseEvent) {
@@ -174,7 +174,7 @@ imMatch.syncGesture = {
             imMatch.logInfo("[syncGesture.touchmousemoveHandler] Merge the group: " + containGroup.id + 
                 " with another group: " + ownGroup.id);
             containGroup.add(ownGroup);
-            delete cursorGroups[ownGroup.id];
+            delete imMatch.cursorGroups[ownGroup.id];
         }
 
         containGroup.cursors[touchMouseEvent.id].add(touchMouseEvent);
@@ -190,8 +190,8 @@ imMatch.syncGesture = {
 
         this.tryToStitch(group);
         
-        delete cursorGroups[group.id];
-        if (Object.keys(cursorGroups).length == 0) {
+        delete imMatch.cursorGroups[group.id];
+        if (Object.keys(imMatch.cursorGroups).length == 0) {
             cursorGroupID = 0;
         }
     },
@@ -202,7 +202,7 @@ imMatch.syncGesture = {
 
     searchOwnCursorGroup: function(touchMouseEvent) {
         var targetGroup;
-        jQuery.each(cursorGroups, function(groupID, group) {
+        jQuery.each(imMatch.cursorGroups, function(groupID, group) {
             if (group.hasOwnPoint(touchMouseEvent)) {
                 targetGroup = group;
                 return false;
@@ -214,7 +214,7 @@ imMatch.syncGesture = {
 
     searchContainCursorGroup: function(touchMouseEvent) {
         var targetGroup, ownGroup;
-        jQuery.each(cursorGroups, function(groupID, group) {
+        jQuery.each(imMatch.cursorGroups, function(groupID, group) {
             if (group.hasOwnPoint(touchMouseEvent)) {
                 ownGroup = group;
                 return;
@@ -235,7 +235,7 @@ imMatch.syncGesture = {
         if (!targetGroup) {
             // New Cursor and Group
             targetGroup = new imMatch.CursorGroup(new imMatch.Cursor(touchMouseEvent));
-            cursorGroups[targetGroup.id] = targetGroup;
+            imMatch.cursorGroups[targetGroup.id] = targetGroup;
         }
         else {
             targetGroup.cursors[touchMouseEvent.id].add(touchMouseEvent);

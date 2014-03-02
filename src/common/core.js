@@ -1,24 +1,3 @@
-var 
-    // Use the correct document accordingly with window argument (sandbox)
-    document = window.document,
-    arr = [],
-
-    stringify = JSON.stringify,
-
-    slice = arr.slice;
-
-var imMatch = jQuery({});
-
-function returnTrue() {
-    return true;
-}
-
-function returnFalse() {
-    return false;
-}
-
-Date.now = Date.now || function now() { return new Date().getTime(); };
-
 jQuery.extend(imMatch, {
     isReady: returnFalse,
 

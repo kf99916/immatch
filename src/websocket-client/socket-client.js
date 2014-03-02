@@ -21,7 +21,7 @@ imMatch.SocketClient = function() {
     };
 
     this.webSocket.onmessage = function(event) {
-        if (imMatch.isEmptyObject(event) || imMatch.isEmpty(event.action)) {
+        if (jQuery.isEmptyObject(event) || imMatch.isEmpty(event.action)) {
             imMatch.logError("[WebSocket.onmessage] The format of message is wrong! Message: " + event);
             return this;
         }

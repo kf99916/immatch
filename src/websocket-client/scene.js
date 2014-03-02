@@ -1,5 +1,3 @@
-var sceneZ = 0; // Be reset if there is no any scene.
-
 imMatch.Scene = function() {
     // Allow instantiation without the 'new' keyword
     if ( !(this instanceof imMatch.Scene) ) {

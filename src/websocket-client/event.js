@@ -1,4 +1,3 @@
-var touchOrder = 0; // Be reset if there is no any touchMouseEvent in cache. Please check it in geture-recognizer.js
 jQuery.extend(imMatch, {
     fixTouchMouseEvent: function(event, touchMouse) {
         touchMouse.identifier = touchMouse.identifier || 0;

@@ -1,14 +1,11 @@
-var isTouchSupported = "ontouchstart" in window,
-    TouchMouseEvent = {
-        DOWN: "touchmousedown",
-        UP: "touchmouseup",
-        MOVE: "touchmousemove",
-        CANCEL: "touchmousecancel"
-    },
-    isMouseDragged = returnFalse,
-    mouseID = 0;
-
 jQuery.extend(imMatch, {
+    touchMouseEventType: {
+        down: "touchmousedown",
+        up: "touchmouseup",
+        move: "touchmousemove",
+        cancel: "touchmousecancel"
+    },
+
     touchMouseHandler: function(event) {
         jQuery.each(event.changedTouches, function(i, touch) {
             var touchMouseEvent = imMatch.fixTouchMouseEvent(event, touch),
@@ -28,22 +25,22 @@ jQuery.extend(imMatch, {
 
     // Touch Handlers
     touchstartHandler: function(event) {
-        event.type = TouchMouseEvent.DOWN;
+        event.type = imMatch.touchMouseEventType.down;
         imMatch.touchMouseHandler(event);
     },
 
     touchmoveHandler: function(event) {
-        event.type = TouchMouseEvent.MOVE;
+        event.type = imMatch.touchMouseEventType.move;
         imMatch.touchMouseHandler(event);
     },
 
     touchendHandler: function(event) {
-        event.type = TouchMouseEvent.UP;
+        event.type = imMatch.touchMouseEventType.up;
         imMatch.touchMouseHandler(event);
     },
 
     touchcancelHandler: function(event) {
-        event.type = TouchMouseEvent.CANCEL;
+        event.type = imMatch.touchMouseEventType.cancel;
         imMatch.touchMouseHandler(event);
     },
 
@@ -63,7 +60,7 @@ jQuery.extend(imMatch, {
         }
 
         isMouseDragged = returnTrue;
-        event.type = TouchMouseEvent.DOWN;
+        event.type = imMatch.touchMouseEventType.down;
 
         mouseID = Math.uuidFast();
         
@@ -75,7 +72,7 @@ jQuery.extend(imMatch, {
             return;
         }
 
-        event.type = TouchMouseEvent.MOVE;
+        event.type = imMatch.touchMouseEventType.move;
         imMatch.mouseHandler(event);
     },
 
@@ -85,7 +82,7 @@ jQuery.extend(imMatch, {
         }
 
         isMouseDragged = returnFalse;
-        event.type = TouchMouseEvent.UP;
+        event.type = imMatch.touchMouseEventType.up;
         imMatch.mouseHandler(event);
     },
 
@@ -95,7 +92,7 @@ jQuery.extend(imMatch, {
         }
 
         isMouseDragged = returnFalse;
-        event.type = TouchMouseEvent.CANCEL;
+        event.type = imMatch.touchMouseEventType.cancel;
         imMatch.mouseHandler(event);
     },
 
