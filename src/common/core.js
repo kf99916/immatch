@@ -13,6 +13,20 @@ jQuery.extend(imMatch, {
         return this;
     },
 
+    inherit: function(object) {
+        if (imMatch.isEmpty(object)) {
+            jQuery.error("[imMatch.inherit] Cannot inherit a null object");
+        }
+
+        if (Object.create) {
+            return Object.create(object);
+        }
+
+        function f() {};
+        f.prototype = object;
+        return new f();
+    },
+
     // Determine if object is a 2D vector
     is2DVector: function(object) {
         if (object == null) {

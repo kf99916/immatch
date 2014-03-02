@@ -61,6 +61,7 @@ module.exports = function(grunt) {
                     "src/websocket-client/check-libraries.js",
                     "src/common/intro/global-var.js",
                     "src/common/*.js",
+                    "src/websocket-client/transform-proto.js",
                     "src/websocket-client/device.js",
                     "src/websocket-client/viewport.js",
                     "src/websocket-client/sync-gesture.js",

@@ -37,3 +37,12 @@ var
     sceneZ = 0,
 
     imMatch = jQuery({});
+
+jQuery.extend(imMatch, {
+    coordinate: {
+        local: 0,
+        global: 1,
+        scene: 2,
+        sprite: 3
+    }
+});

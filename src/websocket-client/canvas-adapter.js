@@ -61,10 +61,10 @@ imMatch.CanvasAdapter.prototype = {
         var self = this;
         jQuery.each(imMatch.scenes.reverse(), function(i, scene) {
             // Scene -> Global -> Local
-            var affineTransformFromScene2Local = imMatch.viewport.affineTransform.concatenate(scene.affineTransform);
+            var affineTransformFromScene2Local = imMatch.viewport.affineTransform.clone().concatenate(scene.affineTransform);
             jQuery.each(scene.sprites.reverse(), function(i, sprite) {
                 // Sprite -> Scene
-                var affineTransformFromSprite2Local = sprite.affineTransform.preConcatenate(affineTransformFromScene2Local),
+                var affineTransformFromSprite2Local = sprite.affineTransform.clone().preConcatenate(affineTransformFromScene2Local),
                     width = sprite.width * sprite.image.ppi, height = sprite.height * sprite.image.ppi;
 
                 self.context.save();

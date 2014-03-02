@@ -49,6 +49,10 @@ imMatch.AffineTransform.prototype = {
         return this;
     },
 
+    clone: function() {
+        return new imMatch.AffineTransform(this.m00, this.m10, this.m01, this.m11, this.m02, this.m12);
+    },
+
     /*
      * [m00 m01 m02] [x 0 0]
      * [m10 m11 m12] [0 y 0]

@@ -4,10 +4,8 @@ imMatch.Sprite = function() {
         return new imMatch.Sprite();
     }
 
-    // Global Coordinate: The origin is initialized as the center of imMatch.viewport
     this.z = 0;
-    this.width = 0;
-    this.height = 0;
+    this.width = this.height = 0;
     this.alpha = 1;
     this.maxScale = 1.0;
     this.minScale = 1.0;
@@ -23,7 +21,7 @@ imMatch.Sprite = function() {
     this.scalable = true;
 };
 
-imMatch.Sprite.prototype = {
+jQuery.extend(imMatch.Sprite.prototype, imMatch.transformPrototype, {
     setContainedScene: function(scene) {
         if (jQuery.isEmptyObject(scene)) {
             return this;
@@ -55,7 +53,7 @@ imMatch.Sprite.prototype = {
             return false;
         }
 
-        spritePoint = this.transformFromScene2Sprite(touchMouseEvent);
+        spritePoint = this.transformWithCoordinate(touchMouseEvent);
 
         if (-this.width / 2 <= spritePoint.x && spritePoint.x <= this.width / 2 &&
             -this.height / 2 <= spritePoint.y && spritePoint.y <= this.height / 2) {
@@ -69,27 +67,20 @@ imMatch.Sprite.prototype = {
         }
     },
 
-    transformFromScene2Sprite: function(vec) {
-        return this.affineTransform.createInverse().transform(vec);
-    },
-
-    transformSprite2Scene: function(vec) {
-        return this.affineTransform.transform(vec);
-    },
-
-    translate: function(translationFacotr) {
-        return this.affineTransform.preTranslate(translationFacotr);
-    },
-
-    rotate: function(rad) {
-        return this.affineTransform.preRotate(rad);
-    },
-
-    scale: function(scalingFactor) {
-        return this.affineTransform.preScale(scalingFactor);
-    },
-
-    shear: function(shearFactor) {
-        return this.affineTransform.preShear(shearFactor);
+    transformWithCoordinate: function(vec) {
+        switch(vec.coordinate) {
+            // Scene -> Sprite
+            case imMatch.coordinate.scene:
+                vec.coordinate = imMatch.coordinate.sprite; 
+                return this.inverseTransform(vec);
+            break;
+            // Sprite -> Scene
+            case imMatch.coordinate.sprite:
+                vec.coordinate = imMatch.coordinate.scene;
+                return this.transform(vec);
+            break;
+            default:
+            break;
+        }
     }
-};
+});
