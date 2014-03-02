@@ -10,6 +10,7 @@ $im.ready(function() {
         scene = new imMatch.Scene();
 
     sprite.setImage("taipei101");
+    sprite.rotate(Math.PI);
     scene.addSprite(sprite);
 
     $im.addScene(scene);

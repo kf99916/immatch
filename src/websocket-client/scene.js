@@ -56,11 +56,11 @@ imMatch.Scene.prototype = {
     },
 
     transformFromGlobal2Scene: function(vec) {
-        return this.affineTransform.transform(vec);
+        return this.affineTransform.createInverse().transform(vec);
     },
 
     transformFromScene2Global: function(vec) {
-        return this.affineTransform.createInverse().transform(vec);
+        return this.affineTransform.transform(vec);
     }
 };
 

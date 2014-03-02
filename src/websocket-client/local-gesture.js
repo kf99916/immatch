@@ -5,29 +5,31 @@ imMatch.localGesture = {
     recognize: function(touchMouseEvent) {
         var handler = touchMouseEvent.type + "Handler";
         if (!this[handler]) {
-            return;
+            return null;
         }
 
-        this[handler](touchMouseEvent);
+        return this[handler](touchMouseEvent);
     },
 
     touchmousedownHandler: function(touchMouseEvent) {
         var sprite = this.searchTouchedSprite(touchMouseEvent);
         if (jQuery.isEmptyObject(sprite)) {
-            return;
+            return null;
         }
 
         this.spriteMap[touchMouseEvent.id] = sprite;
         sprite.touchMouseEvents[touchMouseEvent.id] = touchMouseEvent;
+        return sprite;
     },
 
     touchmousemoveHandler: function(touchMouseEvent) {
         var sprite = this.spriteMap[touchMouseEvent.id];
         if (jQuery.isEmptyObject(sprite)) {
-            return;
+            return null;
         }
 
         sprite.updateTransform(touchMouseEvent);
+        return sprite;
     },
 
     touchmouseupHandler: function(touchMouseEvent) {

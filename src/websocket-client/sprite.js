@@ -70,26 +70,26 @@ imMatch.Sprite.prototype = {
     },
 
     transformFromScene2Sprite: function(vec) {
-        return this.affineTransform.transform(vec);
-    },
-
-    transformSprite2Scene: function(vec) {
         return this.affineTransform.createInverse().transform(vec);
     },
 
+    transformSprite2Scene: function(vec) {
+        return this.affineTransform.transform(vec);
+    },
+
     translate: function(translationFacotr) {
-        this.affineTransform.translate(translationFacotr);
+        return this.affineTransform.preTranslate(translationFacotr);
     },
 
     rotate: function(rad) {
-        this.affineTransform.rotate(rad);
+        return this.affineTransform.preRotate(rad);
     },
 
     scale: function(scalingFactor) {
-        this.affineTransform.scale(scalingFactor);
+        return this.affineTransform.preScale(scalingFactor);
     },
 
     shear: function(shearFactor) {
-        this.affineTransform.shear(shearFactor);
+        return this.affineTransform.preShear(shearFactor);
     }
 };

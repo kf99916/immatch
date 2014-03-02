@@ -19,7 +19,7 @@ imMatch.engine = {
         };
 
         imMatch.trigger("gestureWillbeRecognized", stamp);
-        if (this.frame == 0 || imMatch.gestureRecognizer.recognize(stamp) != 0) {
+        if (this.frame == 0 || !imMatch.isEmpty(imMatch.gestureRecognizer.recognize(stamp))) {
             imMatch.trigger("gestureDidbeRecognized", stamp);
 
             imMatch.trigger("contextWillbeDrawn", stamp);

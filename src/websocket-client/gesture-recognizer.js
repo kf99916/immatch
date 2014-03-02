@@ -1,9 +1,10 @@
 imMatch.gestureRecognizer = {
     recognize: function(stamp) {
         // 1. Get all touchMouseEvent in the frame
-        var touchMouseEvents = imMatch.socketClient.caches.getNRemove("touchMouseEvent", function(touchMouseEvent) {
-            return (touchMouseEvent.frame == stamp.frame);
-        });
+        var touchedSprite,
+            touchMouseEvents = imMatch.socketClient.caches.getNRemove("touchMouseEvent", function(touchMouseEvent) {
+                    return (touchMouseEvent.frame == stamp.frame);
+                });
 
         if (touchMouseEvents.length == 0) {
             touchOrder = 0;
@@ -15,9 +16,9 @@ imMatch.gestureRecognizer = {
             imMatch.syncGesture.recognize(touchMouseEvent);
 
             // 3. Local Gesture Recognition
-            imMatch.localGesture.recognize(touchMouseEvent);
+            touchedSprite = touchedSprite || imMatch.localGesture.recognize(touchMouseEvent);
         });
 
-        return touchMouseEvents.length;
+        return touchedSprite;
     }
 };

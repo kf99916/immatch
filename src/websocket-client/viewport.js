@@ -11,13 +11,13 @@ imMatch.viewport = {
     affineTransform: null,
 
     transformFromLocal2Global: function(vec) {
-        return this.affineTransform.transform(vec);
+        return this.affineTransform.createInverse().transform(vec);
     },
 
     transformFromGlobal2Local: function(vec) {
-        return this.affineTransform.createInverse().transform(vec);
+        return this.affineTransform.transform(vec);
     },
 };
 
 imMatch.viewport.affineTransform = imMatch.AffineTransform.getTranslationInstance({
-        x: -imMatch.viewport.width / 2, y: -imMatch.viewport.height / 2});
+        x: imMatch.viewport.width / 2, y: imMatch.viewport.height / 2});
