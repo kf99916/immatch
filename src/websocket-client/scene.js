@@ -4,6 +4,8 @@ imMatch.Scene = function() {
         return new imMatch.Scene();
     }
 
+    this.id = Math.uuidFast();
+
     this.z = sceneZ++;
     this.width = imMatch.viewport.width;
     this.height = imMatch.viewport.height;
@@ -22,7 +24,7 @@ jQuery.extend(imMatch.Scene.prototype, imMatch.transformPrototype, {
             return false;
         }
 
-        scenePoint = this.transformWithCoordinate(point);
+        scenePoint = this.transformWithCoordinate(point, true);
 
         if (-this.width / 2 <= scenePoint.x && scenePoint.x <= this.width / 2 &&
             -this.height / 2 <= scenePoint.y && scenePoint.y <= this.height / 2) {
@@ -51,21 +53,33 @@ jQuery.extend(imMatch.Scene.prototype, imMatch.transformPrototype, {
         return this;
     },
 
-    transformWithCoordinate: function(vec) {
-        switch(vec.coordinate) {
+    transformWithCoordinate: function(vec, /* Optional */ deep) {
+        var target = {}, result;
+        deep = deep || false;
+        target = (deep)? jQuery.extend(target, vec) : vec;
+        switch(target.coordinate) {
+            // Local -> Global -> Scene
+            case imMatch.coordinate.local:
+                target.coordinate = imMatch.coordinate.scene; 
+                result = this.inverseTransform(imMatch.viewport.inverseTransform(target));
+            break;
             // Global -> Scene
             case imMatch.coordinate.global:
-                vec.coordinate = imMatch.coordinate.scene; 
-                return this.inverseTransform(vec);
+                target.coordinate = imMatch.coordinate.scene;
+                result = this.inverseTransform(target);
             break;
             // Scene -> Global
             case imMatch.coordinate.scene:
-                vec.coordinate = imMatch.coordinate.global;
-                return this.transform(vec);
+                target.coordinate = imMatch.coordinate.global;
+                result = this.transform(copyVec);
             break;
             default:
+                imMatch.logError("[imMatch.scene.transformWithCoordinate] The coordinate is invalid! Coordinate: " + target.coordinate);
             break;
         }
+
+        jQuery.extend(target, result);
+        return target;
     }
 });
 

@@ -12,7 +12,6 @@ jQuery.extend(imMatch, {
                     y: touchMouse.pageY / imMatch.device.ppi,
                     order: touchOrder++,
                     coordinate: imMatch.coordinate.local,
-                    spriteID: null,
                     deviceID: imMatch.device.id,
                     frame: imMatch.engine.frame,
                     timestamp: touchMouse.timestamp

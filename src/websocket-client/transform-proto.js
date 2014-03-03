@@ -1,7 +1,11 @@
 imMatch.transformPrototype = {
     // Must overwrite it
-    transformWithCoordinate: function(vec) {
-        return this.transform(vec);
+    transformWithCoordinate: function(vec, /* Optional */ deep) {
+        var target = {};
+        deep = deep || false;
+        jQuery.extend(deep, target, vec);
+        target = this.transform(target);
+        return target;
     },
 
     transform: function(vec) {
@@ -13,8 +17,6 @@ imMatch.transformPrototype = {
     },
 
     translate: function(translationFactor) {
-        console.log("")
-        console.log(this);
         return this.affineTransform.preTranslate(translationFactor);
     },
 

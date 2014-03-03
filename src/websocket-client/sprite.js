@@ -4,6 +4,8 @@ imMatch.Sprite = function() {
         return new imMatch.Sprite();
     }
 
+    this.id = Math.uuidFast();
+
     this.z = 0;
     this.width = this.height = 0;
     this.alpha = 1;
@@ -53,8 +55,7 @@ jQuery.extend(imMatch.Sprite.prototype, imMatch.transformPrototype, {
             return false;
         }
 
-        spritePoint = this.transformWithCoordinate(touchMouseEvent);
-
+        spritePoint = this.transformWithCoordinate(touchMouseEvent, true);
         if (-this.width / 2 <= spritePoint.x && spritePoint.x <= this.width / 2 &&
             -this.height / 2 <= spritePoint.y && spritePoint.y <= this.height / 2) {
             return true;
@@ -67,20 +68,37 @@ jQuery.extend(imMatch.Sprite.prototype, imMatch.transformPrototype, {
         }
     },
 
-    transformWithCoordinate: function(vec) {
-        switch(vec.coordinate) {
+    transformWithCoordinate: function(vec, /* Optional */ deep) {
+        var target = {}, result;
+        deep = deep || false;
+        target = (deep)? jQuery.extend(target, vec) : vec;
+        switch(target.coordinate) {
+            // Local -> Global -> Scene -> Sprite
+            case imMatch.coordinate.local:
+                target.coordinate = imMatch.coordinate.sprite;
+                result = this.inverseTransform(this.scene.inverseTransform(imMatch.viewport.inverseTransform(target)));
+            break;
+            // Global -> Scene -> Sprite
+            case imMatch.coordinate.global:
+                target.coordinate = imMatch.coordinate.sprite;
+                result = this.inverseTransform(this.scene.inverseTransform(target));
+            break;
             // Scene -> Sprite
             case imMatch.coordinate.scene:
-                vec.coordinate = imMatch.coordinate.sprite; 
-                return this.inverseTransform(vec);
+                target.coordinate = imMatch.coordinate.sprite;
+                result = this.inverseTransform(target);
             break;
             // Sprite -> Scene
-            case imMatch.coordinate.sprite:
-                vec.coordinate = imMatch.coordinate.scene;
-                return this.transform(vec);
+            case imMatch.coordinate.sprite: 
+                target.coordinate = imMatch.coordinate.scene;
+                result = this.transform(target);
             break;
             default:
+                imMatch.logError("[imMatch.scene.transformWithCoordinate] The coordinate is invalid! Coordinate: " + target.coordinate);
             break;
         }
+
+        jQuery.extend(target, result);
+        return target;
     }
 });
