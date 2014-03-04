@@ -12,12 +12,12 @@ imMatch.CanvasAdapter = function CanvasAdapter(canvasID) {
 
     this.canvas.width = imMatch.viewport.width * imMatch.device.ppi;
     this.canvas.height = imMatch.viewport.height * imMatch.device.ppi;
-    this.canvas.style = "width: " + this.canvas.width  + "px; " +
-                        "height: " + this.canvas.height + "px; " +
-                        "position: absolute; top: 50%; left: 50%; " +
-                        "margin-left: " + -this.canvas.width / 2 + "px; " + 
-                        "margin-top: " + -this.canvas.height / 2 + "px;";
-    this.canvas.style.border = "1px solid red";
+    this.canvas.setAttribute("style", "width: " + this.canvas.width  + "px; " +
+                            "height: " + this.canvas.height + "px; " +
+                            "position: absolute; top: 50%; left: 50%; " +
+                            "margin-left: " + -this.canvas.width / 2 + "px; " + 
+                            "margin-top: " + -this.canvas.height / 2 + "px; " + 
+                            "border: 1px solid red;");
 
     this.ratio = 1;
 

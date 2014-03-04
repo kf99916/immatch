@@ -25,11 +25,11 @@ imMatch.loader = {
 
         this.progressBar.id = "progress";
         this.progressBar.value = 0;
-        this.progressBar.style = "width: " + width + "px; " +
-                                "height: " + height + "px; " +
-                                "position: absolute; top: 50%; left: 50%; " +
-                                "margin-left: " + -width / 2 + "px; " + 
-                                "margin-top: " + -height / 2 + "px;";
+        this.progressBar.setAttribute("style", "width: " + width + "px; " +
+                                    "height: " + height + "px; " +
+                                    "position: absolute; top: 50%; left: 50%; " +
+                                    "margin-left: " + -width / 2 + "px; " + 
+                                    "margin-top: " + -height / 2 + "px;");
 
         document.body.appendChild(this.progressBar);
     },

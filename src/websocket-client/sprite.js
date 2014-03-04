@@ -58,10 +58,9 @@ jQuery.extend(imMatch.Sprite.prototype, imMatch.transformPrototype, {
         spritePoint = this.transformWithCoordinate(touchMouseEvent, true);
         spritePoint.x *= deviceImageRatio;
         spritePoint.y *= deviceImageRatio;
-        
+
         if (-this.width / 2 <= spritePoint.x && spritePoint.x <= this.width / 2 &&
             -this.height / 2 <= spritePoint.y && spritePoint.y <= this.height / 2) {
-            console.log("aaa");
             return true;
         }
     },
@@ -87,6 +86,14 @@ jQuery.extend(imMatch.Sprite.prototype, imMatch.transformPrototype, {
         if (this.movable) {
             this.affineTransform.translate({x: currentPointCenter.x - lastPointCenter.x, 
                                             y: currentPointCenter.y - lastPointCenter.y});
+        }
+
+        if (this.rotatable && this.cursorGroup.numCursors >= 2) {
+            
+        }
+
+        if (this.scalable && this.cursorGroup.numCursors >= 2) {
+
         }
     },
 

@@ -7,7 +7,7 @@ jQuery.extend(imMatch, {
     },
 
     touchMouseHandler: function(event) {
-        jQuery.each(event.changedTouches, function(i, touch) {
+        jQuery.each(event.originalEvent.changedTouches, function(i, touch) {
             var touchMouseEvent = imMatch.fixTouchMouseEvent(event, touch),
                 globalTouchMouse = imMatch.viewport.transformWithCoordinate(touchMouseEvent);
 
@@ -46,7 +46,7 @@ jQuery.extend(imMatch, {
 
     // Mouse Handlers
     mouseHandler: function(event) {
-        event.changedTouches = [{
+        event.originalEvent.changedTouches = [{
             identifier: mouseID, 
             pageX: event.pageX, 
             pageY: event.pageY
