@@ -101,11 +101,8 @@ jQuery.extend(imMatch, {
     },
 
     removeScene: function(removedScene) {
-        jQuery.each(imMatch.scenes, function(i, scene) {
-            if (removedScene.id == scene.id) {
-                imMatch.remove(imMatch.scenes, i);
-                return false;
-            }
+        imMatch.scenes = jQuery.grep(imMatch.scenes, function(n, i) {
+            return (removedScene.id != scene.id);
         });
 
         if (imMatch.scenes.length == 0) {

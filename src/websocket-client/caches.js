@@ -37,22 +37,15 @@ imMatch.Cache.prototype = {
     },
 
     get: function(type, cmp) {
-        var results = [];
         if (imMatch.isEmpty(type) || jQuery.isEmptyObject(this[type])) {
-            return results;
+            return [];
         }
 
         if (jQuery.isFunction(cmp)) {
             return this[type];
         }
 
-        jQuery.each(this[type], function(i, data) {
-            if (cmp(data)) {
-                results.push(data);
-            }
-        });
-
-        return results;
+        return jQuery.grep(this[type], cmp);
     },
 
     getNRemove: function(type, cmp) {
@@ -61,15 +54,11 @@ imMatch.Cache.prototype = {
             return [];
         }
 
-        console.log("type = " + this[type].length);
-        var results = this.remove(type, cmp);
-        console.log("results = " + results.length + ", " + this[type].length);
-
-        return results;
+        return this.remove(type, cmp);
     },
 
     remove: function(type, cmp) {
-        var removeItems = [], remainingItems = [];
+        var removeItems = [];
         if (imMatch.isEmpty(type) || jQuery.isEmptyObject(this[type])) {
             return removeItems;
         }
@@ -80,16 +69,8 @@ imMatch.Cache.prototype = {
             return removeItems;
         }
 
-        jQuery.each(this[type], function(i, data) {
-            if (cmp(data)) {
-                removeItems.push(data);
-            }
-            else {
-                remainingItems.push(data);
-            }
-        });
-
-        this[type] = remainingItems;
+        removeItems = jQuery.grep(this[type], cmp);
+        this[type] = jQuery.grep(this[type], cmp, true);
         return removeItems;
     }
 };

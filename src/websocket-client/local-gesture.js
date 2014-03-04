@@ -18,24 +18,33 @@ imMatch.localGesture = {
         }
 
         this.spriteMap[touchMouseEvent.id] = sprite;
-        sprite.touchMouseEvents[touchMouseEvent.id] = touchMouseEvent;
+        sprite.cursorGroup.add(new imMatch.Cursor(touchMouseEvent));
         return sprite;
     },
 
     touchmousemoveHandler: function(touchMouseEvent) {
-        var sprite = this.spriteMap[touchMouseEvent.id];
+        var sprite = this.spriteMap[touchMouseEvent.id], cursor;
         if (jQuery.isEmptyObject(sprite)) {
             return null;
         }
 
-        sprite.updateTransform(touchMouseEvent);
+        cursor = sprite.cursorGroup.cursors[touchMouseEvent.id];
+        if (jQuery.isEmptyObject(cursor)) {
+            return null;
+        }
+        cursor.add(touchMouseEvent);
+        
         return sprite;
     },
 
     touchmouseupHandler: function(touchMouseEvent) {
+        var sprite = this.touchmousemoveHandler(touchMouseEvent);
+        delete this.spriteMap[touchMouseEvent.id];
+        return sprite;
     },
 
     touchmousecancelHandler:function(touchMouseEvent) {
+        return this.touchmouseupHandler(touchMouseEvent);
     },
 
     searchTouchedSprite: function(touchMouseEvent) {

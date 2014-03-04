@@ -12,7 +12,7 @@ imMatch.Sprite = function() {
     this.maxScale = 1.0;
     this.minScale = 1.0;
 
-    this.touchMouseEvents = {};
+    this.cursorGroup = new imMatch.CursorGroup;
     this.affineTransform = new imMatch.AffineTransform;
 
     this.image = null;
@@ -66,6 +66,10 @@ jQuery.extend(imMatch.Sprite.prototype, imMatch.transformPrototype, {
         if (this.movable) {
 
         }
+    },
+
+    updateCursorGroup: function() {
+
     },
 
     transformWithCoordinate: function(vec, /* Optional */ deep) {
