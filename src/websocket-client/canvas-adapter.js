@@ -19,6 +19,8 @@ imMatch.CanvasAdapter = function CanvasAdapter(canvasID) {
                         "margin-top: " + -this.canvas.height / 2 + "px;";
     this.canvas.style.border = "1px solid red";
 
+    this.ratio = 1;
+
     this.context = this.canvas.getContext("2d");
     this.adjustCanvasSize();
 };
@@ -41,12 +43,10 @@ imMatch.CanvasAdapter.prototype = {
                             this.context.backingStorePixelRatio || 1,
             ratio = imMatch.device.devicePixelRatio / backingStoreRatio;
 
-        if (ratio != 1) {
-            this.ratio = ratio;
-            this.canvas.width *= ratio;
-            this.canvas.height *= ratio;
-            this.context.scale(ratio, ratio);
-        }
+        this.ratio *= ratio;
+        this.canvas.width *= ratio;
+        this.canvas.height *= ratio;
+        this.context.scale(ratio, ratio);
 
         return this;
     },
