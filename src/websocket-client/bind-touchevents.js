@@ -7,6 +7,7 @@ jQuery.extend(imMatch, {
     },
 
     touchMouseHandler: function(event) {
+        event.preventDefault();
         jQuery.each(event.originalEvent.changedTouches, function(i, touch) {
             var touchMouseEvent = imMatch.fixTouchMouseEvent(event, touch),
                 globalTouchMouse = imMatch.viewport.transformWithCoordinate(touchMouseEvent);

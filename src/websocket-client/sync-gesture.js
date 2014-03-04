@@ -89,13 +89,12 @@ imMatch.syncGesture = {
     addCursorGroup: function(touchMouseEvent) {
         var targetGroup = this.searchContainCursorGroup(touchMouseEvent);
         if (!targetGroup) {
-            // New Cursor and Group
-            targetGroup = new imMatch.CursorGroup(new imMatch.Cursor(touchMouseEvent));
+            targetGroup = new imMatch.CursorGroup;
             imMatch.cursorGroups[targetGroup.id] = targetGroup;
         }
-        else {
-            targetGroup.cursors[touchMouseEvent.id].add(touchMouseEvent);
-        }
+
+        targetGroup.cursors[touchMouseEvent.id] = targetGroup.cursors[touchMouseEvent.id] || new imMatch.Cursor;
+        targetGroup.cursors[touchMouseEvent.id].add(touchMouseEvent);
 
         return this;
     },
