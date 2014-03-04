@@ -46,7 +46,7 @@ jQuery.extend(imMatch.Sprite.prototype, imMatch.transformPrototype, {
     },
 
     isTouched: function(touchMouseEvent) {
-        var spritePoint;
+        var spritePoint, deviceImageRatio = imMatch.device.ppi / this.image.ppi;
         if (!this.touchable) {
             return false;
         }
@@ -56,8 +56,12 @@ jQuery.extend(imMatch.Sprite.prototype, imMatch.transformPrototype, {
         }
 
         spritePoint = this.transformWithCoordinate(touchMouseEvent, true);
+        spritePoint.x *= deviceImageRatio;
+        spritePoint.y *= deviceImageRatio;
+        
         if (-this.width / 2 <= spritePoint.x && spritePoint.x <= this.width / 2 &&
             -this.height / 2 <= spritePoint.y && spritePoint.y <= this.height / 2) {
+            console.log("aaa");
             return true;
         }
     },
