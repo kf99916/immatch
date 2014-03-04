@@ -10,8 +10,8 @@ $im.ready(function() {
         scene = new imMatch.Scene();
 
     sprite.setImage("taipei101");
-    sprite.rotate(Math.PI / 4);
-    sprite.translate({x: imMatch.viewport.width / 2, y: 0});
+   // sprite.rotate(Math.PI / 4);
+   // sprite.translate({x: imMatch.viewport.width / 2, y: 0});
 
     scene.addSprite(sprite);
 

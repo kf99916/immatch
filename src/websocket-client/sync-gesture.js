@@ -50,9 +50,6 @@ imMatch.syncGesture = {
         this.tryToStitch(group);
         
         delete imMatch.cursorGroups[group.id];
-        if (Object.keys(imMatch.cursorGroups).length == 0) {
-            cursorGroupID = 0;
-        }
     },
 
     touchmousecancelHandler:function(touchMouseEvent) {

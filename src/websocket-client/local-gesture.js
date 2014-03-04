@@ -17,8 +17,13 @@ imMatch.localGesture = {
             return null;
         }
 
+        if (sprite.cursorGroup.numCursors > 2) {
+            return null;
+        }
+
         this.spriteMap[touchMouseEvent.id] = sprite;
         sprite.cursorGroup.add(new imMatch.Cursor(touchMouseEvent));
+
         return sprite;
     },
 
@@ -32,6 +37,7 @@ imMatch.localGesture = {
         if (jQuery.isEmptyObject(cursor)) {
             return null;
         }
+
         cursor.add(touchMouseEvent);
         
         return sprite;

@@ -52,13 +52,21 @@ imMatch.CanvasAdapter.prototype = {
     },
 
     clear: function() {
+        this.context.save();
+
+        this.context.setTransform(1, 0, 0, 1, 0, 0);
         this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+
+        this.context.restore();
 
         return this;
     },
 
     draw: function(stamp) {
         var self = this;
+
+        this.clear();
+
         jQuery.each(imMatch.scenes.reverse(), function(i, scene) {
             // Scene -> Global -> Local
             var affineTransformFromScene2Local = imMatch.viewport.affineTransform.clone().concatenate(scene.affineTransform);

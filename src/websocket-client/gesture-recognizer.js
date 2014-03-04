@@ -9,6 +9,7 @@ imMatch.gestureRecognizer = {
         if (touchMouseEvents.length == 0) {
             imMatch.touchOrder = 0;
             imMatch.engine.frame = 0;
+            cursorGroupID = 0;
         }
 
         jQuery.each(touchMouseEvents, function(i, touchMouseEvent) {
@@ -18,6 +19,11 @@ imMatch.gestureRecognizer = {
 
             // 3. Local Gesture Recognition
             currentTouchedSprite = imMatch.localGesture.recognize(touchMouseEvent);
+            if (jQuery.isEmptyObject(currentTouchedSprite)) {
+                return;
+            }
+
+            // 4. Update touchedSprites 
             jQuery.each(touchedSprites, function(i, touchedSprite) {
                 if (currentTouchedSprite.id == touchedSprite.id) {
                     inTouchedSprites = true;
@@ -25,12 +31,12 @@ imMatch.gestureRecognizer = {
                 }
             });
 
-            if (inTouchedSprites) {
+            if (!inTouchedSprites) {
                 touchedSprites.push(currentTouchedSprite);
             }
         });
 
-        // 4. touchedSprites Update their Affine Transform
+        // 5. touchedSprites Update their Affine Transform
         jQuery.each(touchedSprites, function (i, touchedSprite) {
             touchedSprite.updateAffineTransform();
             touchedSprite.updateCursorGroup();

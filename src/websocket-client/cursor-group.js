@@ -80,13 +80,11 @@ imMatch.CursorGroup.prototype = {
 
         jQuery.each(cursors, function(i, cursor) {
             if (!self.cursors[cursor.id]) {
-                self.cursors[cursor.id] = {};
-                jQuery.extend(self.cursors[cursor.id], cursor);
+                self.cursors[cursor.id] = new imMatch.Cursor;
             }
-            else {
-                self.cursors[cursor.id].add(cursor.points);
-                self.cursors[cursor.id].type = cursor.type;
-            }
+            
+            self.cursors[cursor.id].add(cursor.points);
+            self.cursors[cursor.id].type = cursor.type;
         });
 
         this.numCursors += cursors.length;
@@ -134,6 +132,17 @@ imMatch.CursorGroup.prototype = {
         });
 
         return result;
+    },
+
+    removeCursor: function(cursor) {
+        if (jQuery.isEmptyObject(cursor)) {
+            return null;
+        }
+
+        delete this.cursors[cursor.id];
+        --this.numCursors;
+
+        return this;
     }
 };
 

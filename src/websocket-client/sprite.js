@@ -62,14 +62,44 @@ jQuery.extend(imMatch.Sprite.prototype, imMatch.transformPrototype, {
         }
     },
 
-    updateTransform: function(touchMouseEvent) {
-        if (this.movable) {
+    updateAffineTransform: function() {
+        var lastPointCenter = {x: 0, y: 0},
+            currentPointCenter = {x: 0, y: 0};
 
+        jQuery.each(this.cursorGroup.cursors, function(id, cursor) {
+            var numPoints = cursor.points.length;
+            lastPointCenter.x += cursor.points[0].x;
+            lastPointCenter.y += cursor.points[0].y;
+
+            currentPointCenter.x += cursor.points[numPoints-1].x;
+            currentPointCenter.y += cursor.points[numPoints-1].y;
+        });
+
+        lastPointCenter.x /= this.cursorGroup.numCursors;
+        lastPointCenter.y /= this.cursorGroup.numCursors;
+        currentPointCenter.x /= this.cursorGroup.numCursors;
+        currentPointCenter.y /= this.cursorGroup.numCursors;
+
+        if (this.movable) {
+            this.affineTransform.translate({x: currentPointCenter.x - lastPointCenter.x, 
+                                            y: currentPointCenter.y - lastPointCenter.y});
         }
     },
 
     updateCursorGroup: function() {
-
+        var self = this;
+        jQuery.each(this.cursorGroup.cursors, function(id, cursor) {
+            var lastPoint;
+            switch(cursor.type) {
+                case imMatch.touchMouseEventType.up: case imMatch.touchMouseEventType.cancel:
+                    self.cursorGroup.removeCursor(cursor);
+                break;
+                case imMatch.touchMouseEventType.down: case imMatch.touchMouseEventType.move: default:
+                    lastPoint = cursor.points[cursor.points.length-1];
+                    self.cursorGroup.cursors[id].points = [lastPoint];
+                break;
+            }
+        });
     },
 
     transformWithCoordinate: function(vec, /* Optional */ deep) {
