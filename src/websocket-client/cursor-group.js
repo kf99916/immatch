@@ -42,7 +42,7 @@ imMatch.Cursor.prototype = {
             };
 
             if (!jQuery.isEmptyObject(lastVelocity) && 
-                imMatch.rad(velocity, lastVelocity) > imMatch.threadsholdAboutSyncGesture.straight) {
+                Math.abs(imMatch.rad(velocity, lastVelocity)) > imMatch.threadsholdAboutSyncGesture.straight) {
                 result = false;
                 return false;
             }
@@ -88,6 +88,7 @@ imMatch.CursorGroup.prototype = {
         });
 
         this.numCursors += cursors.length;
+        return this;
     },
     
     removeCursor: function(cursor) {
@@ -142,11 +143,34 @@ imMatch.CursorGroup.prototype = {
 
         return {
             start: imMatch.norm({
-                        x: startEndPoints[0].start.x - startEndPoints[1].start.x,
-                        y: startEndPoints[0].start.y - startEndPoints[1].start.y}),
+                        x: startEndPoints[1].start.x - startEndPoints[0].start.x,
+                        y: startEndPoints[1].start.y - startEndPoints[0].start.y}),
             end: imMatch.norm({
-                        x: startEndPoints[0].end.x - startEndPoints[1].end.x,
-                        y: startEndPoints[0].end.y - startEndPoints[1].end.y})
+                        x: startEndPoints[1].end.x - startEndPoints[0].end.x,
+                        y: startEndPoints[1].end.y - startEndPoints[0].end.y})
+        };
+    },
+
+    computeStartEndVectors: function() {
+        var startEndPoints = [];
+        if (this.numCursors > 2) {
+            return {};
+        }
+
+        jQuery.each(this.cursors, function(id, cursor) {
+            var numPoints = cursor.points.length;
+
+            startEndPoints.push({
+                start: cursor.points[0],
+                end: cursor.points[numPoints-1]
+            });
+        });
+
+        return {
+            start: { x: startEndPoints[1].start.x - startEndPoints[0].start.x,
+                    y: startEndPoints[1].start.y - startEndPoints[0].start.y},
+            end: { x: startEndPoints[1].end.x - startEndPoints[0].end.x,
+                    y: startEndPoints[1].end.y - startEndPoints[0].end.y}
         };
     },
 

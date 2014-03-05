@@ -67,14 +67,13 @@ jQuery.extend(imMatch, {
         return (vector1.x * vector2.x + vector1.y * vector2.y);
     },
 
-    // Return 0 - pi
+    // Return -pi ~ pi
     rad: function(vector1, vector2) {
         if (!imMatch.is2DVector(vector1) || !imMatch.is2DVector(vector2)) {
             return 0;
         }
 
-        var rad = Math.atan2(vector1.x * vector2.y - vector2.x * vector1.y , imMatch.dot(vector1, vector2));
-        return Math.abs(rad);
+        return  Math.atan2(vector1.x * vector2.y - vector2.x * vector1.y , imMatch.dot(vector1, vector2));
     },
 
     norm: function(vector) {

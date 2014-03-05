@@ -9,8 +9,7 @@ imMatch.Sprite = function() {
     this.z = 0;
     this.width = this.height = 0;
     this.alpha = 1;
-    this.maxScale = 1;
-    this.minScale = 1;
+    this.scalingFactor = this.maxScalingFactor = this.minScalingFactor = 1;
 
     this.cursorGroup = new imMatch.CursorGroup;
     this.affineTransform = new imMatch.AffineTransform;
@@ -66,30 +65,34 @@ jQuery.extend(imMatch.Sprite.prototype, imMatch.transformPrototype, {
     },
 
     updateAffineTransform: function() {
-        var center, distance, scalingFactor, newScalingFactor;
+        var center, vector, rad,
+            distance, scalingFactor, newScalingFactor;
         if (this.movable) {
             center = this.cursorGroup.computeStartEndCenters();
-            this.affineTransform.translate({x: center.end.x - center.start.x, 
-                                            y: center.end.y - center.start.y});
+            this.translate({x: center.end.x - center.start.x, y: center.end.y - center.start.y});
         }
 
         if (this.rotatable && this.cursorGroup.numCursors == 2) {
-            
+            vector = this.cursorGroup.computeStartEndVectors();
+            rad = imMatch.rad(vector.start, vector.end);
+            this.rotate(rad, center.start);
         }
 
         if (this.scalable && this.cursorGroup.numCursors == 2) {
             distance = this.cursorGroup.computeDistances();
             scalingFactor = distance.end / distance.start || 1;
+            newScalingFactor = this.scalingFactor * scalingFactor;
 
-            this.affineTransform.scale({x: scalingFactor, y: scalingFactor});
+            if (newScalingFactor <= this.minScalingFactor) {
+                scalingFactor = this.minScalingFactor / this.scalingFactor;
+            }
+            else if (newScalingFactor >= this.maxScalingFactor) {
+                scalingFactor = this.maxScalingFactor / this.scalingFactor;
+            }
 
-            newScalingFactor = this.affineTransform.getScalingFactor();
-            newScalingFactor.x = Math.max(this.minScale, newScalingFactor.x);
-            newScalingFactor.y = Math.max(this.minScale, newScalingFactor.y);
-            newScalingFactor.x = Math.min(this.maxScale, newScalingFactor.x);
-            newScalingFactor.y = Math.min(this.maxScale, newScalingFactor.y);
+            this.scalingFactor *= scalingFactor;
 
-            this.affineTransform.setScalingFactor(newScalingFactor);
+            this.scale({x: scalingFactor, y: scalingFactor});
         }
     },
 

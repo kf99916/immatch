@@ -240,21 +240,6 @@ imMatch.AffineTransform.prototype = {
 
     },
 
-    getScalingFactor: function() {
-        return {x: this.m00, y: this.m11};
-    },
-
-    setScalingFactor: function(scalingFactor) {
-        if (jQuery.isEmptyObject(scalingFactor)) {
-            return this;
-        }
-
-        this.m00 = scalingFactor.x;
-        this.m11 = scalingFactor.y;
-
-        return this;
-    },
-
     print: function() {
         console.log("[ " + this.m00 + " " + this.m01 + " " + this.m02 + " ]");
         console.log("[ " + this.m10 + " " + this.m11 + " " + this.m12 + " ]");

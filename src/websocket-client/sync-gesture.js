@@ -93,8 +93,12 @@ imMatch.syncGesture = {
             imMatch.cursorGroups[targetGroup.id] = targetGroup;
         }
 
-        targetGroup.cursors[touchMouseEvent.id] = targetGroup.cursors[touchMouseEvent.id] || new imMatch.Cursor;
-        targetGroup.cursors[touchMouseEvent.id].add(touchMouseEvent);
+        if (jQuery.isEmptyObject(targetGroup.cursors[touchMouseEvent.id])) {
+            targetGroup.add(new imMatch.Cursor(touchMouseEvent));
+        }
+        else {
+            targetGroup.cursors[touchMouseEvent.id].add(touchMouseEvent);
+        }
 
         return this;
     },

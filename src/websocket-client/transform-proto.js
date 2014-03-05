@@ -20,8 +20,8 @@ imMatch.transformPrototype = {
         return this.affineTransform.preTranslate(translationFactor);
     },
 
-    rotate: function(rad) {
-        return this.affineTransform.preRotate(rad);
+    rotate: function(rad, anchorPoint) {
+        return this.affineTransform.preRotate(rad, anchorPoint);
     },
 
     scale: function(scalingFactor) {
