@@ -25,6 +25,8 @@ var
 
     isMouseDragged = returnFalse,
 
+    maxNumTouchesInSprite = 2,
+
     mouseID = "",
 
     // Be reset if there is no any touchMouseEvent in cache. Please check it in geture-recognizer.js

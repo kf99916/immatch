@@ -17,7 +17,7 @@ imMatch.localGesture = {
             return null;
         }
 
-        if (sprite.cursorGroup.numCursors > 2) {
+        if (sprite.cursorGroup.numCursors > maxNumTouchesInSprite) {
             return null;
         }
 

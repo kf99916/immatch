@@ -77,11 +77,7 @@ jQuery.extend(imMatch, {
         return Math.abs(rad);
     },
 
-    norm: function(vector1, vector2) {
-        var vec = {
-            x: vector1.x - vector2.x,
-            y: vector1.y - vector2.y
-        }
-        return Math.sqrt(imMatch.dot(vec, vec));
+    norm: function(vector) {
+        return Math.sqrt(imMatch.dot(vector, vector));
     }
 });

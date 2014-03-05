@@ -89,6 +89,66 @@ imMatch.CursorGroup.prototype = {
 
         this.numCursors += cursors.length;
     },
+    
+    removeCursor: function(cursor) {
+        if (jQuery.isEmptyObject(cursor)) {
+            return null;
+        }
+
+        delete this.cursors[cursor.id];
+        --this.numCursors;
+
+        return this;
+    },
+
+    computeStartEndCenters: function() {
+        var startCenter = {x: 0, y: 0},
+            endCenter = {x: 0, y: 0};
+
+        jQuery.each(this.cursors, function(id, cursor) {
+            var numPoints = cursor.points.length;
+            startCenter.x += cursor.points[0].x;
+            startCenter.y += cursor.points[0].y;
+
+            endCenter.x += cursor.points[numPoints-1].x;
+            endCenter.y += cursor.points[numPoints-1].y;
+        });
+
+        startCenter.x /= this.numCursors;
+        startCenter.y /= this.numCursors;
+        endCenter.x /= this.numCursors;
+        endCenter.y /= this.numCursors;
+
+        return {
+            start: startCenter,
+            end: endCenter
+        };
+    },
+
+    computeDistances: function() {
+        var startEndPoints = [];
+        if (this.numCursors > 2) {
+            return {};
+        }
+
+        jQuery.each(this.cursors, function(id, cursor) {
+            var numPoints = cursor.points.length;
+
+            startEndPoints.push({
+                start: cursor.points[0],
+                end: cursor.points[numPoints-1]
+            });
+        });
+
+        return {
+            start: imMatch.norm({
+                        x: startEndPoints[0].start.x - startEndPoints[1].start.x,
+                        y: startEndPoints[0].start.y - startEndPoints[1].start.y}),
+            end: imMatch.norm({
+                        x: startEndPoints[0].end.x - startEndPoints[1].end.x,
+                        y: startEndPoints[0].end.y - startEndPoints[1].end.y})
+        };
+    },
 
     hasOwnPoint: function(point) {
         return (this.cursors[point.id])? true : false;
@@ -97,8 +157,11 @@ imMatch.CursorGroup.prototype = {
     hasConatinPoint: function(point) {
         var result = false;
         jQuery.each(this.cursors, function(cursorID, cursor) {
-            var lastPoint = cursor.points[cursor.points.length - 1];
-            if (imMatch.norm(point, lastPoint) <= imMatch.threadsholdAboutSyncGesture.distance) {
+            var numPoints = cursor.points.length,
+                vec = {x: cursor.points[numPoints-1].x - point.x,
+                        y: cursor.points[numPoints-1].y - point.y};
+
+            if (imMatch.norm(vec) <= imMatch.threadsholdAboutSyncGesture.distance) {
                 result = true;
                 return false;
             }
@@ -132,17 +195,6 @@ imMatch.CursorGroup.prototype = {
         });
 
         return result;
-    },
-
-    removeCursor: function(cursor) {
-        if (jQuery.isEmptyObject(cursor)) {
-            return null;
-        }
-
-        delete this.cursors[cursor.id];
-        --this.numCursors;
-
-        return this;
     }
 };
 

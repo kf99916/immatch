@@ -9,8 +9,8 @@ imMatch.Sprite = function() {
     this.z = 0;
     this.width = this.height = 0;
     this.alpha = 1;
-    this.maxScale = 1.0;
-    this.minScale = 1.0;
+    this.maxScale = 1;
+    this.minScale = 1;
 
     this.cursorGroup = new imMatch.CursorGroup;
     this.affineTransform = new imMatch.AffineTransform;
@@ -66,34 +66,30 @@ jQuery.extend(imMatch.Sprite.prototype, imMatch.transformPrototype, {
     },
 
     updateAffineTransform: function() {
-        var lastPointCenter = {x: 0, y: 0},
-            currentPointCenter = {x: 0, y: 0};
-
-        jQuery.each(this.cursorGroup.cursors, function(id, cursor) {
-            var numPoints = cursor.points.length;
-            lastPointCenter.x += cursor.points[0].x;
-            lastPointCenter.y += cursor.points[0].y;
-
-            currentPointCenter.x += cursor.points[numPoints-1].x;
-            currentPointCenter.y += cursor.points[numPoints-1].y;
-        });
-
-        lastPointCenter.x /= this.cursorGroup.numCursors;
-        lastPointCenter.y /= this.cursorGroup.numCursors;
-        currentPointCenter.x /= this.cursorGroup.numCursors;
-        currentPointCenter.y /= this.cursorGroup.numCursors;
-
+        var center, distance, scalingFactor, newScalingFactor;
         if (this.movable) {
-            this.affineTransform.translate({x: currentPointCenter.x - lastPointCenter.x, 
-                                            y: currentPointCenter.y - lastPointCenter.y});
+            center = this.cursorGroup.computeStartEndCenters();
+            this.affineTransform.translate({x: center.end.x - center.start.x, 
+                                            y: center.end.y - center.start.y});
         }
 
-        if (this.rotatable && this.cursorGroup.numCursors >= 2) {
+        if (this.rotatable && this.cursorGroup.numCursors == 2) {
             
         }
 
-        if (this.scalable && this.cursorGroup.numCursors >= 2) {
+        if (this.scalable && this.cursorGroup.numCursors == 2) {
+            distance = this.cursorGroup.computeDistances();
+            scalingFactor = distance.end / distance.start || 1;
 
+            this.affineTransform.scale({x: scalingFactor, y: scalingFactor});
+
+            newScalingFactor = this.affineTransform.getScalingFactor();
+            newScalingFactor.x = Math.max(this.minScale, newScalingFactor.x);
+            newScalingFactor.y = Math.max(this.minScale, newScalingFactor.y);
+            newScalingFactor.x = Math.min(this.maxScale, newScalingFactor.x);
+            newScalingFactor.y = Math.min(this.maxScale, newScalingFactor.y);
+
+            this.affineTransform.setScalingFactor(newScalingFactor);
         }
     },
 
