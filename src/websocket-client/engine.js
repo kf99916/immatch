@@ -9,7 +9,7 @@ jQuery.extend(imMatch, {
             jQuery.error("Please invoke $im.ready(fn).");
         }
 
-        imMatch.socketClient = new imMatch.SocketClient;
+        imMatch.socketClient = new imMatch.SocketClient();
         imMatch.canvas = new imMatch.CanvasAdapter(canvasID);
 
         imMatch.addTouchMouseHandlers();
@@ -27,7 +27,7 @@ imMatch.engine = {
     lastRunTimestamp: 0,
 
     frame: 0, // Be reset if there is no any touchMouseEvent in cache. Please check it in geture-recognizer.js
-    
+
     run: function(timestamp) {
         var stamp = {
             time: timestamp,
@@ -35,11 +35,11 @@ imMatch.engine = {
         };
 
         imMatch.trigger("gestureWillbeRecognized", stamp);
-        if (this.frame == 0 || imMatch.gestureRecognizer.recognize(stamp).length != 0) {
+        if (this.frame === 0 || imMatch.gestureRecognizer.recognize(stamp).length !== 0) {
             imMatch.trigger("gestureDidbeRecognized", stamp);
 
             imMatch.trigger("contextWillbeDrawn", stamp);
-            imMatch.canvas.draw(stamp);
+            imMatch.canvas.draw();
             imMatch.trigger("contextDidbeDrawn", stamp);
         }
 
@@ -51,7 +51,10 @@ imMatch.engine = {
             case imMatch.mode.stitched:
                 setTimeout(this.run.bind(this), this.interval, Date.now() + this.interval);
             break;
-            case imMatch.mode.alone: default:
+            case imMatch.mode.alone:
+                window.requestAnimationFrame(this.run.bind(this));
+            break;
+            default:
                 window.requestAnimationFrame(this.run.bind(this));
             break;
         }
@@ -62,7 +65,10 @@ imMatch.engine = {
             case imMatch.mode.stitched:
             // TODO
             break;
-            case imMatch.mode.alone: default:
+            case imMatch.mode.alone:
+                this.interval = stamp.time - this.lastRunTimestamp;
+            break;
+            default:
                 this.interval = stamp.time - this.lastRunTimestamp;
             break;
         }

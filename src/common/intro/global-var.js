@@ -12,31 +12,18 @@ function fixMessage(message, mode) {
 
 Date.now = Date.now || function now() { return new Date().getTime(); };
 
-var 
-    // Use the correct document accordingly with window argument (sandbox)
-    document = window.document,
+// Use the correct document accordingly with window argument (sandbox)
+var document = window.document,
+
     arr = [],
 
     stringify = JSON.stringify,
 
     slice = arr.slice,
 
-    isTouchSupported = "ontouchstart" in window,
+    indexOf = arr.indexOf,
 
-    isMouseDragged = returnFalse,
-
-    maxNumTouchesInSprite = 2,
-
-    mouseID = "",
-
-    // Be reset if there is no any touchMouseEvent in cache. Please check it in geture-recognizer.js
-    cursorGroupID = 0,
-
-    // Be reset if there is no any touchMouseEvent in cache. Please check it in geture-recognizer.js
-    touchOrder = 0,
-
-    // Be reset if there is no any scene. Please check it in scene.js
-    sceneZ = 0,
+    push = arr.push,
 
     imMatch = jQuery({});
 

@@ -3,10 +3,10 @@ imMatch.gestureRecognizer = {
         // 1. Get all touchMouseEvent in the frame
         var touchedSprites = [], currentTouchedSprite, inTouchedSprites = false,
             touchMouseEvents = imMatch.socketClient.caches.getNRemove("touchMouseEvent", function(touchMouseEvent) {
-                    return (touchMouseEvent.frame == stamp.frame);
+                    return (touchMouseEvent.frame === stamp.frame);
                 });
 
-        if (touchMouseEvents.length == 0) {
+        if (touchMouseEvents.length === 0) {
             imMatch.touchOrder = 0;
             imMatch.engine.frame = 0;
             cursorGroupID = 0;
@@ -23,16 +23,16 @@ imMatch.gestureRecognizer = {
                 return;
             }
 
-            // 4. Update touchedSprites 
+            // 4. Update touchedSprites
             jQuery.each(touchedSprites, function(i, touchedSprite) {
-                if (currentTouchedSprite.id == touchedSprite.id) {
+                if (currentTouchedSprite.id === touchedSprite.id) {
                     inTouchedSprites = true;
                     return false;
                 }
             });
 
             if (!inTouchedSprites) {
-                touchedSprites.push(currentTouchedSprite);
+                push.call(touchedSprites,currentTouchedSprite);
             }
         });
 

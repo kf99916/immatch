@@ -1,6 +1,5 @@
-var
     // Map over jQuery in case of overwrite
-    _imMatch = window.imMatch,
+var _imMatch = window.imMatch,
 
     // Map over the $ in case of overwrite
     _$im = window.$im;
@@ -18,6 +17,4 @@ imMatch.noConflict = function(deep) {
 };
 
 // Expose imMatch and $im identifiers
-if (noGlobal === undefined) {
-    window.imMatch = window.$im = imMatch;
-}
+window.imMatch = window.$im = imMatch;

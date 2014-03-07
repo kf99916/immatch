@@ -41,7 +41,7 @@ imMatch.Cursor.prototype = {
                 y: (point.y - lastPoint.y) / duration
             };
 
-            if (!jQuery.isEmptyObject(lastVelocity) && 
+            if (!jQuery.isEmptyObject(lastVelocity) &&
                 Math.abs(imMatch.rad(velocity, lastVelocity)) > imMatch.threadsholdAboutSyncGesture.straight) {
                 result = false;
                 return false;
@@ -59,7 +59,7 @@ imMatch.CursorGroup = function(cursors) {
     // Allow instantiation without the 'new' keyword
     if ( !(this instanceof imMatch.CursorGroup) ) {
         return new imMatch.CursorGroup(cursors);
-    } 
+    }
 
     this.cursors = {};
     this.numCursors = 0;
@@ -80,9 +80,9 @@ imMatch.CursorGroup.prototype = {
 
         jQuery.each(cursors, function(i, cursor) {
             if (!self.cursors[cursor.id]) {
-                self.cursors[cursor.id] = new imMatch.Cursor;
+                self.cursors[cursor.id] = new imMatch.Cursor();
             }
-            
+
             self.cursors[cursor.id].add(cursor.points);
             self.cursors[cursor.id].type = cursor.type;
         });
@@ -90,7 +90,7 @@ imMatch.CursorGroup.prototype = {
         this.numCursors += cursors.length;
         return this;
     },
-    
+
     removeCursor: function(cursor) {
         if (jQuery.isEmptyObject(cursor)) {
             return null;
@@ -197,12 +197,12 @@ imMatch.CursorGroup.prototype = {
     isAllCursorsUp: function() {
         var numUpCursors = 0;
         jQuery.each(this.cursors, function(cursorID, cursor) {
-            if (cursor.type == imMatch.touchMouseEventType.up || cursor.type == imMatch.touchMouseEventType.cancel) {
+            if (cursor.type === imMatch.touchMouseEventType.up || cursor.type === imMatch.touchMouseEventType.cancel) {
                 ++numUpCursors;
             }
         });
 
-        if (numUpCursors == this.numCursors) {
+        if (numUpCursors === this.numCursors) {
             return true;
         }
 
@@ -219,9 +219,36 @@ imMatch.CursorGroup.prototype = {
         });
 
         return result;
-    }
+    },
+
+    // All of DOWN points is out of the stitching area and UP or CANCEL points is in the stitching area
+   /* isAllCurosrsFitStitchingRegionCriteria: function() {
+        var result = true;
+        jQuery.each(this.cursors, function(cursorID, cursor) {
+            if (cursor.points[0].x )
+        });
+
+        return result;
+    }*/
 };
 
 jQuery.extend(imMatch, {
-    cursorGroups: {}
+    cursorGroups: {},
+
+   /* isOutOfStitchingRegion: function(point) {
+        var localPoint, outOfStitchingRegionMargin;
+        if (!imMatch.is2DVector(point)) {
+            return false;
+        }
+
+        outOfStitchingRegionMargin = {
+            top: imMatch.device.stitchingRegionSize,
+            bottom: imMatch.viewport.height - imMatch.device.stitchingRegionSize,
+            left: imMatch.device.stitchingRegionSize,
+            right: imMatch.viewport.width - imMatch.device.stitchingRegionSize,
+        };
+
+        localPoint = (point.coordinate == imMatch.coordinate.local)? point: imMatch.viewport.transformWithCoordinate(point);
+        if (imMatch.device.stitchingRegionSize <= localPoint.x && localPoint.x <= imMatch.device.stitchingRegionSize)
+    }*/
 });

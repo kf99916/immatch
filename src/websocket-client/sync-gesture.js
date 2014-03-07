@@ -29,8 +29,8 @@ imMatch.syncGesture = {
             return;
         }
 
-        if (containGroup.id != ownGroup.id) {
-            imMatch.logInfo("[syncGesture.touchmousemoveHandler] Merge the group: " + containGroup.id + 
+        if (containGroup.id !== ownGroup.id) {
+            imMatch.logInfo("[syncGesture.touchmousemoveHandler] Merge the group: " + containGroup.id +
                 " with another group: " + ownGroup.id);
             containGroup.add(ownGroup);
             delete imMatch.cursorGroups[ownGroup.id];
@@ -48,7 +48,7 @@ imMatch.syncGesture = {
         }
 
         this.tryToStitch(group);
-        
+
         delete imMatch.cursorGroups[group.id];
     },
 
@@ -89,7 +89,7 @@ imMatch.syncGesture = {
     addCursorGroup: function(touchMouseEvent) {
         var targetGroup = this.searchContainCursorGroup(touchMouseEvent);
         if (!targetGroup) {
-            targetGroup = new imMatch.CursorGroup;
+            targetGroup = new imMatch.CursorGroup();
             imMatch.cursorGroups[targetGroup.id] = targetGroup;
         }
 
@@ -107,7 +107,7 @@ imMatch.syncGesture = {
         // Criteria 1: Cursor is straight
         if (!group.isAllCursorsStraight()) {
             imMatch.logDebug("[syncGesture.tryToStitch] All of cursors is not straight!");
-            return this;   
+            return this;
         }
 
         // Criteria 2: all of DOWN points is out of the stitching area and UP or CANCEL points is in the stitching area

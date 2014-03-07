@@ -7,7 +7,7 @@ imMatch.deviceHelper = {
 
     iPhone: function() {
         return {ppi: 163,
-                margin: {top: (4.5 - 480 / 163) / 2, bottom: (4.5 - 480 / 163) / 2, 
+                margin: {top: (4.5 - 480 / 163) / 2, bottom: (4.5 - 480 / 163) / 2,
                         left: (2.31 - 320 / 163) / 2, right: (2.31 - 320 / 163) / 2}
         };
     },
@@ -33,7 +33,7 @@ jQuery.extend(MobileEsp, {
             return false;
         }
 
-        return (window.screen.availHeight > 480);    
+        return (window.screen.availHeight > 480);
     }
 });
 

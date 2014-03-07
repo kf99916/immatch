@@ -15,7 +15,7 @@ jQuery.extend(imMatch, {
             touchMouseEvent.x = globalTouchMouse.x;
             touchMouseEvent.y = globalTouchMouse.y;
 
-            imMatch.logInfo("[" + touchMouseEvent.type + "] " + touchMouseEvent.x + ", " + 
+            imMatch.logInfo("[" + touchMouseEvent.type + "] " + touchMouseEvent.x + ", " +
                 touchMouseEvent.y + "(" + touchMouseEvent.id + ")");
 
             imMatch.socketClient.caches.queue("touchMouseEvent", touchMouseEvent, function(a, b) {
@@ -48,8 +48,8 @@ jQuery.extend(imMatch, {
     // Mouse Handlers
     mouseHandler: function(event) {
         event.originalEvent.changedTouches = [{
-            identifier: mouseID, 
-            pageX: event.pageX, 
+            identifier: mouseID,
+            pageX: event.pageX,
             pageY: event.pageY
         }];
         imMatch.touchMouseHandler(event);
@@ -64,7 +64,7 @@ jQuery.extend(imMatch, {
         event.type = imMatch.touchMouseEventType.down;
 
         mouseID = Math.uuidFast();
-        
+
         imMatch.mouseHandler(event);
     },
 

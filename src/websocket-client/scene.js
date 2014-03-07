@@ -14,7 +14,7 @@ imMatch.Scene = function() {
     this.spriteZ = 0;
     this.maxNumSprites = 100;
 
-    this.affineTransform = new imMatch.AffineTransform;
+    this.affineTransform = new imMatch.AffineTransform();
 };
 
 jQuery.extend(imMatch.Scene.prototype, imMatch.transformPrototype, {
@@ -45,7 +45,7 @@ jQuery.extend(imMatch.Scene.prototype, imMatch.transformPrototype, {
         sprite.setContainedScene(this);
         ++this.spriteZ;
 
-        this.sprites.push(sprite);
+        push.call(this.sprites, sprite);
         this.sprites.sort(function(a, b) {
             return b.z - a.z;
         });
@@ -60,7 +60,7 @@ jQuery.extend(imMatch.Scene.prototype, imMatch.transformPrototype, {
         switch(target.coordinate) {
             // Local -> Global -> Scene
             case imMatch.coordinate.local:
-                target.coordinate = imMatch.coordinate.scene; 
+                target.coordinate = imMatch.coordinate.scene;
                 result = this.inverseTransform(imMatch.viewport.inverseTransform(target));
             break;
             // Global -> Scene
@@ -71,7 +71,7 @@ jQuery.extend(imMatch.Scene.prototype, imMatch.transformPrototype, {
             // Scene -> Global
             case imMatch.coordinate.scene:
                 target.coordinate = imMatch.coordinate.global;
-                result = this.transform(copyVec);
+                result = this.transform(target);
             break;
             default:
                 imMatch.logError("[imMatch.scene.transformWithCoordinate] The coordinate is invalid! Coordinate: " + target.coordinate);
@@ -92,7 +92,7 @@ jQuery.extend(imMatch, {
             return this;
         }
 
-        imMatch.scenes.push(scene);
+        push.call(imMatch.scenes, scene);
         imMatch.scenes.sort(function(a, b) {
             return b.z - a.z;
         });
@@ -101,11 +101,11 @@ jQuery.extend(imMatch, {
     },
 
     removeScene: function(removedScene) {
-        imMatch.scenes = jQuery.grep(imMatch.scenes, function(n, i) {
-            return (removedScene.id != scene.id);
+        imMatch.scenes = jQuery.grep(imMatch.scenes, function(scene) {
+            return (removedScene.id !== scene.id);
         });
 
-        if (imMatch.scenes.length == 0) {
+        if (imMatch.scenes.length === 0) {
             sceneZ = 0;
         }
 

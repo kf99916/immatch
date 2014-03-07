@@ -21,34 +21,49 @@ module.exports = function(grunt) {
 		meta: {
 			imMatchWebsocketClient: {
 				minBanner: "/*! <%= pkg.title %> v<%= pkg.version %> Client Javascript Library <%= pkg.homepage %> | <%= pkg.licenses[0].type %> license */",
-				banner: "/*! <%= pkg.title %> v<%= pkg.version %> Client Javascript Library\n" + 
-						" * <%= pkg.homepage %>\n" + 
+				banner: "/*! <%= pkg.title %> v<%= pkg.version %> Client Javascript Library\n" +
+						" * <%= pkg.homepage %>\n" +
 						" *\n" +
 						" * Copyright 2012, <%= grunt.template.today('yyyy') %> <%= pkg.author.name %>\n" +
 						" * Released under the <%= pkg.licenses[0].type %> license\n" +
 						" * <%= pkg.licenses[0].url %>\n" +
 						" *\n" +
-						" * Date: <%= grunt.template.today('yyyy-mm-dd') %>\n" + 
+						" * Date: <%= grunt.template.today('yyyy-mm-dd') %>\n" +
 						" */"
 			},
             imMatchWebsocketServer:
             {
                 minBanner: "/*! <%= pkg.title %> v<%= pkg.version %> Websocket Server <%= pkg.homepage %> | <%= pkg.licenses[0].type %> license */",
-                banner: "/*! <%= pkg.title %> v<%= pkg.version %> Websocket Server\n" + 
-                        " * <%= pkg.homepage %>\n" + 
+                banner: "/*! <%= pkg.title %> v<%= pkg.version %> Websocket Server\n" +
+                        " * <%= pkg.homepage %>\n" +
                         " *\n" +
                         " * Copyright 2012 <%= pkg.author.name %>\n" +
                         " * Released under the <%= pkg.licenses[0].type %> license\n" +
                         " * <%= pkg.licenses[0].url %>\n" +
                         " *\n" +
-                        " * Date: <%= grunt.template.today('yyyy-mm-dd') %>\n" + 
+                        " * Date: <%= grunt.template.today('yyyy-mm-dd') %>\n" +
                         " */"
             }
 		},
 		concat: {
 			options: {
-		      stripBanners: true
-		    },
+                stripBanners: true
+            },
+            imMatchWebsocketClientForJshint: {
+                src:["src/common/intro/intro.js",
+                    "src/websocket-client/check-libraries.js",
+                    "src/common/intro/global-var.js",
+                    "src/common/*.js",
+                    "src/websocket-client/global-var.js",
+                    "src/websocket-client/transform-proto.js",
+                    "src/websocket-client/device.js",
+                    "src/websocket-client/viewport.js",
+                    "src/websocket-client/cursor-group.js",
+                    "src/websocket-client/sync-gesture.js",
+                    "src/websocket-client/*.js",
+                    "src/common/outro/outro.js"],
+                dest: "dist/immatch-jshint.js"
+            },
 			imMatchWebsocketClient: {
 				options: {
 					banner: "<%= meta.imMatchWebsocketClient.banner %>",
@@ -61,6 +76,7 @@ module.exports = function(grunt) {
                     "src/websocket-client/check-libraries.js",
                     "src/common/intro/global-var.js",
                     "src/common/*.js",
+                    "src/websocket-client/global-var.js",
                     "src/websocket-client/transform-proto.js",
                     "src/websocket-client/device.js",
                     "src/websocket-client/viewport.js",
@@ -68,7 +84,7 @@ module.exports = function(grunt) {
                     "src/websocket-client/sync-gesture.js",
                     "src/websocket-client/*.js",
 					"src/common/outro/outro.js"],
-				dest:"dist/immatch.js"
+				dest: "dist/immatch.js"
 			},
             imMatchWebsocketServer: {
                 options: {
@@ -85,26 +101,30 @@ module.exports = function(grunt) {
 		},
 		jsonlint: {
 			pkg: {
-				src: [ "package.json" ]
-			}
+				src: ["package.json"]
+			},
+
+            example: {
+                src: ["example/**/*.json"]
+            },
 		},
 		jshint: {
 			all: {
+                options: {
+                    jshintrc: true
+                },
 				src: [
-					"src/**/*.js", "Gruntfile.js"
-				],
-				options: {
-					jshintrc: true
-				}
+					"src/common/intro/global-var.js", "src/common/*.js",
+                    "src/websocket-client/*.js", "src/websocket-server/**/*.js",
+                    "Gruntfile.js"
+				]
 			},
 			dist: {
-                src: [
-                    "dist/immatch.js", 
-                    "dist/immatch-ws-server.js"
-                ],
-                options: srcHintOptions
+                options: srcHintOptions,
+                src: ["dist/immatch-jshint.js", "dist/immatch-ws-server.js"]
             }
 		},
+        clean: ["dist/immatch-jshint.js"],
 		uglify: {
 			my_target: {
 				files: {
@@ -161,8 +181,8 @@ module.exports = function(grunt) {
 	require( "load-grunt-tasks" )( grunt );
 
 	// Watch task
-	grunt.registerTask( "watch", ["jsonlint", "concat", "uglify", "copy"]);
+	grunt.registerTask( "watch", ["jsonlint", "concat", "jshint", "clean", "uglify", "copy"]);
 
 	// Default grunt.
-	grunt.registerTask("default", ["jsonlint", "concat", "uglify"]);
+	grunt.registerTask("default", ["jsonlint", "concat", "jshint", "clean", "uglify"]);
 };

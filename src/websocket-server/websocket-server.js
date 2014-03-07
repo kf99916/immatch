@@ -35,7 +35,7 @@ jQuery.extend(server, {
     removeDeviceCallback: function(deviceID, groupID) {
         imMatch.remove(this.device2group, deviceID);
         if (this.groups[groupID].getLength() === 0) {
-            imMatch.remove(this.groups, groupID)
+            imMatch.remove(this.groups, groupID);
             imMatch.logInfo("[imMatch.webSocketServer.removeDeviceCallback] Remove group. groupID = " + groupID);
         }
 
@@ -62,7 +62,7 @@ jQuery.extend(server, {
                 deviceID: deviceID
             }));
 
-            imMatch.logDebug("[imMatch.Group.addGroup] Connection and broadcast \"connectionSuccess\" message." + 
+            imMatch.logDebug("[imMatch.Group.addGroup] Connection and broadcast \"connectionSuccess\" message." +
                 " deviceID = " + deviceID + ", groupID = " + groupID);
 
         } catch(error) {
@@ -99,16 +99,16 @@ jQuery.extend(server, {
         },
 
         close: function(webSocket) {
-            imMatch.logInfo("[imMatch.Group.response.close] The client closes WebSocket." + 
+            imMatch.logInfo("[imMatch.Group.response.close] The client closes WebSocket." +
                 " deviceID = " + webSocket.deviceID + ", groupID = " + webSocket.groupID);
 
             server.groups[webSocket.groupID].removeDeviceWithID(webSocket.deviceID);
-            
+
             return server;
         },
 
         error: function(error, webSocket) {
-            imMatch.logError("[imMatch.Group.response.error] " + error.message + 
+            imMatch.logError("[imMatch.Group.response.error] " + error.message +
                 " deviceID = " + webSocket.deviceID + ", groupID = " + webSocket.groupID);
             jQuery.error("[imMatch.Group.response.error] WebSocket error.");
 
@@ -126,7 +126,7 @@ jQuery.extend(server, {
         },
 
         tryToStitch: function(data) {
-            var now = imMatch.now(), data1, data1Index, group1, group2,
+            var now = imMatch.now(), data1, group1, group2,
                 i = 0, length = server.candidates.length;
             if (imMatch.isEmptyObject(data)) {
                 imMatch.logWarn("[imMatch.webSocketServer.tryToStitch] NO data.");
@@ -149,7 +149,7 @@ jQuery.extend(server, {
                     data1 = stitchInfo.data;
                     imMatch.remove(server.candidates, i);
                     return false;
-                }   
+                }
             }, true);
 
             if (!data1) {
@@ -165,7 +165,7 @@ jQuery.extend(server, {
                     }
                 }
 
-                core_push.call(server.candidates, {data: data, timestamp: now});
+                push.call(server.candidates, {data: data, timestamp: now});
             }
             // Matching devices successes
             else {
@@ -173,7 +173,7 @@ jQuery.extend(server, {
                 group2 = server.groups[server.device2group[data.deviceID]];
 
                 if (group1.isStitching() || group2.isStitching()) {
-                    imMatch.logDebug("[imMatch.webSocketServer.tryToStitch] Groups are stitching." + 
+                    imMatch.logDebug("[imMatch.webSocketServer.tryToStitch] Groups are stitching." +
                         " groupID1 = " + group1.getGroupID() + ", groupID2 = " + group2.getGroupID());
                     return server;
                 }
@@ -183,7 +183,7 @@ jQuery.extend(server, {
                     group1.setUnstitchInfo(data1, data, true);
                 }
                 else {
-                    imMatch.logInfo("[imMatch.webSocketServer.tryToStitch] DeviceID1 = " + data1.deviceID + 
+                    imMatch.logInfo("[imMatch.webSocketServer.tryToStitch] DeviceID1 = " + data1.deviceID +
                         " DeviceID2 = " + data.deviceID + " are be stitched");
 
                     // Reverse stitch orientation of the later device
@@ -215,15 +215,15 @@ jQuery.extend(server, {
                     touchPoints: data.touchPoints
                 }, group.stitchInfo.matchDevices);
 
-                imMatch.logInfo("[imMatch.Group.response.exchangeData] Receive \"exchangeData\" message" + 
+                imMatch.logInfo("[imMatch.Group.response.exchangeData] Receive \"exchangeData\" message" +
                     " and broadcast \"exchangeData\" message." + " deviceID = " + data.deviceID);
             }
-            
+
             return server;
         },
 
         exchangeDataDone: function(data) {
-            var group, matchGroup, newGroup, removeGroup, 
+            var group, matchGroup, newGroup, removeGroup,
                 lengthGroup = 0, lengthMatchGroup = 0;
             if (data) {
                 group = server.groups[server.device2group[data.deviceID]];
@@ -233,11 +233,11 @@ jQuery.extend(server, {
 
                 group.numDeviceDone = (imMatch.isEmpty(group.numDeviceDone))? 1 : group.numDeviceDone + 1;
                 matchGroup.numDeviceDone = (imMatch.isEmpty(matchGroup.numDeviceDone))? 1 : matchGroup.numDeviceDone + 1;
-                
-                imMatch.logDebug("[imMatch.Group.response.exchangeDataDone] Receive \"exchangeDataDone\" message." + 
+
+                imMatch.logDebug("[imMatch.Group.response.exchangeDataDone] Receive \"exchangeDataDone\" message." +
                     " #done in group1 = " + group.numDeviceDone + ", #done in group2 = " + matchGroup.numDeviceDone);
                 // All devices in these two group are ready
-                if (group.numDeviceDone === lengthGroup + lengthMatchGroup && 
+                if (group.numDeviceDone === lengthGroup + lengthMatchGroup &&
                     matchGroup.numDeviceDone === lengthGroup + lengthMatchGroup) {
                     if (lengthGroup <= lengthMatchGroup) {
                         newGroup = group;
@@ -245,11 +245,11 @@ jQuery.extend(server, {
                     }
                     else {
                         newGroup = matchGroup;
-                        removeGroup = group;                        
+                        removeGroup = group;
                     }
 
                     // Add devices in removeGroup to newGroup and modify device2group
-                    imMatch.each(removeGroup.getDevices(), function(deviceID, device) {
+                    jQuery.each(removeGroup.getDevices(), function(deviceID, device) {
                         newGroup.addDevice(deviceID, device.webSocket, device.viewportQTY);
                         server.device2group[deviceID] = newGroup.getGroupID();
                     });
@@ -262,8 +262,8 @@ jQuery.extend(server, {
                         action: "exchangeDataDone"
                     });
 
-                    imMatch.logInfo("[imMatch.Group.response.exchangeDataDone] Combine two groups." + 
-                        " New group = " + newGroup.getGroupID() + ", removed group = " + removeGroup.getGroupID() + 
+                    imMatch.logInfo("[imMatch.Group.response.exchangeDataDone] Combine two groups." +
+                        " New group = " + newGroup.getGroupID() + ", removed group = " + removeGroup.getGroupID() +
                         ", #devives = " + newGroup.getLength());
                 }
             }
@@ -277,7 +277,7 @@ jQuery.extend(server, {
                 groupID = server.device2group[data.deviceID];
                 server.groups[groupID].setUnstitchInfo({deviceID: data.deviceID});
             }
-            
+
             return server;
         },
 
@@ -286,11 +286,11 @@ jQuery.extend(server, {
             if (data) {
                 group = server.groups[server.device2group[data.deviceID]];
                 group.numDeviceDone = (imMatch.isEmpty(group.numDeviceDone))? 1 : group.numDeviceDone + 1;
-                imMatch.logDebug("[imMatch.Group.response.unstitchDone] Receive \"unstitchDone\" message." + 
+                imMatch.logDebug("[imMatch.Group.response.unstitchDone] Receive \"unstitchDone\" message." +
                     " #done in group = " + group.numDeviceDone);
 
                 if (group.numDeviceDone === group.getLength()) {
-                    imMatch.remove(group, numDeviceDone);
+                    imMatch.remove(group, group.numDeviceDone);
 
                     group.broadcast({
                         action: "unstitchDone",
@@ -301,7 +301,7 @@ jQuery.extend(server, {
                     group.removeDeviceWithID(data.deviceID);
                     newGroup = server.addGroup(device.webSocket, data.devceID);
 
-                    imMatch.logDebug("[imMatch.Group.response.unstitchDone] Slice two group." + 
+                    imMatch.logDebug("[imMatch.Group.response.unstitchDone] Slice two group." +
                         " New group = " + newGroup.getGroupID() + ", #devices (new) = " + newGroup.getLength() +
                         ", original group = " + group.getGroupID() + ", #devives (original) = " + group.getLength());
                 }

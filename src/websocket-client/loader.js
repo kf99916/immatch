@@ -11,6 +11,7 @@ imMatch.loader = {
             async: true,
             dataType: "json",
             success: function(data, textStatus, jqXHR) {
+                imMatch.logInfo("Succeeded to load the list: " + loadList + ". " + textStatus + ", " + jqXHR);
                 self.loadData(data, fn);
             },
             error: function(jqXHR, textStatus, errorThrown) {
@@ -28,7 +29,7 @@ imMatch.loader = {
         this.progressBar.setAttribute("style", "width: " + width + "px; " +
                                     "height: " + height + "px; " +
                                     "position: absolute; top: 50%; left: 50%; " +
-                                    "margin-left: " + -width / 2 + "px; " + 
+                                    "margin-left: " + -width / 2 + "px; " +
                                     "margin-top: " + -height / 2 + "px;");
 
         document.body.appendChild(this.progressBar);
@@ -44,7 +45,7 @@ imMatch.loader = {
                 return;
             }
 
-            if (item.type != "image") {
+            if (item.type !== "image") {
                 return;
             }
 

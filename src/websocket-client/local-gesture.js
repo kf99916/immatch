@@ -39,7 +39,7 @@ imMatch.localGesture = {
         }
 
         cursor.add(touchMouseEvent);
-        
+
         return sprite;
     },
 

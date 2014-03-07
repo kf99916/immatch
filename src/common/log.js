@@ -13,7 +13,7 @@ jQuery.extend(imMatch, {
     warnLevel: 2,
 
     errorLevel: 3,
-    
+
     logDebug: function(message) {
         if (imMatch.isEmpty(message) || this.logLevel > imMatch.debugLevel) {
             return this;

@@ -20,36 +20,36 @@ jQuery.extend(imMatch, {
 
     // Return the largest argument or element in array and index
     max: function() {
-        var target = arguments[0], 
+        var target = arguments[0],
             result = {index:-1, value: +Infinity};
 
         if (!jQuery.isArrayLike(target)) {
             target = [];
             jQuery.each(arguments, function(i, argument) {
-                core_push.call(target, argument);
+                push.call(target, argument);
             });
         }
 
         result.value = Math.max.apply(Math, target);
-        result.index = core_indexOf.call(target, result.value);
+        result.index = indexOf.call(target, result.value);
 
         return result;
     },
 
     // Return the smallest argument or element in array and index
     min: function() {
-        var target = arguments[0], 
+        var target = arguments[0],
             result = {index:-1, value: -Infinity};
 
         if (!jQuery.isArrayLike(target)) {
             target = [];
             jQuery.each(arguments, function(i, argument) {
-                core_push.call(target, argument);
+                push.call(target, argument);
             });
         }
 
         result.value = Math.min.apply(Math, target);
-        result.index = core_indexOf.call(target, result.value);
+        result.index = indexOf.call(target, result.value);
 
         return result;
     },

@@ -16,9 +16,9 @@ imMatch.Group = function Group(groupID, webSocketServer) {
     }
 
     // Privileged Methods
-    this.getGroupID = function() {return _groupID;}
+    this.getGroupID = function() {return _groupID;};
 
-    this.getDevices = function() {return _devices;}
+    this.getDevices = function() {return _devices;};
 
     this.addDevice = function(deviceID, webSocket, /* Optional */ viewportQTY) {
         if (imMatch.isEmpty(deviceID) || !webSocket) {
@@ -38,11 +38,11 @@ imMatch.Group = function Group(groupID, webSocketServer) {
         // Invoke webSocketServer addDeviceCallBack
         _webSocketServer.addDeviceCallback(deviceID, this.getGroupID());
 
-        imMatch.logInfo("[imMatch.Group.addDevice] Add device. deviceID = " + deviceID + 
+        imMatch.logInfo("[imMatch.Group.addDevice] Add device. deviceID = " + deviceID +
             ", GroupID = " + _groupID + ", #devices = " + _length);
 
         return this;
-    }
+    };
 
     this.removeDeviceWithID = function(deviceID) {
         if (imMatch.isEmpty(deviceID)) {
@@ -53,20 +53,20 @@ imMatch.Group = function Group(groupID, webSocketServer) {
         var temp = {x: _devices[deviceID].viewportQTY.x, y: _devices[deviceID].viewportQTY.y};
         imMatch.remove(_devices, deviceID);
         --_length;
-        
+
         this.center.x = (this.center.x * (_length + 1) + temp.x) / _length;
         this.center.y = (this.center.y * (_length + 1) + temp.y) / _length;
 
         // Invoke webSocketServer removeDeviceCallback
         _webSocketServer.removeDeviceCallback(deviceID, this.getGroupID());
 
-        imMatch.logInfo("[imMatch.Group.removeDeviceWithID] Remove device. deviceID = " + deviceID + 
+        imMatch.logInfo("[imMatch.Group.removeDeviceWithID] Remove device. deviceID = " + deviceID +
             ", GroupID = " + _groupID + ", #devices = " + _length);
 
         return this;
-    }
+    };
 
-    this.getLength = function() {return _length;}
+    this.getLength = function() {return _length;};
 };
 
 // Public Methods
@@ -76,14 +76,13 @@ imMatch.Group.prototype = {
     center: {x: 0, y: 0},
 
     numSyncAt: {},
-    
+
     stitchInfo: {},
 
     unstitchInfo: {},
 
     // Stitch information contains information about matching group
     setStitchInfo: function(stitchInfo) {
-        var temp;
         if (!stitchInfo) {
             this.isStitching = returnFalse;
             this.stitchInfo = {};
@@ -92,7 +91,7 @@ imMatch.Group.prototype = {
             this.isStitching = returnTrue;
             this.stitchInfo = stitchInfo;
 
-            imMatch.logInfo("[imMatch.Group.setStitchInfo] Stitch information: deviceID = " + 
+            imMatch.logInfo("[imMatch.Group.setStitchInfo] Stitch information: deviceID = " +
                 this.stitchInfo.deviceID + ", groupID = " + this.getGroupID());
         }
 
@@ -115,7 +114,7 @@ imMatch.Group.prototype = {
                 needToRestitch: needToRestitch
             };
 
-            imMatch.logInfo("[imMatch.Group.setUnstitchInfo] Unstitch information: deviceID1 = " + groupInfo1.deviceID + 
+            imMatch.logInfo("[imMatch.Group.setUnstitchInfo] Unstitch information: deviceID1 = " + groupInfo1.deviceID +
                 ", deviceID2 = " + groupInfo2.deviceID + ", Need to restitch = " + needToRestitch);
         }
 
@@ -136,18 +135,18 @@ imMatch.Group.prototype = {
 
         // Send ack
         this.broadcast({
-            action: "synchronize", 
+            action: "synchronize",
             executeChunk: data.executeChunk, // unit: frame
             deviceId: data.deviceID,        // TODO: deviceId -> deviceID
             imageProgress: data.imageProgress,
             touchPoints: data.touchPoints
         });
 
-        imMatch.logDebug("[imMatch.Group.synchronize] Receive \"clientSync\" message" + 
-            " and broadcast \"clientSync\" message." + " deviceID = " + data.deviceID + 
+        imMatch.logDebug("[imMatch.Group.synchronize] Receive \"clientSync\" message" +
+            " and broadcast \"clientSync\" message." + " deviceID = " + data.deviceID +
             ", executeChunk = " + data.executeChunk);
 
-        this.numSyncAt[data.executeChunk] = (this.numSyncAt[data.executeChunk])? 
+        this.numSyncAt[data.executeChunk] = (this.numSyncAt[data.executeChunk])?
                                                 this.numSyncAt[data.executeChunk] + 1 : 1;
 
         if (this.numSyncAt[data.executeChunk] >= this.getLength()) {
@@ -163,11 +162,11 @@ imMatch.Group.prototype = {
                     executeChunk: data.executeChunk
                 });
 
-                imMatch.logDebug("[imMatch.Group.synchronize] Broadcast \"idle\" message." + 
+                imMatch.logDebug("[imMatch.Group.synchronize] Broadcast \"idle\" message." +
                     " deviceID = " + data.deviceID + ", executeChunk = " + data.executeChunk);
             }
         }
-        
+
         return this;
     },
 
@@ -180,7 +179,7 @@ imMatch.Group.prototype = {
 
         targets = targets || this.getDevices();
         var message = stringify(data);
-        imMatch.each(targets, function(i, target) {
+        jQuery.each(targets, function(i, target) {
             target.webSocket.send(message);
         });
 
@@ -202,9 +201,9 @@ imMatch.Group.prototype = {
             executeChunk: executeChunk
         });
 
-        imMatch.logInfo("[imMatch.Group.startUnstitch] Broadcast \"unstitchStart\" message." + 
-            " deviceID1 = " + unstitchInfo.groupInfo1.deviceID + 
-            ", deviceID2 = " + unstitchInfo.groupInfo2.deviceID + 
+        imMatch.logInfo("[imMatch.Group.startUnstitch] Broadcast \"unstitchStart\" message." +
+            " deviceID1 = " + unstitchInfo.groupInfo1.deviceID +
+            ", deviceID2 = " + unstitchInfo.groupInfo2.deviceID +
             ", executeChunk = " + executeChunk);
 
         return true;
@@ -217,13 +216,13 @@ imMatch.Group.prototype = {
 
         executeChunk = executeChunk || 0;
 
-        var transVariables = this.transform(), deviceIDs, matchDeviceIDs, 
+        var transVariables = this.transform(), deviceIDs, matchDeviceIDs,
             devices = this.getDevices();
 
         deviceIDs = this.makeArrayID(devices);
         matchDeviceIDs = this.makeArrayID(stitchInfo.matchDevices);
 
-        imMatch.each(devices, function(deviceID, device) {
+        jQuery.each(devices, function(deviceID, device) {
             device.webSocket.send(stringify({
                 action: "stitchStart",
                 deviceIDs: deviceIDs,
@@ -236,9 +235,9 @@ imMatch.Group.prototype = {
             }));
         });
 
-        imMatch.logInfo("[imMatch.Group.startStitch] Broadcast \"stitchStart\" message." + 
-            " deviceID = " + stitchInfo.deviceID + 
-            ", matchDeviceID = " + stitchInfo.matchDeviceID + 
+        imMatch.logInfo("[imMatch.Group.startStitch] Broadcast \"stitchStart\" message." +
+            " deviceID = " + stitchInfo.deviceID +
+            ", matchDeviceID = " + stitchInfo.matchDeviceID +
             ", executeChunk = " + executeChunk);
 
         return true;
@@ -248,8 +247,8 @@ imMatch.Group.prototype = {
     makeArrayID: function(devices) {
         var deviceIDs = [];
 
-        imMatch.each(devices, function(deviceID, device) {
-            deviceIDs.push(deviceID);
+        jQuery.each(devices, function(deviceID) {
+            push.call(deviceIDs, deviceID);
         });
 
         return deviceIDs;
@@ -276,7 +275,7 @@ imMatch.Group.prototype = {
         }
 
         var self = this;
-        imMatch.each(this.getDevices(), function(i, target) {
+        jQuery.each(this.getDevices(), function(i, target) {
             var newViewportQTYxy = imMatch.math.rotate(target.viewportQTY, rad, self.center);
 
             target.viewportQTY.x = newViewportQTYxy.x;
@@ -295,7 +294,7 @@ imMatch.Group.prototype = {
         this.center.x += delta.x;
         this.center.y += delta.y;
 
-        imMatch.each(this.getDevices(), function(i, target) {
+        jQuery.each(this.getDevices(), function(i, target) {
             target.viewportQTY.x += delta.x;
             target.viewportQTY.y += delta.y;
         });

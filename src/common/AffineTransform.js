@@ -191,8 +191,8 @@ imMatch.AffineTransform.prototype = {
 
     isInvertible: function() {
         var det = this.getDeterminant();
-        return jQuery.isNumeric(det) && jQuery.isNumeric(this.m02) &&
-            jQuery.isNumeric(this.m12_) && det != 0;
+        return (jQuery.isNumeric(det) && jQuery.isNumeric(this.m02) &&
+            jQuery.isNumeric(this.m12) && det !== 0);
     },
 
     createInverse: function() {
@@ -235,15 +235,15 @@ imMatch.AffineTransform.prototype = {
 
         var cos = Math.cos(rad), sin = Math.sin(rad);
         return this.setTransform(cos, sin, -sin, cos,
-            anchorPoint.x - anchorPoint.x * cos + anchorPoint.y * sin, 
+            anchorPoint.x - anchorPoint.x * cos + anchorPoint.y * sin,
             anchorPoint.y - anchorPoint.x * sin - anchorPoint.y * cos);
 
     },
 
     print: function() {
-        console.log("[ " + this.m00 + " " + this.m01 + " " + this.m02 + " ]");
-        console.log("[ " + this.m10 + " " + this.m11 + " " + this.m12 + " ]");
-        console.log("[ 0 0 1 ]");
-        console.log();
+        window.console.log("[ " + this.m00 + " " + this.m01 + " " + this.m02 + " ]");
+        window.console.log("[ " + this.m10 + " " + this.m11 + " " + this.m12 + " ]");
+        window.console.log("[ 0 0 1 ]");
+        window.console.log();
     }
 };

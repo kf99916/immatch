@@ -11,8 +11,8 @@ imMatch.Sprite = function() {
     this.alpha = 1;
     this.scalingFactor = this.maxScalingFactor = this.minScalingFactor = 1;
 
-    this.cursorGroup = new imMatch.CursorGroup;
-    this.affineTransform = new imMatch.AffineTransform;
+    this.cursorGroup = new imMatch.CursorGroup();
+    this.affineTransform = new imMatch.AffineTransform();
 
     this.image = null;
 
@@ -72,13 +72,13 @@ jQuery.extend(imMatch.Sprite.prototype, imMatch.transformPrototype, {
             this.translate({x: center.end.x - center.start.x, y: center.end.y - center.start.y});
         }
 
-        if (this.rotatable && this.cursorGroup.numCursors == 2) {
+        if (this.rotatable && this.cursorGroup.numCursors === 2) {
             vector = this.cursorGroup.computeStartEndVectors();
             rad = imMatch.rad(vector.start, vector.end);
             this.rotate(rad, center.start);
         }
 
-        if (this.scalable && this.cursorGroup.numCursors == 2) {
+        if (this.scalable && this.cursorGroup.numCursors === 2) {
             distance = this.cursorGroup.computeDistances();
             scalingFactor = distance.end / distance.start || 1;
             newScalingFactor = this.scalingFactor * scalingFactor;
@@ -104,7 +104,11 @@ jQuery.extend(imMatch.Sprite.prototype, imMatch.transformPrototype, {
                 case imMatch.touchMouseEventType.up: case imMatch.touchMouseEventType.cancel:
                     self.cursorGroup.removeCursor(cursor);
                 break;
-                case imMatch.touchMouseEventType.down: case imMatch.touchMouseEventType.move: default:
+                case imMatch.touchMouseEventType.down: case imMatch.touchMouseEventType.move:
+                    lastPoint = cursor.points[cursor.points.length-1];
+                    self.cursorGroup.cursors[id].points = [lastPoint];
+                break;
+                default:
                     lastPoint = cursor.points[cursor.points.length-1];
                     self.cursorGroup.cursors[id].points = [lastPoint];
                 break;
@@ -133,7 +137,7 @@ jQuery.extend(imMatch.Sprite.prototype, imMatch.transformPrototype, {
                 result = this.inverseTransform(target);
             break;
             // Sprite -> Scene
-            case imMatch.coordinate.sprite: 
+            case imMatch.coordinate.sprite:
                 target.coordinate = imMatch.coordinate.scene;
                 result = this.transform(target);
             break;

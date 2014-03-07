@@ -22,9 +22,9 @@ jQuery.extend(imMatch, {
             return Object.create(object);
         }
 
-        function f() {};
-        f.prototype = object;
-        return new f();
+        function F() {}
+        F.prototype = object;
+        return new F();
     },
 
     // Determine if object is a 2D vector
@@ -32,7 +32,7 @@ jQuery.extend(imMatch, {
         if (jQuery.isEmptyObject(object)) {
             return false;
         }
-        
+
         return (jQuery.isNumeric(object.x) && jQuery.isNumeric(object.y));
     },
 
@@ -46,7 +46,7 @@ jQuery.extend(imMatch, {
         if (jQuery.isEmptyObject(name)) {
             return object;
         }
-        
+
         if (jQuery.isArray(object)) {
             slice.call(object, name, 1);
         }

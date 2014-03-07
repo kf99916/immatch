@@ -15,8 +15,8 @@ imMatch.CanvasAdapter = function CanvasAdapter(canvasID) {
     this.canvas.setAttribute("style", "width: " + this.canvas.width  + "px; " +
                             "height: " + this.canvas.height + "px; " +
                             "position: absolute; top: 50%; left: 50%; " +
-                            "margin-left: " + -this.canvas.width / 2 + "px; " + 
-                            "margin-top: " + -this.canvas.height / 2 + "px; " + 
+                            "margin-left: " + -this.canvas.width / 2 + "px; " +
+                            "margin-top: " + -this.canvas.height / 2 + "px; " +
                             "border: 1px solid red;");
 
     this.ratio = 1;
@@ -62,7 +62,7 @@ imMatch.CanvasAdapter.prototype = {
         return this;
     },
 
-    draw: function(stamp) {
+    draw: function() {
         var self = this;
 
         this.clear();
@@ -73,7 +73,7 @@ imMatch.CanvasAdapter.prototype = {
             jQuery.each(scene.sprites.reverse(), function(i, sprite) {
                 // Sprite -> Scene
                 var affineTransformFromSprite2Local = sprite.affineTransform.clone().preConcatenate(affineTransformFromScene2Local),
-                    width = sprite.width * sprite.image.ppi * self.ratio, 
+                    width = sprite.width * sprite.image.ppi * self.ratio,
                     height = sprite.height * sprite.image.ppi * self.ratio;
 
                 self.context.save();
@@ -81,7 +81,7 @@ imMatch.CanvasAdapter.prototype = {
                 self.context.setTransform(
                     affineTransformFromSprite2Local.m00, affineTransformFromSprite2Local.m10,
                     affineTransformFromSprite2Local.m01, affineTransformFromSprite2Local.m11,
-                    affineTransformFromSprite2Local.m02 * imMatch.device.ppi * self.ratio, 
+                    affineTransformFromSprite2Local.m02 * imMatch.device.ppi * self.ratio,
                     affineTransformFromSprite2Local.m12 * imMatch.device.ppi * self.ratio);
 
                 self.context.globalAlpha *= sprite.alpha;

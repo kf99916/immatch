@@ -49,7 +49,6 @@ imMatch.Cache.prototype = {
     },
 
     getNRemove: function(type, cmp) {
-        return this.remove(type, cmp);
         if (imMatch.isEmpty(type) || jQuery.isEmptyObject(this[type])) {
             return [];
         }

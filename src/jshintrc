@@ -17,9 +17,14 @@
 
 	"browser": true,
 
+	"node": {
+		"require": true,
+		"console": true
+	},
+
 	"globals": {
 		"jQuery": true,
-		"define": true,
-		"module": true
+		"imMatch": true,
+		"MobileEsp": true
 	}
 }
