@@ -65,6 +65,8 @@ imMatch.CanvasAdapter.prototype = {
     draw: function() {
         var self = this;
 
+        // Optimization 1:Just clear the rerender region
+        // TODO
         this.clear();
 
         jQuery.each(imMatch.scenes.reverse(), function(i, scene) {
@@ -73,8 +75,12 @@ imMatch.CanvasAdapter.prototype = {
             jQuery.each(scene.sprites.reverse(), function(i, sprite) {
                 // Sprite -> Scene
                 var affineTransformFromSprite2Local = sprite.affineTransform.clone().preConcatenate(affineTransformFromScene2Local),
-                    width = sprite.width * sprite.image.ppi * self.ratio,
-                    height = sprite.height * sprite.image.ppi * self.ratio;
+                    // Optimization 2: Avoid floating point coordinates to improve performance, so invoke imMatch.round
+                    width =  imMatch.round(sprite.width * sprite.image.ppi * self.ratio),
+                    height = imMatch.round(sprite.height * sprite.image.ppi * self.ratio);
+
+                // Optimization 3: Skip those sprites which is not in the viewport
+                // TODO
 
                 self.context.save();
 
@@ -85,7 +91,7 @@ imMatch.CanvasAdapter.prototype = {
                     affineTransformFromSprite2Local.m12 * imMatch.device.ppi * self.ratio);
 
                 self.context.globalAlpha *= sprite.alpha;
-                self.context.drawImage(sprite.image, -width / 2, - height / 2, width, height);
+                self.context.drawImage(sprite.image, -imMatch.round(width / 2), - imMatch.round(height / 2), width, height);
 
                 self.context.restore();
             });

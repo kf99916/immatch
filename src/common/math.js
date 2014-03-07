@@ -78,5 +78,13 @@ jQuery.extend(imMatch, {
 
     norm: function(vector) {
         return Math.sqrt(imMatch.dot(vector, vector));
+    },
+
+    round: function(number) {
+        if (!jQuery.isNumeric(number)) {
+            return number;
+        }
+
+        return ~~(number + 0.5);
     }
 });
