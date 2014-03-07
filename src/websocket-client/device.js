@@ -1,50 +1,33 @@
-imMatch.Device = {
-    MacBookPro: {
-        ppi: 113,
-        syncAreaSize: 0.3,
-        margin: {
-            top: 0.7,
-            bottom: 0.7,
-            left: 0.7,
-            right: 0.7
-        }
+imMatch.deviceHelper = {
+    MacBookPro: function() {
+        return {ppi: 113,
+                margin: {top: 0.7, bottom: 0.7, left: 0.7, right: 0.7}
+        };
     },
 
-    iPhone: {
-        ppi: 163,
-        syncAreaSize: 0.3,
-        margin: {
-            top: (4.5 - 480 / 163) / 2,
-            bottom: (4.5 - 480 / 163) / 2,
-            left: (2.31 - 320 / 163) / 2,
-            right: (2.31 - 320 / 163) / 2
-        }
+    iPhone: function() {
+        return {ppi: 163,
+                margin: {top: (4.5 - 480 / 163) / 2, bottom: (4.5 - 480 / 163) / 2, 
+                        left: (2.31 - 320 / 163) / 2, right: (2.31 - 320 / 163) / 2}
+        };
     },
 
-    iPhone5: {
-        ppi: 163,
-        syncAreaSize: 0.3,
-        margin: {
-            top: (4.87 - 1136 / 326) / 2,
-            bottom: (4.87 - 1136 / 326) / 2,
-            left: (2.31 - 640 / 326) / 2,
-            right: (2.31 - 640 / 326) / 2
-        }
+    iPhone5: function() {
+        return {ppi: 163,
+                margin: {top: (4.87 - 1136 / 326) / 2, bottom: (4.87 - 1136 / 326) / 2,
+                        left: (2.31 - 640 / 326) / 2, right: (2.31 - 640 / 326) / 2}
+        };
     },
 
-    iPad: {
-        ppi: 132,
-        syncAreaSize: 0.3,
-        margin: {
-            top: (9.5 - 1024 / 132) / 2,
-            bottom: (9.5 - 1024 / 132) / 2,
-            left: (7.31 - 768 / 132) / 2,
-            right: (7.31 - 768 / 132) / 2
-        }
-    },
+    iPad: function() {
+        return {ppi: 132,
+                margin: {top: (9.5 - 1024 / 132) / 2, bottom: (9.5 - 1024 / 132) / 2,
+                        left: (7.31 - 768 / 132) / 2, right: (7.31 - 768 / 132) / 2}
+        };
+    }
 };
 
-imMatch.extend(MobileEsp, {
+jQuery.extend(MobileEsp, {
     DetectIphone5: function() {
         if (!MobileEsp.DetectIphoneOrIpod()) {
             return false;
@@ -54,16 +37,17 @@ imMatch.extend(MobileEsp, {
     }
 });
 
-imMatch.device = imMatch.Device.MacBookPro;
+imMatch.device = imMatch.deviceHelper.MacBookPro();
 if (MobileEsp.DetectIphone5()) {
-    imMatch.device = imMatch.Device.iPhone5;
+    imMatch.device = imMatch.deviceHelper.iPhone5();
 }
 else if (MobileEsp.DetectIphoneOrIpod()) {
-    imMatch.device = imMatch.Device.iPhone;
+    imMatch.device = imMatch.deviceHelper.iPhone();
 }
 else if (MobileEsp.DetectIpad()) {
-    imMatch.device = imMatch.Device.iPad;
+    imMatch.device = imMatch.deviceHelper.iPad();
 }
 
-
-imMatch.device.devicePixelRatio = window.devicePixelRatio || 1;
+jQuery.extend(imMatch.device, {
+    devicePixelRatio: window.devicePixelRatio || 1
+});

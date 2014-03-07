@@ -29,7 +29,7 @@ jQuery.extend(imMatch, {
 
     // Determine if object is a 2D vector
     is2DVector: function(object) {
-        if (object == null) {
+        if (jQuery.isEmptyObject(object)) {
             return false;
         }
         

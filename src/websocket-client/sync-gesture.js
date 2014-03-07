@@ -107,13 +107,14 @@ imMatch.syncGesture = {
         // Criteria 1: Cursor is straight
         if (!group.isAllCursorsStraight()) {
             imMatch.logDebug("[syncGesture.tryToStitch] All of cursors is not straight!");
-            return;   
+            return this;   
         }
 
-        // Criteria 2: Start touch is out of the stitching region and End touch is in the stitching region
+        // Criteria 2: all of DOWN points is out of the stitching area and UP or CANCEL points is in the stitching area
 
         // Criteria 3: Cursor is perpendicular to the boundary of window
 
         imMatch.logInfo("[syncGesture.tryToStitch] Try to stitch!");
+        return this;
     }
 };
