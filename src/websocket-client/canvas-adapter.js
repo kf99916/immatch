@@ -70,28 +70,34 @@ imMatch.CanvasAdapter.prototype = {
         this.clear();
 
         jQuery.each(imMatch.scenes.reverse(), function(i, scene) {
-            // Scene -> Global -> Local
-            var affineTransformFromScene2Local = imMatch.viewport.affineTransform.clone().concatenate(scene.affineTransform);
             jQuery.each(scene.sprites.reverse(), function(i, sprite) {
-                // Sprite -> Scene
-                var affineTransformFromSprite2Local = sprite.affineTransform.clone().preConcatenate(affineTransformFromScene2Local),
-                    // Optimization 2: Avoid floating point coordinates to improve performance, so invoke imMatch.round
-                    width =  imMatch.round(sprite.width * sprite.image.ppi * self.ratio),
-                    height = imMatch.round(sprite.height * sprite.image.ppi * self.ratio);
+                // Optimization 2: Skip those sprites which is not in the viewport
+                if (!sprite.isInViewport()) {
+                    return;
+                }
 
-                // Optimization 3: Skip those sprites which is not in the viewport
-                // TODO
+                // Sprite -> local
+                var affineTransform2Local = sprite.getAffineTransform2Local(),
+                    frame = sprite.getFrame();
+
+                // Optimization 3: Avoid floating point coordinates to improve performance, so invoke imMatch.round
+                frame = {
+                    x: -imMatch.round(frame.x / 2),
+                    y: -imMatch.round(frame.y / 2),
+                    width: imMatch.round(frame.x),
+                    height: imMatch.round(frame.y)
+                };
 
                 self.context.save();
 
                 self.context.setTransform(
-                    affineTransformFromSprite2Local.m00, affineTransformFromSprite2Local.m10,
-                    affineTransformFromSprite2Local.m01, affineTransformFromSprite2Local.m11,
-                    affineTransformFromSprite2Local.m02 * imMatch.device.ppi * self.ratio,
-                    affineTransformFromSprite2Local.m12 * imMatch.device.ppi * self.ratio);
+                    affineTransform2Local.m00, affineTransform2Local.m10,
+                    affineTransform2Local.m01, affineTransform2Local.m11,
+                    affineTransform2Local.m02 * imMatch.device.ppi * self.ratio,
+                    affineTransform2Local.m12 * imMatch.device.ppi * self.ratio);
 
                 self.context.globalAlpha *= sprite.alpha;
-                self.context.drawImage(sprite.image, -imMatch.round(width / 2), - imMatch.round(height / 2), width, height);
+                self.context.drawImage(sprite.image, frame.x, frame.y, frame.width, frame.height);
 
                 self.context.restore();
             });

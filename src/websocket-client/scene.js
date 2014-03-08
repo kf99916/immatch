@@ -18,6 +18,39 @@ imMatch.Scene = function() {
 };
 
 jQuery.extend(imMatch.Scene.prototype, imMatch.transformPrototype, {
+    transformWithCoordinate: function(vec, /* Optional */ deep) {
+        var target = {}, result;
+        deep = deep || false;
+        target = (deep)? jQuery.extend(target, vec) : vec;
+        switch(target.coordinate) {
+            // Local -> Global -> Scene
+            case imMatch.coordinate.local:
+                target.coordinate = imMatch.coordinate.scene;
+                result = this.inverseTransform(imMatch.viewport.inverseTransform(target));
+            break;
+            // Global -> Scene
+            case imMatch.coordinate.global:
+                target.coordinate = imMatch.coordinate.scene;
+                result = this.inverseTransform(target);
+            break;
+            // Scene -> Global
+            case imMatch.coordinate.scene:
+                target.coordinate = imMatch.coordinate.global;
+                result = this.transform(target);
+            break;
+            default:
+                imMatch.logError("[imMatch.scene.transformWithCoordinate] The coordinate is invalid! Coordinate: " + target.coordinate);
+            break;
+        }
+
+        jQuery.extend(target, result);
+        return target;
+    },
+
+    getAffineTransform2Local: function() {
+        return this.affineTransform.clone().preConcatenate(imMatch.viewport.affineTransform);
+    },
+
     isTouched: function(point) {
         var scenePoint;
         if (!imMatch.is2DVector(point)) {
@@ -51,35 +84,6 @@ jQuery.extend(imMatch.Scene.prototype, imMatch.transformPrototype, {
         });
 
         return this;
-    },
-
-    transformWithCoordinate: function(vec, /* Optional */ deep) {
-        var target = {}, result;
-        deep = deep || false;
-        target = (deep)? jQuery.extend(target, vec) : vec;
-        switch(target.coordinate) {
-            // Local -> Global -> Scene
-            case imMatch.coordinate.local:
-                target.coordinate = imMatch.coordinate.scene;
-                result = this.inverseTransform(imMatch.viewport.inverseTransform(target));
-            break;
-            // Global -> Scene
-            case imMatch.coordinate.global:
-                target.coordinate = imMatch.coordinate.scene;
-                result = this.inverseTransform(target);
-            break;
-            // Scene -> Global
-            case imMatch.coordinate.scene:
-                target.coordinate = imMatch.coordinate.global;
-                result = this.transform(target);
-            break;
-            default:
-                imMatch.logError("[imMatch.scene.transformWithCoordinate] The coordinate is invalid! Coordinate: " + target.coordinate);
-            break;
-        }
-
-        jQuery.extend(target, result);
-        return target;
     }
 });
 

@@ -12,7 +12,7 @@ $im.ready(function() {
     sprite.setImage("taipei101");
     sprite.maxScalingFactor = 2;
     sprite.minScalingFactor = 0.5;
-    sprite.rotate(Math.PI);
+
     sprite.translate({x: imMatch.viewport.width / 2, y: 0});
 
     scene.addSprite(sprite);

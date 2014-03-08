@@ -36,5 +36,32 @@ jQuery.extend(imMatch.viewport, imMatch.transformPrototype, {
 
         jQuery.extend(target, result);
         return target;
+    },
+
+    transform: function(vec) {
+        return this.affineTransform.transform(vec);
+    },
+
+    inverseTransform: function(vec) {
+        return this.affineTransform.createInverse().transform(vec);
+    },
+
+    translate: function(translationFactor) {
+        translationFactor.x = -translationFactor.x;
+        translationFactor.y = -translationFactor.y;
+        return this.affineTransform.preTranslate(translationFactor);
+    },
+
+    rotate: function(rad, anchorPoint) {
+        rad = -rad;
+        return this.affineTransform.preRotate(rad, anchorPoint);
+    },
+
+    scale: function(scalingFactor) {
+        return this.affineTransform.preScale(scalingFactor);
+    },
+
+    shear: function(shearFactor) {
+        return this.affineTransform.preShear(shearFactor);
     }
 });
