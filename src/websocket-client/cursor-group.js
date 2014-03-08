@@ -55,12 +55,39 @@ imMatch.Cursor.prototype = {
     },
 
     isFitStitchingRegionCriteria: function() {
-        if (!imMatch.isInStitchingRegion(this.points[0]) &&
-            imMatch.isInStitchingRegion(this.points[this.points.length-1])) {
+        var numPoints = this.points.length,
+            startPoint = this.points[0], endPoint = this.points[numPoints-1];
+        if (startPoint.type !== imMatch.touchMouseEventType.down ||
+            (endPoint.type !== imMatch.touchMouseEventType.up && endPoint.type !== imMatch.touchMouseEventType.cancel)) {
+            return false;
+        }
+
+        if (!imMatch.isInStitchingRegion(startPoint) && imMatch.isInStitchingRegion(endPoint)) {
             return true;
         }
 
         return false;
+    },
+
+    isPerpendicularToBoundary: function() {
+        var perpendicularRadDiff = imMatch.threadsholdAboutSyncGesture.perpendicularRadDiff,
+            numPoints = this.points.length,
+            startPoint = this.points[0], endPoint = this.points[numPoints-1],
+            vec = {
+                x: endPoint.x - startPoint.x,
+                y: endPoint.y - startPoint.y
+            },
+            radBetweenHorizontal = Math.abs(imMatch.rad(vec, {x: 1, y: 0})),
+            radBetweenVertical = Math.abs(imMatch.rad(vec, {x: 0, y: 1}));
+
+        if (Math.abs(radBetweenHorizontal - Math.PI/2) > perpendicularRadDiff &&
+            Math.abs(radBetweenVertical - Math.PI/2) > perpendicularRadDiff) {
+
+            console.log(radBetweenHorizontal * 180 / Math.PI, radBetweenVertical * 180 / Math.PI);
+            return false;
+        }
+
+        return true;
     }
 };
 
@@ -235,6 +262,18 @@ imMatch.CursorGroup.prototype = {
         var result = true;
         jQuery.each(this.cursors, function(cursorID, cursor) {
             if (!cursor.isFitStitchingRegionCriteria()) {
+                result = false;
+                return false;
+            }
+        });
+
+        return result;
+    },
+
+    isAllCursorsPerpendicularToBoundary: function() {
+        var result = true;
+        jQuery.each(this.cursors, function(cursorID, cursor) {
+            if (!cursor.isPerpendicularToBoundary()) {
                 result = false;
                 return false;
             }

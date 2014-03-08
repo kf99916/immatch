@@ -2,7 +2,8 @@ jQuery.extend(imMatch, {
     threadsholdAboutSyncGesture: {
         distance: 2,
         samplingTime: 50, // ms
-        straight: Math.PI / 20
+        straight: Math.PI / 20,
+        perpendicularRadDiff: 0.15
     }
 });
 
@@ -105,19 +106,30 @@ imMatch.syncGesture = {
     },
 
     tryToStitch: function(group) {
+        // Pinch Gesture
+        // Criteria 0: Only one cursor is in the cursor group
+        if (group.numCursors !== 1) {
+            imMatch.logDebug("[syncGesture.tryToStitch] The number of cursors is not 1: " + group.numCursors);
+            return this;
+        }
+
         // Criteria 1: all of DOWN points is out of the stitching area and UP or CANCEL points is in the stitching area
         if (!group.isAllCurosrsFitStitchingRegionCriteria()) {
-            imMatch.logDebug("[syncGesture.tryToStitch] All of cursors do not fit sititching region criteria!");
+            imMatch.logDebug("[syncGesture.tryToStitch] some of cursors do not fit sititching region criteria!");
             return this;
         }
 
         // Criteria 2: Cursor is straight
         if (!group.isAllCursorsStraight()) {
-            imMatch.logDebug("[syncGesture.tryToStitch] All of cursors is not straight!");
+            imMatch.logDebug("[syncGesture.tryToStitch] some of cursors is not straight!");
             return this;
         }
 
         // Criteria 3: Cursor is perpendicular to the boundary of window
+        if (!group.isAllCursorsPerpendicularToBoundary()) {
+            imMatch.logDebug("[syncGesture.tryToStitch] some of cursors is not perpendicular to the boundary of window!");
+            return this;
+        }
 
         imMatch.logInfo("[syncGesture.tryToStitch] Try to stitch!");
         return this;
