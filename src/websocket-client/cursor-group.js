@@ -52,6 +52,15 @@ imMatch.Cursor.prototype = {
         });
 
         return result;
+    },
+
+    isFitStitchingRegionCriteria: function() {
+        if (!imMatch.isInStitchingRegion(this.points[0]) &&
+            imMatch.isInStitchingRegion(this.points[this.points.length-1])) {
+            return true;
+        }
+
+        return false;
     }
 };
 
@@ -222,33 +231,38 @@ imMatch.CursorGroup.prototype = {
     },
 
     // All of DOWN points is out of the stitching area and UP or CANCEL points is in the stitching area
-   /* isAllCurosrsFitStitchingRegionCriteria: function() {
+    isAllCurosrsFitStitchingRegionCriteria: function() {
         var result = true;
         jQuery.each(this.cursors, function(cursorID, cursor) {
-            if (cursor.points[0].x )
+            if (!cursor.isFitStitchingRegionCriteria()) {
+                result = false;
+                return false;
+            }
         });
 
         return result;
-    }*/
+    }
 };
 
 jQuery.extend(imMatch, {
     cursorGroups: {},
 
-   /* isOutOfStitchingRegion: function(point) {
-        var localPoint, outOfStitchingRegionMargin;
+    isInStitchingRegion: function(point) {
         if (!imMatch.is2DVector(point)) {
             return false;
         }
 
-        outOfStitchingRegionMargin = {
-            top: imMatch.device.stitchingRegionSize,
-            bottom: imMatch.viewport.height - imMatch.device.stitchingRegionSize,
-            left: imMatch.device.stitchingRegionSize,
-            right: imMatch.viewport.width - imMatch.device.stitchingRegionSize,
-        };
+        var normalRegion = imMatch.viewport.transformWithCoordinate({x: 0, y: 0, coordinate: imMatch.coordinate.global}),
+            localPoint = (point.coordinate === imMatch.coordinate.local)? point :
+                                imMatch.viewport.transformWithCoordinate(point, true);
+        normalRegion.width = imMatch.viewport.width - 2 * imMatch.device.stitchingRegionSize;
+        normalRegion.height = imMatch.viewport.height - 2 * imMatch.device.stitchingRegionSize;
 
-        localPoint = (point.coordinate == imMatch.coordinate.local)? point: imMatch.viewport.transformWithCoordinate(point);
-        if (imMatch.device.stitchingRegionSize <= localPoint.x && localPoint.x <= imMatch.device.stitchingRegionSize)
-    }*/
+        if (normalRegion.x - normalRegion.width/2 <= localPoint.x && localPoint.x <= normalRegion.x + normalRegion.width/2 &&
+            normalRegion.y - normalRegion.height/2 <= localPoint.y && localPoint.y <= normalRegion.y + normalRegion.height/2) {
+            return false;
+        }
+
+        return true;
+    }
 });

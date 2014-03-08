@@ -17,7 +17,7 @@ imMatch.syncGesture = {
     },
 
     touchmousedownHandler: function(touchMouseEvent) {
-        this.addCursorGroup(touchMouseEvent);
+        return this.addCursorGroup(touchMouseEvent);
     },
 
     touchmousemoveHandler: function(touchMouseEvent) {
@@ -26,7 +26,7 @@ imMatch.syncGesture = {
 
         if (jQuery.isEmptyObject(containGroup) || jQuery.isEmptyObject(ownGroup)) {
             imMatch.logError("The containGroup is empty: " + containGroup + " or the ownGroup is empty: " + ownGroup);
-            return;
+            return null;
         }
 
         if (containGroup.id !== ownGroup.id) {
@@ -37,11 +37,12 @@ imMatch.syncGesture = {
         }
 
         containGroup.cursors[touchMouseEvent.id].add(touchMouseEvent);
+
+        return containGroup;
     },
 
     touchmouseupHandler: function(touchMouseEvent) {
-        var group = this.searchContainCursorGroup(touchMouseEvent);
-        this.touchmousemoveHandler(touchMouseEvent);
+        var group = this.touchmousemoveHandler(touchMouseEvent);
 
         if (!group.isAllCursorsUp()) {
             return;
@@ -100,17 +101,21 @@ imMatch.syncGesture = {
             targetGroup.cursors[touchMouseEvent.id].add(touchMouseEvent);
         }
 
-        return this;
+        return targetGroup;
     },
 
     tryToStitch: function(group) {
-        // Criteria 1: Cursor is straight
+        // Criteria 1: all of DOWN points is out of the stitching area and UP or CANCEL points is in the stitching area
+        if (!group.isAllCurosrsFitStitchingRegionCriteria()) {
+            imMatch.logDebug("[syncGesture.tryToStitch] All of cursors do not fit sititching region criteria!");
+            return this;
+        }
+
+        // Criteria 2: Cursor is straight
         if (!group.isAllCursorsStraight()) {
             imMatch.logDebug("[syncGesture.tryToStitch] All of cursors is not straight!");
             return this;
         }
-
-        // Criteria 2: all of DOWN points is out of the stitching area and UP or CANCEL points is in the stitching area
 
         // Criteria 3: Cursor is perpendicular to the boundary of window
 

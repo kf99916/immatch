@@ -9,11 +9,9 @@ jQuery.extend(imMatch, {
     touchMouseHandler: function(event) {
         event.preventDefault();
         jQuery.each(event.originalEvent.changedTouches, function(i, touch) {
-            var touchMouseEvent = imMatch.fixTouchMouseEvent(event, touch),
-                globalTouchMouse = imMatch.viewport.transformWithCoordinate(touchMouseEvent);
+            var touchMouseEvent = imMatch.fixTouchMouseEvent(event, touch);
 
-            touchMouseEvent.x = globalTouchMouse.x;
-            touchMouseEvent.y = globalTouchMouse.y;
+            imMatch.viewport.transformWithCoordinate(touchMouseEvent);
 
             imMatch.logInfo("[" + touchMouseEvent.type + "] " + touchMouseEvent.x + ", " +
                 touchMouseEvent.y + "(" + touchMouseEvent.id + ")");

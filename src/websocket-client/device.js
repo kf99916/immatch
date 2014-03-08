@@ -49,5 +49,7 @@ else if (MobileEsp.DetectIpad()) {
 }
 
 jQuery.extend(imMatch.device, {
-    devicePixelRatio: window.devicePixelRatio || 1
+    devicePixelRatio: window.devicePixelRatio || 1,
+
+    stitchingRegionSize: 0.3
 });
