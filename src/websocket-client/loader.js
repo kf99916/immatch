@@ -11,11 +11,11 @@ imMatch.loader = {
             async: true,
             dataType: "json",
             success: function(data, textStatus, jqXHR) {
-                imMatch.logInfo("Succeeded to load the list: " + loadList + ". " + textStatus + ", " + jqXHR);
+                imMatch.logInfo("Succeeded to load the list:", loadList, textStatus, jqXHR);
                 self.loadData(data, fn);
             },
             error: function(jqXHR, textStatus, errorThrown) {
-                jQuery.error("Failed to load the list: " + loadList + ". " + jqXHR + ", " + textStatus + ", " + errorThrown);
+                jQuery.error("Failed to load the list: ", loadList, jqXHR, textStatus, errorThrown);
             }
         });
     },

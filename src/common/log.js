@@ -1,9 +1,9 @@
 window.console = window.console || {};
-window.console.log = console.log || function(message) {return message;};
-window.console.debug = console.debug || function(message) {window.console.log(message);};
-window.console.info = console.info || function(message) {window.console.log(message);};
-window.console.warn = console.warn || function(message) {window.console.log(message);};
-window.console.error = console.error || function(message) {window.console.log(message);};
+window.console.log = console.log || function() {return arguments;};
+window.console.debug = console.debug || function() {window.console.log.apply(window.console, arguments);};
+window.console.info = console.info || function() {window.console.log.apply(window.console, arguments);};
+window.console.warn = console.warn || function() {window.console.log.apply(window.console, arguments);};
+window.console.error = console.error || function() {window.console.log.apply(window.console, arguments);};
 
 jQuery.extend(imMatch, {
     debugLevel: 0,
@@ -14,42 +14,50 @@ jQuery.extend(imMatch, {
 
     errorLevel: 3,
 
-    logDebug: function(message) {
-        if (imMatch.isEmpty(message) || this.logLevel > imMatch.debugLevel) {
+    logDebug: function() {
+        if (arguments.length === 0 || this.logLevel > imMatch.debugLevel) {
             return this;
         }
 
-        window.console.debug(fixMessage(message, "DEBUG"));
+        unshift.call(arguments, generatePrefixMessage("DEBUG"));
+
+        window.console.debug.apply(window.console, arguments);
 
         return this;
     },
 
-    logInfo: function(message) {
-        if (imMatch.isEmpty(message) || this.logLevel > imMatch.infoLevel) {
+    logInfo: function() {
+        if (arguments.length === 0 || this.logLevel > imMatch.infoLevel) {
             return this;
         }
 
-        window.console.info(fixMessage(message, "INFO"));
+        unshift.call(arguments, generatePrefixMessage("INFO"));
+
+        window.console.info.apply(window.console, arguments);
 
         return this;
     },
 
-    logWarn: function(message) {
-        if (imMatch.isEmpty(message) || this.logLevel > imMatch.warnLevel) {
+    logWarn: function() {
+        if (arguments.length === 0 || this.logLevel > imMatch.warnLevel) {
             return this;
         }
 
-        window.console.warn(fixMessage(message, "WARN"));
+        unshift.call(arguments, generatePrefixMessage("WARN"));
+
+        window.console.warn.apply(window.console, arguments);
 
         return this;
     },
 
-    logError: function(message) {
-        if (imMatch.isEmpty(message) || this.logLevel > imMatch.errorLevel) {
+    logError: function() {
+        if (arguments.length === 0 || this.logLevel > imMatch.errorLevel) {
             return this;
         }
 
-        window.console.error(fixMessage(message, "ERROR"));
+        unshift.call(arguments, generatePrefixMessage("ERROR"));
+
+        window.console.error.apply(window.console, arguments);
 
         return this;
     },

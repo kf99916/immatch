@@ -6,8 +6,8 @@ function returnFalse() {
     return false;
 }
 
-function fixMessage(message, mode) {
-    return "[" + mode.toUpperCase() + "] " + Date() + " : " + message;
+function generatePrefixMessage(mode) {
+    return "[" + mode.toUpperCase() + "] " + Date() + " :";
 }
 
 Date.now = Date.now || function now() { return new Date().getTime(); };
@@ -24,6 +24,8 @@ var document = window.document,
     indexOf = arr.indexOf,
 
     push = arr.push,
+
+    unshift = arr.unshift,
 
     imMatch = jQuery({});
 

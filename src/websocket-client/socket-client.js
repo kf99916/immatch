@@ -17,16 +17,16 @@ imMatch.SocketClient = function() {
     this.caches = new imMatch.Cache();
     this.webSocket = new window.WebSocket("@WEBSOCKET_URL");
     this.webSocket.onopen = function(event) {
-        imMatch.logInfo("[WebSocket.onopen] A websocket opened. URL: " + "@WEBSOCKET_URL " + event);
+        imMatch.logInfo("[WebSocket.onopen] A websocket opened. URL: " + "@WEBSOCKET_URL ", event);
     };
 
     this.webSocket.onmessage = function(event) {
         if (jQuery.isEmptyObject(event) || imMatch.isEmpty(event.action)) {
-            imMatch.logError("[WebSocket.onmessage] The format of message is wrong! Message: " + event);
+            imMatch.logError("[WebSocket.onmessage] The format of message is wrong! Message: ", event);
             return this;
         }
 
-        imMatch.logInfo("[WebSocket.onmessage] The websocket received message: " + event.data);
+        imMatch.logInfo("[WebSocket.onmessage] The websocket received message: ", event.data);
         var jsonObject = imMatch.parseJSON(event.data);
         if (self.response[jsonObject.action]) {
             self.response[jsonObject.action](jsonObject);
@@ -50,7 +50,7 @@ imMatch.SocketClient = function() {
 imMatch.SocketClient.prototype = {
     send: function(data) {
         if (jQuery.isEmptyObject(data) || imMatch.isEmpty(data.action)) {
-            imMatch.logError("[SocketClient.send] The format of message is wrong! Message: " + data);
+            imMatch.logError("[SocketClient.send] The format of message is wrong! Message: ", data);
             return this;
         }
 

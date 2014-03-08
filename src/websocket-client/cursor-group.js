@@ -83,7 +83,6 @@ imMatch.Cursor.prototype = {
         if (Math.abs(radBetweenHorizontal - Math.PI/2) > perpendicularRadDiff &&
             Math.abs(radBetweenVertical - Math.PI/2) > perpendicularRadDiff) {
 
-            console.log(radBetweenHorizontal * 180 / Math.PI, radBetweenVertical * 180 / Math.PI);
             return false;
         }
 

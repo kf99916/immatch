@@ -26,7 +26,7 @@ imMatch.syncGesture = {
             ownGroup = this.searchOwnCursorGroup(touchMouseEvent);
 
         if (jQuery.isEmptyObject(containGroup) || jQuery.isEmptyObject(ownGroup)) {
-            imMatch.logError("The containGroup is empty: " + containGroup + " or the ownGroup is empty: " + ownGroup);
+            imMatch.logError("The containGroup is empty: ", containGroup, " or the ownGroup is empty: ", ownGroup);
             return null;
         }
 
