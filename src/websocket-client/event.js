@@ -3,7 +3,7 @@ jQuery.extend(imMatch, {
         touchMouse.identifier = touchMouse.identifier || 0;
         touchMouse.pageX = touchMouse.pageX || 0;
         touchMouse.pageY = touchMouse.pageY || 0;
-        touchMouse.timestamp = touchMouse.timestamp || Date.now();
+        touchMouse.timestamp = Date.now();
 
         // Local Coordinate: The origin is initialized as the upper left corner of imMatch.viewport
         return new jQuery.Event(event, {

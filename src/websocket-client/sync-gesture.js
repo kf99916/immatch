@@ -1,7 +1,7 @@
 jQuery.extend(imMatch, {
     threadsholdAboutSyncGesture: {
         distance: 2,
-        smaplingTime: 50, // ms
+        samplingTime: 50, // ms
         straight: Math.PI / 20
     }
 });
