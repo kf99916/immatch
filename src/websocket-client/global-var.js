@@ -7,9 +7,6 @@ var isTouchSupported = "ontouchstart" in window,
     mouseID = "",
 
     // Be reset if there is no any touchMouseEvent in cache. Please check it in geture-recognizer.js
-    cursorGroupID = 0,
-
-    // Be reset if there is no any touchMouseEvent in cache. Please check it in geture-recognizer.js
     touchOrder = 0,
 
     // Be reset if there is no any scene. Please check it in scene.js

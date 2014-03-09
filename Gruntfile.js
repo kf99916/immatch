@@ -72,6 +72,7 @@ module.exports = function(grunt) {
                     }
 				},
 				src:["src/common/intro/intro.js",
+                    "src/common/3rd-party/*.js",
                     "src/websocket-client/3rd-party/*.js",
                     "src/websocket-client/check-libraries.js",
                     "src/common/intro/global-var.js",
@@ -86,14 +87,26 @@ module.exports = function(grunt) {
 					"src/common/outro/outro.js"],
 				dest: "dist/immatch.js"
 			},
+            imMatchWebsocketServerForJshint: {
+                src: ["src/common/intro/intro.js",
+                    "src/websocket-server/import.js",
+                    "src/common/intro/global-var.js",
+                    "src/common/*.js",
+                    "src/websocket-server/global-var.js",
+                    "src/websocket-server/*.js",
+                    "src/common/outro/outro.js"],
+                dest: "dist/immatch-ws-server-jshint.js"
+            },
             imMatchWebsocketServer: {
                 options: {
                     banner: "<%= meta.imMatchWebsocketServer.banner %>"
                 },
                 src: ["src/common/intro/intro.js",
+                    "src/common/3rd-party/*.js",
                     "src/websocket-server/import.js",
                     "src/common/intro/global-var.js",
                     "src/common/*.js",
+                    "src/websocket-server/global-var.js",
                     "src/websocket-server/*.js",
                     "src/common/outro/outro.js"],
                 dest: "dist/immatch-ws-server.js"
@@ -121,10 +134,10 @@ module.exports = function(grunt) {
 			},
 			dist: {
                 options: srcHintOptions,
-                src: ["dist/immatch-jshint.js", "dist/immatch-ws-server.js"]
+                src: ["dist/immatch-jshint.js", "dist/dist/immatch-ws-server-jshint.js"]
             }
 		},
-        clean: ["dist/immatch-jshint.js"],
+        clean: ["dist/immatch-jshint.js", "dist/immatch-ws-server-jshint.js"],
 		uglify: {
 			my_target: {
 				files: {

@@ -19,9 +19,7 @@ imMatch.Cursor.prototype = {
             points = [points];
         }
 
-        jQuery.each(points, function(i, point) {
-            self.points.push(point);
-        });
+        self.points = self.points.concat(points);
 
         numPoints = points.length;
         this.type = points[numPoints-1].type;
@@ -98,7 +96,7 @@ imMatch.CursorGroup = function(cursors) {
 
     this.cursors = {};
     this.numCursors = 0;
-    this.id = cursorGroupID++;
+    this.id = Math.uuidFast();
     this.add(cursors);
 };
 

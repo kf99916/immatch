@@ -17,8 +17,6 @@ var document = window.document,
 
     arr = [],
 
-    stringify = JSON.stringify,
-
     slice = arr.slice,
 
     indexOf = arr.indexOf,
@@ -26,6 +24,8 @@ var document = window.document,
     push = arr.push,
 
     unshift = arr.unshift,
+
+    stringify = JSON.stringify,
 
     imMatch = jQuery({});
 

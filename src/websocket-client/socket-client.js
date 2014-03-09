@@ -21,19 +21,20 @@ imMatch.SocketClient = function() {
     };
 
     this.webSocket.onmessage = function(event) {
-        if (jQuery.isEmptyObject(event) || imMatch.isEmpty(event.action)) {
-            imMatch.logError("[WebSocket.onmessage] The format of message is wrong! Message: ", event);
-            return this;
+        if (jQuery.isEmptyObject(event)) {
+            imMatch.logError("[WebSocket.onmessage] The message is empty!");
+            return;
         }
 
-        imMatch.logInfo("[WebSocket.onmessage] The websocket received message: ", event.data);
-        var jsonObject = imMatch.parseJSON(event.data);
-        if (self.response[jsonObject.action]) {
-            self.response[jsonObject.action](jsonObject);
+        var jsonObject = jQuery.parseJSON(event.data);
+        imMatch.logInfo("[WebSocket.onmessage] The websocket received a message: ", jsonObject);
+
+        if (imMatch.isEmpty(self.response[jsonObject.action])) {
+            imMatch.logWarn("[WebSocket.onmessage] Unknown action: " + jsonObject.action);
+            return;
         }
-        else {
-            imMatch.logWarn("[imMatch.webSocketServer.on] Unknown json object action: " + jsonObject.action);
-        }
+
+        self.response[jsonObject.action](jsonObject);
     };
 
     this.webSocket.onclose = function(event) {
@@ -66,6 +67,7 @@ imMatch.SocketClient.prototype = {
     response: {
         connectionSuccess: function(jsonObject) {
             imMatch.device.id = jsonObject.deviceID;
+            imMatch.device.groupID = jsonObject.groupID;
         },
 
     /*    synchronize: function(jsonObject) {
