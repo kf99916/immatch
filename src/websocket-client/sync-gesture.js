@@ -132,6 +132,9 @@ imMatch.syncGesture = {
         }
 
         imMatch.logInfo("[syncGesture.tryToStitch] Try to stitch!");
+
+        imMatch.socketClient.request.tryToStitch(group.computeStitchingInfo());
+
         return this;
     }
 };

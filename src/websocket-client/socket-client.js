@@ -64,6 +64,20 @@ imMatch.SocketClient.prototype = {
         return this;
     },
 
+    fixRequestData: function(data, action) {
+        data.action = action;
+        data.deviceID = imMatch.device.id;
+        data.groupID = imMatch.device.groupID;
+        return data;
+    },
+
+    request: {
+        tryToStitch: function(data) {
+            console.log(data);
+            imMatch.socketClient.send(imMatch.socketClient.fixRequestData(data, "tryToStitch"));
+        },
+    },
+
     response: {
         connectionSuccess: function(jsonObject) {
             imMatch.device.id = jsonObject.deviceID;

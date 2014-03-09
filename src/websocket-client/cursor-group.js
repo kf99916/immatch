@@ -5,12 +5,12 @@ imMatch.Cursor = function(touchMouseEvent) {
     }
 
     this.points = [];
+    this.numPoints = 0;
     this.add(touchMouseEvent);
 };
 
 imMatch.Cursor.prototype = {
     add: function(points) {
-        var numPoints, self = this;
         if (jQuery.isEmptyObject(points)) {
             return;
         }
@@ -19,11 +19,19 @@ imMatch.Cursor.prototype = {
             points = [points];
         }
 
-        self.points = self.points.concat(points);
+        this.points = this.points.concat(points);
 
-        numPoints = points.length;
-        this.type = points[numPoints-1].type;
-        this.id = points[numPoints-1].id;
+        this.numPoints = this.points.length;
+        this.type = this.points[this.numPoints-1].type;
+        this.id = this.points[this.numPoints-1].id;
+    },
+
+    getVector: function() {
+        var startPoint = this.points[0], endPoint = this.points[this.numPoints-1];
+        return {
+            x: endPoint.x - startPoint.x,
+            y: endPoint.y - startPoint.y
+        };
     },
 
     isStraight: function() {
@@ -53,8 +61,7 @@ imMatch.Cursor.prototype = {
     },
 
     isFitStitchingRegionCriteria: function() {
-        var numPoints = this.points.length,
-            startPoint = this.points[0], endPoint = this.points[numPoints-1];
+        var startPoint = this.points[0], endPoint = this.points[this.numPoints-1];
         if (startPoint.type !== imMatch.touchMouseEventType.down ||
             (endPoint.type !== imMatch.touchMouseEventType.up && endPoint.type !== imMatch.touchMouseEventType.cancel)) {
             return false;
@@ -69,12 +76,7 @@ imMatch.Cursor.prototype = {
 
     isPerpendicularToBoundary: function() {
         var perpendicularRadDiff = imMatch.threadsholdAboutSyncGesture.perpendicularRadDiff,
-            numPoints = this.points.length,
-            startPoint = this.points[0], endPoint = this.points[numPoints-1],
-            vec = {
-                x: endPoint.x - startPoint.x,
-                y: endPoint.y - startPoint.y
-            },
+            vec = this.getVector(),
             radBetweenHorizontal = Math.abs(imMatch.rad(vec, {x: 1, y: 0})),
             radBetweenVertical = Math.abs(imMatch.rad(vec, {x: 0, y: 1}));
 
@@ -140,12 +142,11 @@ imMatch.CursorGroup.prototype = {
             endCenter = {x: 0, y: 0};
 
         jQuery.each(this.cursors, function(id, cursor) {
-            var numPoints = cursor.points.length;
             startCenter.x += cursor.points[0].x;
             startCenter.y += cursor.points[0].y;
 
-            endCenter.x += cursor.points[numPoints-1].x;
-            endCenter.y += cursor.points[numPoints-1].y;
+            endCenter.x += cursor.points[cursor.numPoints-1].x;
+            endCenter.y += cursor.points[cursor.numPoints-1].y;
         });
 
         startCenter.x /= this.numCursors;
@@ -166,11 +167,9 @@ imMatch.CursorGroup.prototype = {
         }
 
         jQuery.each(this.cursors, function(id, cursor) {
-            var numPoints = cursor.points.length;
-
             startEndPoints.push({
                 start: cursor.points[0],
-                end: cursor.points[numPoints-1]
+                end: cursor.points[cursor.numPoints-1]
             });
         });
 
@@ -191,11 +190,9 @@ imMatch.CursorGroup.prototype = {
         }
 
         jQuery.each(this.cursors, function(id, cursor) {
-            var numPoints = cursor.points.length;
-
             startEndPoints.push({
                 start: cursor.points[0],
-                end: cursor.points[numPoints-1]
+                end: cursor.points[cursor.numPoints-1]
             });
         });
 
@@ -207,6 +204,66 @@ imMatch.CursorGroup.prototype = {
         };
     },
 
+    computeStitchingInfo: function() {
+        var stitchingInfo = {}, rad,
+            startEndCenters = this.computeStartEndCenters(), localVector, localEndCenter,
+            globalVector = {x: 0, y: 0, coordinate: imMatch.coordinate.global};
+
+        jQuery.each(this.cursors, function(id, cursor) {
+            var cursorVec = cursor.getVector();
+            globalVector.x += cursorVec.x;
+            globalVector.y += cursorVec.y;
+        });
+
+        globalVector.x /= this.numCursors;
+        globalVector.y /= this.numCursors;
+
+        // Compute orientation
+        stitchingInfo.orientation = {x: 0, y: 0};
+        if (globalVector.y === 0 || Math.abs(globalVector.x / globalVector.y) > 1) {
+            stitchingInfo.orientation.x = (globalVector.x > 0)? 1 : -1;
+        }
+        else if (globalVector.x === 0 || Math.abs(globalVector.y / globalVector.x) > 1) {
+            stitchingInfo.orientation.y = (globalVector.y > 0)? 1 : -1;
+        }
+
+        localVector = imMatch.viewport.transformWithCoordinate(globalVector, true);
+        localEndCenter = imMatch.viewport.transformWithCoordinate({
+            x: startEndCenters.end.x,
+            y: startEndCenters.end.y,
+            coordinate: imMatch.coordinate.global
+        });
+
+        // Compute margin & point
+        stitchingInfo.margin = {x: 0, y: 0};
+        if (localVector.y === 0 || Math.abs(localVector.x / localVector.y) > 1) {
+            if (localVector.x > 0) {
+                localEndCenter.x = imMatch.viewport.width;
+                stitchingInfo.margin.x = imMatch.device.margin.right;
+            }
+            else {
+                localEndCenter.x = 0;
+                stitchingInfo.margin.x = imMatch.device.margin.left;
+            }
+        }
+        else if (localVector.x === 0 || Math.abs(localVector.y / localVector.x) > 1) {
+            if (localVector.y > 0) {
+                localEndCenter.y = imMatch.viewport.height;
+                stitchingInfo.margin.y = imMatch.device.margin.bottom;
+            }
+            else {
+                localEndCenter.y = 0;
+                stitchingInfo.margin.y = imMatch.device.margin.top;
+            }
+        }
+
+        rad = imMatch.rad({x: 1, y: 0}, stitchingInfo.orientation);
+        stitchingInfo.margin = imMatch.rotate(stitchingInfo.margin, rad);
+        stitchingInfo.point = imMatch.viewport.transformWithCoordinate(localEndCenter);
+
+        return stitchingInfo;
+    },
+
     hasOwnPoint: function(point) {
         return (this.cursors[point.id])? true : false;
     },
@@ -214,9 +271,8 @@ imMatch.CursorGroup.prototype = {
     hasConatinPoint: function(point) {
         var result = false;
         jQuery.each(this.cursors, function(cursorID, cursor) {
-            var numPoints = cursor.points.length,
-                vec = {x: cursor.points[numPoints-1].x - point.x,
-                        y: cursor.points[numPoints-1].y - point.y};
+            var vec = {x: cursor.points[cursor.numPoints-1].x - point.x,
+                        y: cursor.points[cursor.numPoints-1].y - point.y};
 
             if (imMatch.norm(vec) <= imMatch.threadsholdAboutSyncGesture.distance) {
                 result = true;

@@ -168,12 +168,14 @@ jQuery.extend(imMatch.Sprite.prototype, imMatch.transformPrototype, {
                     self.cursorGroup.removeCursor(cursor);
                 break;
                 case imMatch.touchMouseEventType.down: case imMatch.touchMouseEventType.move:
-                    lastPoint = cursor.points[cursor.points.length-1];
+                    lastPoint = cursor.points[cursor.numPoints-1];
                     self.cursorGroup.cursors[id].points = [lastPoint];
+                    cursor.numPoints = 1;
                 break;
                 default:
-                    lastPoint = cursor.points[cursor.points.length-1];
+                    lastPoint = cursor.points[cursor.numPoints-1];
                     self.cursorGroup.cursors[id].points = [lastPoint];
+                    cursor.numPoints = 1;
                 break;
             }
         });
