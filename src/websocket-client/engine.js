@@ -10,6 +10,7 @@ jQuery.extend(imMatch, {
         }
 
         imMatch.socketClient = new imMatch.SocketClient();
+        imMatch.engine.synchronize = imMatch.socketClient.request.synchronize;
         imMatch.canvas = new imMatch.CanvasAdapter(canvasID);
 
         imMatch.addTouchMouseHandlers();
@@ -28,29 +29,42 @@ imMatch.engine = {
 
     frame: 0, // Be reset if there is no any touchMouseEvent in cache. Please check it in geture-recognizer.js
 
+    isReady: function() {
+        if (this.mode !== imMatch.mode.stitched) {
+            return true;
+        }
+
+        // TODO
+    },
+
     run: function(timestamp) {
         var stamp = {
-            time: timestamp,
-            frame: this.frame,
-            chunk: Math.floor(this.frame / imMatch.chunkSize) * imMatch.chunkSize
-        };
+                time: timestamp,
+                frame: this.frame,
+                chunk: Math.floor(this.frame / imMatch.chunkSize) * imMatch.chunkSize},
+            touchedSprites;
 
-        if (this.mode === imMatch.mode.stitched && this.frame % imMatch.chunkSize === 0) {
-            imMatch.socketClient.request.synchronize(stamp);
+        if (this.isReady()) {
+            if (this.mode === imMatch.mode.stitched && this.frame % imMatch.chunkSize === 0) {
+                imMatch.trigger("infoWillSynchronized", stamp);
+                this.synchronize.call(imMatch.socketClient, stamp);
+                imMatch.trigger("infoDidSynchronized", stamp);
+            }
+
+            imMatch.trigger("gestureWillRecognized", stamp);
+            touchedSprites = imMatch.gestureRecognizer.recognize(stamp);
+            imMatch.trigger("gestureDidRecognized", stamp);
+
+            if (this.frame === 0 || touchedSprites.length !== 0) {
+                imMatch.trigger("contextWillDrawn", stamp);
+                imMatch.canvas.draw();
+                imMatch.trigger("contextDidDrawn", stamp);
+            }
+
+            this.updateInterval(stamp);
+            this.lastRunTimestamp = timestamp;
+            ++this.frame;
         }
-
-        imMatch.trigger("gestureWillbeRecognized", stamp);
-        if (this.frame === 0 || imMatch.gestureRecognizer.recognize(stamp).length !== 0) {
-            imMatch.trigger("gestureDidbeRecognized", stamp);
-
-            imMatch.trigger("contextWillbeDrawn", stamp);
-            imMatch.canvas.draw();
-            imMatch.trigger("contextDidbeDrawn", stamp);
-        }
-
-        this.updateInterval(stamp);
-        this.lastRunTimestamp = timestamp;
-        ++this.frame;
 
         switch(this.mode) {
             case imMatch.mode.stitched:
