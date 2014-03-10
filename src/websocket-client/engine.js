@@ -1,25 +1,3 @@
-jQuery.extend(imMatch, {
-    mode: {
-        alone: 0,
-        stitched: 1
-    },
-
-    run: function(canvasID) {
-        if (!imMatch.isReady()) {
-            jQuery.error("Please invoke $im.ready(fn).");
-        }
-
-        imMatch.socketClient = new imMatch.SocketClient();
-        imMatch.engine.synchronize = imMatch.socketClient.request.synchronize;
-        imMatch.canvas = new imMatch.CanvasAdapter(canvasID);
-
-        imMatch.addTouchMouseHandlers();
-
-        imMatch.engine.lastRunTimestamp = Date.now();
-        imMatch.engine.run(imMatch.engine.lastRunTimestamp);
-    }
-});
-
 imMatch.engine = {
     interval: 0,
 
@@ -27,7 +5,7 @@ imMatch.engine = {
 
     lastRunTimestamp: 0,
 
-    frame: 0, // Be reset if there is no any touchMouseEvent in cache. Please check it in geture-recognizer.js
+    frame: 0, // TODO: Reset
 
     isReady: function() {
         if (this.mode !== imMatch.mode.stitched) {
@@ -93,3 +71,20 @@ imMatch.engine = {
         }
     }
 };
+
+jQuery.extend(imMatch, {
+    run: function(canvasID) {
+        if (!imMatch.isReady()) {
+            jQuery.error("Please invoke $im.ready(fn).");
+        }
+
+        imMatch.socketClient = new imMatch.SocketClient();
+        imMatch.engine.synchronize = imMatch.socketClient.request.synchronize;
+        imMatch.canvas = new imMatch.CanvasAdapter(canvasID);
+
+        imMatch.addTouchMouseHandlers();
+
+        imMatch.engine.lastRunTimestamp = Date.now();
+        imMatch.engine.run(imMatch.engine.lastRunTimestamp);
+    }
+});

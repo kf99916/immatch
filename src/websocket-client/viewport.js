@@ -14,7 +14,7 @@ imMatch.viewport.affineTransform = imMatch.AffineTransform.getTranslationInstanc
 
 jQuery.extend(imMatch.viewport, imMatch.transformPrototype, {
     transformWithCoordinate: function(vec, /* Optional */ deep) {
-        var target = {}, result;
+        var target, result;
         deep = deep || false;
         target = (deep)? jQuery.extend(target, vec) : vec;
 
@@ -34,8 +34,7 @@ jQuery.extend(imMatch.viewport, imMatch.transformPrototype, {
             break;
         }
 
-        jQuery.extend(target, result);
-        return target;
+        return jQuery.extend(target, result);
     },
 
     transform: function(vec) {

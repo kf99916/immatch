@@ -11,6 +11,7 @@ imMatch.Cursor = function(touchMouseEvent) {
 
 imMatch.Cursor.prototype = {
     add: function(points) {
+        var self = this;
         if (jQuery.isEmptyObject(points)) {
             return;
         }
@@ -19,18 +20,29 @@ imMatch.Cursor.prototype = {
             points = [points];
         }
 
-        this.points = this.points.concat(points);
+        jQuery.each(points, function(i, point) {
+            if (self.numPoints === 0) {
+                self.coordinate = point.coordinate;
+            }
+            else if (self.coordinate !== point.coordinate) {
+                return;
+            }
 
-        this.numPoints = this.points.length;
+            self.points.push(point);
+            ++self.numPoints;
+        });
+
         this.type = this.points[this.numPoints-1].type;
         this.id = this.points[this.numPoints-1].id;
     },
 
     getVector: function() {
         var startPoint = this.points[0], endPoint = this.points[this.numPoints-1];
+
         return {
             x: endPoint.x - startPoint.x,
-            y: endPoint.y - startPoint.y
+            y: endPoint.y - startPoint.y,
+            coordinate: this.coordinate
         };
     },
 
@@ -139,20 +151,37 @@ imMatch.CursorGroup.prototype = {
 
     computeStartEndCenters: function() {
         var startCenter = {x: 0, y: 0},
-            endCenter = {x: 0, y: 0};
+            endCenter = {x: 0, y: 0},
+            coordinate;
 
         jQuery.each(this.cursors, function(id, cursor) {
-            startCenter.x += cursor.points[0].x;
-            startCenter.y += cursor.points[0].y;
+            var startPoint = cursor.points[0], endPoint = cursor.points[cursor.numPoints-1];
+            if (imMatch.isEmpty(coordinate)) {
+                coordinate = cursor.coordinate;
+            }
+            else if (coordinate !== cursor.coordinate) {
+                coordinate = null;
+                return false;
+            }
 
-            endCenter.x += cursor.points[cursor.numPoints-1].x;
-            endCenter.y += cursor.points[cursor.numPoints-1].y;
+            startCenter.x += startPoint.x;
+            startCenter.y += startPoint.y;
+
+            endCenter.x += endPoint.x;
+            endCenter.y += endPoint.y;
         });
+
+        if (imMatch.isEmpty(coordinate)) {
+            return null;
+        }
 
         startCenter.x /= this.numCursors;
         startCenter.y /= this.numCursors;
         endCenter.x /= this.numCursors;
         endCenter.y /= this.numCursors;
+
+        startCenter.coordinate = coordinate;
+        endCenter.coordinate = coordinate;
 
         return {
             start: startCenter,
@@ -161,17 +190,29 @@ imMatch.CursorGroup.prototype = {
     },
 
     computeDistances: function() {
-        var startEndPoints = [];
+        var startEndPoints = [], coordinate;
         if (this.numCursors > 2) {
             return {};
         }
 
         jQuery.each(this.cursors, function(id, cursor) {
+            if (imMatch.isEmpty(coordinate)) {
+                coordinate = cursor.coordinate;
+            }
+            else if (coordinate !== cursor.coordinate) {
+                coordinate = null;
+                return false;
+            }
+
             startEndPoints.push({
                 start: cursor.points[0],
                 end: cursor.points[cursor.numPoints-1]
             });
         });
+
+        if (imMatch.isEmpty(coordinate)) {
+            return null;
+        }
 
         return {
             start: imMatch.norm({
@@ -184,17 +225,29 @@ imMatch.CursorGroup.prototype = {
     },
 
     computeStartEndVectors: function() {
-        var startEndPoints = [];
+        var startEndPoints = [], coordinate;
         if (this.numCursors > 2) {
             return {};
         }
 
         jQuery.each(this.cursors, function(id, cursor) {
+            if (imMatch.isEmpty(coordinate)) {
+                coordinate = cursor.coordinate;
+            }
+            else if (coordinate !== cursor.coordinate) {
+                coordinate = null;
+                return false;
+            }
+
             startEndPoints.push({
                 start: cursor.points[0],
                 end: cursor.points[cursor.numPoints-1]
             });
         });
+
+        if (imMatch.isEmpty(coordinate)) {
+            return null;
+        }
 
         return {
             start: { x: startEndPoints[1].start.x - startEndPoints[0].start.x,
@@ -206,17 +259,21 @@ imMatch.CursorGroup.prototype = {
 
     computeStitchingInfo: function() {
         var stitchingInfo = {}, rad,
-            startEndCenters = this.computeStartEndCenters(), localVector, localEndCenter,
-            globalVector = {x: 0, y: 0, coordinate: imMatch.coordinate.global};
+            globalStartEndCenters = this.computeStartEndCenters(), localStartEndCenters = {},
+            globalVector, localVector;
 
-        jQuery.each(this.cursors, function(id, cursor) {
-            var cursorVec = cursor.getVector();
-            globalVector.x += cursorVec.x;
-            globalVector.y += cursorVec.y;
-        });
+        localStartEndCenters.start = imMatch.viewport.transformWithCoordinate(globalStartEndCenters.start);
+        localStartEndCenters.end = imMatch.viewport.transformWithCoordinate(globalStartEndCenters.end);
 
-        globalVector.x /= this.numCursors;
-        globalVector.y /= this.numCursors;
+        globalVector = {
+            x: globalStartEndCenters.end.x - globalStartEndCenters.start.x,
+            y: globalStartEndCenters.end.y - globalStartEndCenters.start.y
+        };
+
+        localVector = {
+            x: localStartEndCenters.end.x - localStartEndCenters.start.x,
+            y: localStartEndCenters.end.y - localStartEndCenters.start.y
+        };
 
         // Compute orientation
         stitchingInfo.orientation = {x: 0, y: 0};
@@ -227,39 +284,32 @@ imMatch.CursorGroup.prototype = {
             stitchingInfo.orientation.y = (globalVector.y > 0)? 1 : -1;
         }
 
-        localVector = imMatch.viewport.transformWithCoordinate(globalVector, true);
-        localEndCenter = imMatch.viewport.transformWithCoordinate({
-            x: startEndCenters.end.x,
-            y: startEndCenters.end.y,
-            coordinate: imMatch.coordinate.global
-        });
-
         // Compute margin & point
         stitchingInfo.margin = {x: 0, y: 0};
         if (localVector.y === 0 || Math.abs(localVector.x / localVector.y) > 1) {
             if (localVector.x > 0) {
-                localEndCenter.x = imMatch.viewport.width;
+                localStartEndCenters.end.x = imMatch.viewport.width;
                 stitchingInfo.margin.x = imMatch.device.margin.right;
             }
             else {
-                localEndCenter.x = 0;
+                localStartEndCenters.end.x = 0;
                 stitchingInfo.margin.x = imMatch.device.margin.left;
             }
         }
         else if (localVector.x === 0 || Math.abs(localVector.y / localVector.x) > 1) {
             if (localVector.y > 0) {
-                localEndCenter.y = imMatch.viewport.height;
+                localStartEndCenters.end.y = imMatch.viewport.height;
                 stitchingInfo.margin.y = imMatch.device.margin.bottom;
             }
             else {
-                localEndCenter.y = 0;
+                localStartEndCenters.end.y = 0;
                 stitchingInfo.margin.y = imMatch.device.margin.top;
             }
         }
 
         rad = imMatch.rad({x: 1, y: 0}, stitchingInfo.orientation);
         stitchingInfo.margin = imMatch.rotate(stitchingInfo.margin, rad);
-        stitchingInfo.point = imMatch.viewport.transformWithCoordinate(localEndCenter);
+        stitchingInfo.point = imMatch.viewport.transformWithCoordinate(localStartEndCenters.end);
 
         return stitchingInfo;
     },

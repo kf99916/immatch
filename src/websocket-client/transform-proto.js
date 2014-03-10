@@ -1,11 +1,11 @@
 imMatch.transformPrototype = {
     // Must overwrite it
     transformWithCoordinate: function(vec, /* Optional */ deep) {
-        var target = {};
+        var target, result;
         deep = deep || false;
-        jQuery.extend(deep, target, vec);
-        target = this.transform(target);
-        return target;
+        target = (deep)? jQuery.extend(target, vec) : vec;
+        result = this.transform(target);
+        return jQuery.extend(target, result);
     },
 
     getAffineTransform2Local: function() {

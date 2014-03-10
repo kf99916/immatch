@@ -9,7 +9,6 @@ imMatch.gestureRecognizer = {
 
         if (touchMouseEvents.length === 0) {
             touchOrder = 0;
-            imMatch.engine.frame = 0;
         }
 
         jQuery.each(touchMouseEvents, function(i, touchMouseEvent) {

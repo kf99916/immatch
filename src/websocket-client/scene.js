@@ -43,8 +43,7 @@ jQuery.extend(imMatch.Scene.prototype, imMatch.transformPrototype, {
             break;
         }
 
-        jQuery.extend(target, result);
-        return target;
+        return jQuery.extend(target, result);
     },
 
     getAffineTransform2Local: function() {
