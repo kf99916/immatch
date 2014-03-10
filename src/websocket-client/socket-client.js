@@ -21,20 +21,22 @@ imMatch.SocketClient = function() {
     };
 
     this.webSocket.onmessage = function(event) {
+        var jsonObject, response;
         if (jQuery.isEmptyObject(event)) {
             imMatch.logError("[WebSocket.onmessage] The message is empty!");
             return;
         }
 
-        var jsonObject = jQuery.parseJSON(event.data);
+        jsonObject = jQuery.parseJSON(event.data);
         imMatch.logInfo("[WebSocket.onmessage] The websocket received a message: ", jsonObject);
 
-        if (imMatch.isEmpty(self.response[jsonObject.action])) {
+        response = self.response[jsonObject.action];
+        if (imMatch.isEmpty(response)) {
             imMatch.logWarn("[WebSocket.onmessage] Unknown action: " + jsonObject.action);
             return;
         }
 
-        self.response[jsonObject.action](jsonObject);
+        response.call(self, jsonObject);
     };
 
     this.webSocket.onclose = function(event) {
@@ -73,9 +75,15 @@ imMatch.SocketClient.prototype = {
 
     request: {
         tryToStitch: function(data) {
-            console.log(data);
-            imMatch.socketClient.send(imMatch.socketClient.fixRequestData(data, "tryToStitch"));
+            this.send(this.fixRequestData(data, "tryToStitch"));
+            imMatch.logInfo("[SocketClient.request.tryToStitch] data:", data);
         },
+
+        synchronize: function(data) {
+            data.touchMouseEvents = this.caches.getNRemove("touchMouseEvent");
+            this.send(this.fixRequestData(data, "synchronize"));
+            imMatch.logInfo("[SocketClient.request.synchronize] data:", data);
+        }
     },
 
     response: {

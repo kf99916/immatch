@@ -59,5 +59,21 @@ imMatch.Group.prototype = {
         });
 
         return this;
+    },
+
+    synchronize: function(jsonObject) {
+
+    },
+
+    isStitching: function() {
+        var stitchingInfos = imMatch.webSocketServer.caches.get("stitchingInfo"), result = false;
+        jQuery.each(stitchingInfos, function(i, stitchingInfo) {
+            if (this.id == stitchingInfo[0].groupID || this.id == stitchingInfo[1].groupID) {
+                result = true;
+                return false;
+            }
+        });
+
+        return result;
     }
 };

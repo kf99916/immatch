@@ -133,7 +133,7 @@ imMatch.syncGesture = {
 
         imMatch.logInfo("[syncGesture.tryToStitch] Try to stitch!");
 
-        imMatch.socketClient.request.tryToStitch(group.computeStitchingInfo());
+        imMatch.socketClient.request.tryToStitch.call(imMatch.socketClient, group.computeStitchingInfo());
 
         return this;
     }

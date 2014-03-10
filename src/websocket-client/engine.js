@@ -31,8 +31,13 @@ imMatch.engine = {
     run: function(timestamp) {
         var stamp = {
             time: timestamp,
-            frame: this.frame
+            frame: this.frame,
+            chunk: Math.floor(this.frame / imMatch.chunkSize) * imMatch.chunkSize
         };
+
+        if (this.mode === imMatch.mode.stitched && this.frame % imMatch.chunkSize === 0) {
+            imMatch.socketClient.request.synchronize(stamp);
+        }
 
         imMatch.trigger("gestureWillbeRecognized", stamp);
         if (this.frame === 0 || imMatch.gestureRecognizer.recognize(stamp).length !== 0) {

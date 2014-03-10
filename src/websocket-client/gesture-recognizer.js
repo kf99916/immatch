@@ -1,8 +1,9 @@
 imMatch.gestureRecognizer = {
     recognize: function(stamp) {
         // 1. Get all touchMouseEvent in the frame
-        var touchedSprites = [], currentTouchedSprite, inTouchedSprites = false,
-            touchMouseEvents = imMatch.socketClient.caches.getNRemove("touchMouseEvent", function(touchMouseEvent) {
+        var touchMouseEventCache = (imMatch.engine.mode === imMatch.mode.alone)? "touchMouseEvent" : "syncTouchMouseEvent",
+            touchedSprites = [], currentTouchedSprite, inTouchedSprites = false,
+            touchMouseEvents = imMatch.socketClient.caches.getNRemove(touchMouseEventCache, function(touchMouseEvent) {
                     return (touchMouseEvent.frame === stamp.frame);
                 });
 

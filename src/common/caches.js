@@ -41,7 +41,7 @@ imMatch.Cache.prototype = {
             return [];
         }
 
-        if (jQuery.isFunction(cmp)) {
+        if (!jQuery.isFunction(cmp)) {
             return this[type];
         }
 

@@ -18,5 +18,7 @@ jQuery.extend(imMatch, {
         global: 1,
         scene: 2,
         sprite: 3
-    }
+    },
+
+    chunkSize: 5
 });
