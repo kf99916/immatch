@@ -18,7 +18,8 @@ jQuery.extend(ws.Server.prototype, {
         device.send({
             action: "connectionSuccess",
             groupID: group.id,
-            deviceID: device.id
+            deviceID: device.id,
+            numDevices: group.numDevices
          });
 
         return group;
@@ -99,7 +100,8 @@ jQuery.extend(ws.Server.prototype, {
             group = this.groups[jsonObject.groupID];
             matchGroup = this.groups[match.groupID];
 
-            if (group.isStitching() || matchGroup.isStitching()) {
+            if (jQuery.isEmptyObject(group.getStitchingInfo()) ||
+                jQuery.isEmptyObject(matchGroup.getStitchingInfo())) {
                 imMatch.logDebug("[ws.Server.tryToStitch] Groups are stitching." +
                         " group:", group, "matchGroup:", matchGroup);
                 return this;

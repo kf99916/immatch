@@ -15,7 +15,8 @@ var isTouchSupported = "ontouchstart" in window,
 jQuery.extend(imMatch, {
     mode: {
         alone: 0,
-        stitched: 1
+        stitching: 1,
+        stitched: 2
     },
 
     coordinate: {

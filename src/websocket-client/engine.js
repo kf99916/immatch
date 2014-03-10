@@ -7,22 +7,40 @@ imMatch.engine = {
 
     frame: 0, // TODO: Reset
 
-    isReady: function() {
-        if (this.mode !== imMatch.mode.stitched) {
-            return true;
+    numDevices: 0,
+
+    numDevicesSynced: {},
+
+    isReady: function(stamp) {
+        var ready = false;
+        switch(this.mode) {
+            case imMatch.mode.alone:
+                ready = true;
+            break;
+            case imMatch.mode.stitching:
+                ready = false;
+            break;
+            case imMatch.mode.stitched:
+                if (this.numDevices === this.numDevicesSynced[stamp.chunk + imMatch.chunkSize]) {
+                    ready = true;
+                }
+            break;
+            default:
+            break;
         }
 
-        // TODO
+        return ready;
     },
 
     run: function(timestamp) {
-        var stamp = {
+        var self = this,
+            stamp = {
                 time: timestamp,
                 frame: this.frame,
                 chunk: Math.floor(this.frame / imMatch.chunkSize) * imMatch.chunkSize},
             touchedSprites;
 
-        if (this.isReady()) {
+        if (this.isReady(stamp)) {
             if (this.mode === imMatch.mode.stitched && this.frame % imMatch.chunkSize === 0) {
                 imMatch.trigger("infoWillSynchronized", stamp);
                 this.synchronize.call(imMatch.socketClient, stamp);
@@ -46,13 +64,19 @@ imMatch.engine = {
 
         switch(this.mode) {
             case imMatch.mode.stitched:
-                setTimeout(this.run.bind(this), this.interval, Date.now() + this.interval);
+                setTimeout(function() {
+                    self.run();
+                }, this.interval, Date.now() + this.interval);
             break;
-            case imMatch.mode.alone:
-                window.requestAnimationFrame(this.run.bind(this));
+            case imMatch.mode.stitching: case imMatch.mode.alone:
+                window.requestAnimationFrame(function() {
+                    self.run();
+                });
             break;
             default:
-                window.requestAnimationFrame(this.run.bind(this));
+                window.requestAnimationFrame(function() {
+                    self.run();
+                });
             break;
         }
     },
@@ -62,7 +86,7 @@ imMatch.engine = {
             case imMatch.mode.stitched:
             // TODO
             break;
-            case imMatch.mode.alone:
+            case imMatch.mode.stitching: case imMatch.mode.alone:
                 this.interval = stamp.time - this.lastRunTimestamp;
             break;
             default:

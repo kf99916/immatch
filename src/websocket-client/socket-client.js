@@ -73,6 +73,16 @@ imMatch.SocketClient.prototype = {
         return data;
     },
 
+    fixSynchronizData: function(data) {
+        // The data is received before the next chunk.
+        data.chunk += imMatch.chunkSize;
+        data.touchMouseEvents = this.caches.getNRemove("touchMouseEvent");
+        // The touchMouseEvents are executed after 2 chunks.
+        jQuery.each(data.touchMouseEvents, function(i, touchMouseEvent) {
+            touchMouseEvent.frame += 2 * imMatch.chunkSize;
+        });
+    },
+
     request: {
         tryToStitch: function(data) {
             this.send(this.fixRequestData(data, "tryToStitch"));
@@ -80,7 +90,7 @@ imMatch.SocketClient.prototype = {
         },
 
         synchronize: function(data) {
-            data.touchMouseEvents = this.caches.getNRemove("touchMouseEvent");
+            data = this.fixSynchronizData(data);
             this.send(this.fixRequestData(data, "synchronize"));
             imMatch.logInfo("[SocketClient.request.synchronize] data:", data);
         }
@@ -90,20 +100,33 @@ imMatch.SocketClient.prototype = {
         connectionSuccess: function(jsonObject) {
             imMatch.device.id = jsonObject.deviceID;
             imMatch.device.groupID = jsonObject.groupID;
+            imMatch.device.numDevices = jsonObject.numDevices;
+            return this;
         },
 
-    /*    synchronize: function(jsonObject) {
+        synchronize: function(jsonObject) {
+            var self = this;
+            jQuery.each(jsonObject.touchMouseEvents, function(i, touchMouseEvent) {
+                self.caches.queue("syncTouchMouseEvent", touchMouseEvent, function(a, b) {
+                    return a.order - b.order;
+                });
+            });
 
+            if (imMatch.isEmpty(imMatch.engine.numDevicesSynced[jsonObject.chunk])) {
+                imMatch.engine.numDevicesSynced[jsonObject.chunk] = 1;
+                return this;
+            }
+
+            ++imMatch.engine.numDevicesSynced[jsonObject.chunk];
+            return this;
         },
 
-        idle: function(jsonObject) {
-
+        stitching: function(jsonObject) {
+            // TODO
+            console.log(jsonObject);
+            imMatch.engine.mode = imMatch.mode.stitching;
         },
-
-        stitchStart: function(jsonObject) {
-
-        },
-
+/*
         exchangeData: function(jsonObject) {
 
         },
