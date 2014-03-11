@@ -6,7 +6,6 @@ imMatch.Device = function(webSocket) {
 
     this.id = Math.uuidFast();
     this.webSocket = webSocket;
-    this.affineTransform = new imMatch.AffineTransform();
 };
 
 imMatch.Device.prototype = {
@@ -97,9 +96,9 @@ imMatch.Group.prototype = {
     },
 
     getStitchingInfo: function() {
-        var stitchingInfos = imMatch.webSocketServer.caches.get("stitchingInfo"), result;
+        var self = this, stitchingInfos = imMatch.webSocketServer.caches.get("stitchingInfo"), result;
         jQuery.each(stitchingInfos, function(i, stitchingInfo) {
-            if (this.id == stitchingInfo[0].groupID || this.id == stitchingInfo[1].groupID) {
+            if (self.id == stitchingInfo[0].groupID || self.id == stitchingInfo[1].groupID) {
                 result = stitchingInfo;
                 return false;
             }
@@ -114,10 +113,16 @@ imMatch.Group.prototype = {
             return this;
         }
 
+        if (this.id == stitchingInfo[1].groupID) {
+            stitchingInfo = stitchingInfo.reverse();
+        }
+
         this.broadcast({
             action: "stitching",
+            stitchingInfo: stitchingInfo
         });
-        imMatch.logInfo("[imMatch.Group.stitch] Be stitching with device1:", stitchingInfo[0], " & device2:", stitchingInfo[2]);
+
+        imMatch.logInfo("[imMatch.Group.stitch][device1]", stitchingInfo[0], "[device2]", stitchingInfo[1]);
 
         return this;
     }

@@ -24,6 +24,28 @@ imMatch.engine = {
     },
 
     updateMode: function() {
+        var affineTransform;
+        switch(this.mode) {
+            case imMatch.mode.alone:
+                if (!jQuery.isEmptyObject(imMatch.socketClient.caches.get("stitchingInfo"))) {
+                    this.mode = imMatch.mode.stitching.exchange;
+                }
+            break;
+            case imMatch.mode.stitching.exchange:
+                affineTransform = this.computeAffineTransform(imMatch.socketClient.caches.getNRemove("stitchingInfo"));
+                this.update(affineTransform);
+                this.sendAllData();
+                this.mode = imMatch.mode.stitching.done;
+            break;
+            case imMatch.mode.stitching.done:
+            break;
+            case imMatch.mode.stitching.wait:
+            break;
+            case imMatch.mode.stitched:
+            break;
+            default:
+            break;
+        }
         return this;
     },
 
@@ -109,6 +131,18 @@ imMatch.engine = {
         }
 
         return this;
+    },
+
+    computeAffineTransform: function(stitchingInfo) {
+        console.log(stitchingInfo);
+    },
+
+    update: function(affineTransform) {
+        console.log(affineTransform);
+    },
+
+    sendAllData: function() {
+
     }
 };
 

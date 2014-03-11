@@ -70,6 +70,7 @@ imMatch.SocketClient.prototype = {
         data.action = action;
         data.deviceID = imMatch.device.id;
         data.groupID = imMatch.device.groupID;
+        data.timestamp = Date.now();
         return data;
     },
 
@@ -122,9 +123,14 @@ imMatch.SocketClient.prototype = {
         },
 
         stitching: function(jsonObject) {
-            // TODO
+            if (!jQuery.isEmptyObject(this.caches.get("stitchingInfo"))) {
+                return this;
+            }
+
             console.log(jsonObject);
-            imMatch.engine.mode = imMatch.mode.stitching.exchange;
+
+            this.caches.queue("stitchingInfo", jsonObject.stitchingInfo);
+            return this;
         },
 /*
         exchangeData: function(jsonObject) {

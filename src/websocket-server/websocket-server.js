@@ -51,15 +51,14 @@ jQuery.extend(ws.Server.prototype, {
     },
 
     searchMatchCandidate: function(jsonObject) {
-        var candidates = this.caches.get("stitchingCandidate"),
-            self = this, match, now = Date.now();
+        var candidates = this.caches.get("stitchingCandidate"), now = Date.now(), match;
         if (jQuery.isEmptyObject(jsonObject)) {
             return null;
         }
 
         jQuery.each(candidates.reverse(), function(i, candidate) {
             if (jsonObject.deviceID != candidate.deviceID &&
-                Math.abs(now - candidate.timestamp) < self.lifetimeCandidate) {
+                Math.abs(now - candidate.timestamp) < imMatch.lifetimeCandidate) {
                 match = candidate;
                 return false;
             }
@@ -93,15 +92,15 @@ jQuery.extend(ws.Server.prototype, {
         tryToStitch: function(jsonObject) {
             var match = this.searchMatchCandidate(jsonObject), group, matchGroup;
             if (jQuery.isEmptyObject(match)) {
-                this.addCandidate(match);
+                this.addCandidate(jsonObject);
                 return this;
             }
 
             group = this.groups[jsonObject.groupID];
             matchGroup = this.groups[match.groupID];
 
-            if (jQuery.isEmptyObject(group.getStitchingInfo()) ||
-                jQuery.isEmptyObject(matchGroup.getStitchingInfo())) {
+            if (!jQuery.isEmptyObject(group.getStitchingInfo()) ||
+                !jQuery.isEmptyObject(matchGroup.getStitchingInfo())) {
                 imMatch.logDebug("[ws.Server.tryToStitch] Groups are stitching." +
                         " group:", group, "matchGroup:", matchGroup);
                 return this;
@@ -117,6 +116,10 @@ jQuery.extend(ws.Server.prototype, {
             jsonObject.orientation.y = -jsonObject.orientation.y;
 
             this.caches.queue("stitchingInfo", [jsonObject, match]);
+            if (group.numDevices === 1 && matchGroup.numDevices === 1) {
+                group.stitch();
+                matchGroup.stitch();
+            }
         },
 
         synchronize: function(jsonObject) {
