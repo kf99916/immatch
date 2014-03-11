@@ -124,7 +124,7 @@ imMatch.SocketClient.prototype = {
         stitching: function(jsonObject) {
             // TODO
             console.log(jsonObject);
-            imMatch.engine.mode = imMatch.mode.stitching;
+            imMatch.engine.mode = imMatch.mode.stitching.exchange;
         },
 /*
         exchangeData: function(jsonObject) {

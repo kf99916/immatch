@@ -11,16 +11,32 @@ imMatch.engine = {
 
     numDevicesSynced: {},
 
-    isReady: function(stamp) {
-        var ready = false;
-        switch(this.mode) {
-            case imMatch.mode.alone:
+    run: function(timestamp) {
+        var stamp = {
+                time: timestamp,
+                frame: this.frame,
+                chunk: Math.floor(this.frame / imMatch.chunkSize) * imMatch.chunkSize};
+
+        this.updateMode(stamp);
+        this.runWithMode(stamp);
+        this.updateIntervalWithMode(stamp);
+        this.setTimerWithMode(stamp);
+    },
+
+    updateMode: function() {
+        return this;
+    },
+
+    runWithMode: function(stamp) {
+        var ready = false, mainMode = imMatch.getMainMode(this.mode), touchedSprites;
+        switch(mainMode) {
+            case imMatch.mainMode.alone:
                 ready = true;
             break;
-            case imMatch.mode.stitching:
+            case imMatch.mainMode.stitching:
                 ready = false;
             break;
-            case imMatch.mode.stitched:
+            case imMatch.mainMode.stitched:
                 if (this.numDevices === this.numDevicesSynced[stamp.chunk + imMatch.chunkSize]) {
                     ready = true;
                 }
@@ -29,70 +45,70 @@ imMatch.engine = {
             break;
         }
 
-        return ready;
-    },
-
-    run: function(timestamp) {
-        var self = this,
-            stamp = {
-                time: timestamp,
-                frame: this.frame,
-                chunk: Math.floor(this.frame / imMatch.chunkSize) * imMatch.chunkSize},
-            touchedSprites;
-
-        if (this.isReady(stamp)) {
-            if (this.mode === imMatch.mode.stitched && this.frame % imMatch.chunkSize === 0) {
-                imMatch.trigger("infoWillSynchronized", stamp);
-                this.synchronize.call(imMatch.socketClient, stamp);
-                imMatch.trigger("infoDidSynchronized", stamp);
-            }
-
-            imMatch.trigger("gestureWillRecognized", stamp);
-            touchedSprites = imMatch.gestureRecognizer.recognize(stamp);
-            imMatch.trigger("gestureDidRecognized", stamp);
-
-            if (this.frame === 0 || touchedSprites.length !== 0) {
-                imMatch.trigger("contextWillDrawn", stamp);
-                imMatch.canvas.draw();
-                imMatch.trigger("contextDidDrawn", stamp);
-            }
-
-            this.updateInterval(stamp);
-            this.lastRunTimestamp = timestamp;
-            ++this.frame;
+        if (!ready) {
+            return this;
         }
 
-        switch(this.mode) {
-            case imMatch.mode.stitched:
+        if (mainMode === imMatch.mainMode.stitched && this.frame % imMatch.chunkSize === 0) {
+            imMatch.trigger("infoWillSynchronized", stamp);
+            this.synchronize.call(imMatch.socketClient, stamp);
+            imMatch.trigger("infoDidSynchronized", stamp);
+        }
+
+        imMatch.trigger("gestureWillRecognized", stamp);
+        touchedSprites = imMatch.gestureRecognizer.recognize(stamp);
+        imMatch.trigger("gestureDidRecognized", stamp);
+
+        if (this.frame === 0 || touchedSprites.length !== 0) {
+            imMatch.trigger("contextWillDrawn", stamp);
+            imMatch.canvas.draw();
+            imMatch.trigger("contextDidDrawn", stamp);
+        }
+        ++this.frame;
+
+        return this;
+    },
+
+    updateIntervalWithMode: function(stamp) {
+        switch(imMatch.getMainMode(this.mode)) {
+            case imMatch.mainMode.alone:
+            case imMatch.mainMode.stitching:
+                this.interval = stamp.time - this.lastRunTimestamp;
+            break;
+            case imMatch.mainMode.stitched:
+            // TODO
+            break;
+            default:
+                this.interval = stamp.time - this.lastRunTimestamp;
+            break;
+        }
+
+        this.lastRunTimestamp = stamp.time;
+        return this;
+    },
+
+    setTimerWithMode: function() {
+        var self = this;
+        switch(imMatch.getMainMode(this.mode)) {
+            case imMatch.mainMode.alone:
+            case imMatch.mainMode.stitching:
+                window.requestAnimationFrame(function() {
+                    self.run();
+                });
+            break;
+            case imMatch.mainMode.stitched:
                 setTimeout(function() {
                     self.run();
                 }, this.interval, Date.now() + this.interval);
             break;
-            case imMatch.mode.stitching: case imMatch.mode.alone:
-                window.requestAnimationFrame(function() {
-                    self.run();
-                });
-            break;
             default:
                 window.requestAnimationFrame(function() {
                     self.run();
                 });
             break;
         }
-    },
 
-    updateInterval: function(stamp) {
-        switch(this.mode) {
-            case imMatch.mode.stitched:
-            // TODO
-            break;
-            case imMatch.mode.stitching: case imMatch.mode.alone:
-                this.interval = stamp.time - this.lastRunTimestamp;
-            break;
-            default:
-                this.interval = stamp.time - this.lastRunTimestamp;
-            break;
-        }
+        return this;
     }
 };
 

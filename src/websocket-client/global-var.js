@@ -13,10 +13,32 @@ var isTouchSupported = "ontouchstart" in window,
     sceneZ = 0;
 
 jQuery.extend(imMatch, {
-    mode: {
-        alone: 0,
-        stitching: 1,
-        stitched: 2
+    makeMode: function(mainMode, state) {
+        mainMode = mainMode || 0;
+        state = state || 0;
+        return (mainMode << 24) | (state & 0xffff);
+    },
+
+    getMainMode: function(mode) {
+        mode = mode || 0;
+        return (mode >> 24);
+    },
+
+    getState: function(mode) {
+        mode = mode || 0;
+        return (mode & 0xffff);
+    },
+
+    mainMode: {
+        alone: 0x01,
+        stitching: 0x02,
+        stitched: 0x04
+    },
+
+    state: {
+        exchange: 1,
+        done: 2,
+        wait: 3
     },
 
     coordinate: {
@@ -28,3 +50,15 @@ jQuery.extend(imMatch, {
 
     chunkSize: 5
 });
+
+imMatch.mode = {
+    alone: imMatch.makeMode(imMatch.mainMode.alone),
+
+    stitching: {
+            exchange: imMatch.makeMode(imMatch.mainMode.stitching, imMatch.state.exchange),
+            done: imMatch.makeMode(imMatch.mainMode.stitching, imMatch.state.done),
+            wait: imMatch.makeMode(imMatch.mainMode.stitching, imMatch.state.wait)
+    },
+
+    stitched: imMatch.makeMode(imMatch.mainMode.stitched)
+};
