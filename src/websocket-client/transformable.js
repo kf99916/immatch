@@ -1,5 +1,5 @@
-imMatch.transformPrototype = {
-    // Must overwrite it
+imMatch.transformable = {
+    // ===================== The following functions must be overriding =====================
     transformWithCoordinate: function(vec, /* Optional */ deep) {
         var target, result;
         deep = deep || false;
@@ -11,6 +11,24 @@ imMatch.transformPrototype = {
     getAffineTransform2Local: function() {
         return this.affineTransform;
     },
+
+    serialize: function() {
+        return {
+            affineTransform: [this.affineTransform.m00, this.affineTransform.m10, this.affineTransform.m01,
+                                this.affineTransform.m11, this.affineTransform.m02, this.affineTransform.m12]
+        };
+    },
+
+    deserialize: function(data) {
+        if (jQuery.isArray(data.affineTransform) && data.affineTransform.length === 6) {
+            this.affineTransform = imMatch.AffineTransform.apply(this, data.affineTransform);
+            delete data.affineTransform;
+        }
+
+        return jQuery.extend(true, this, data);
+    },
+
+    // ===================== The above functions must be overriding =====================
 
     getBoundingBox: function() {
         var affineTransform2Local = this.getAffineTransform2Local(),

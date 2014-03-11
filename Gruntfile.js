@@ -78,7 +78,7 @@ module.exports = function(grunt) {
                     "src/common/intro/global-var.js",
                     "src/common/*.js",
                     "src/websocket-client/global-var.js",
-                    "src/websocket-client/transform-proto.js",
+                    "src/websocket-client/transformable.js",
                     "src/websocket-client/device.js",
                     "src/websocket-client/viewport.js",
                     "src/websocket-client/cursor-group.js",

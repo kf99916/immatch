@@ -24,7 +24,6 @@ imMatch.engine = {
     },
 
     updateMode: function() {
-        var affineTransform;
         switch(this.mode) {
             case imMatch.mode.alone:
                 if (!jQuery.isEmptyObject(imMatch.socketClient.caches.get("stitchingInfo"))) {
@@ -32,8 +31,7 @@ imMatch.engine = {
                 }
             break;
             case imMatch.mode.stitching.exchange:
-                affineTransform = this.computeAffineTransform(imMatch.socketClient.caches.getNRemove("stitchingInfo"));
-                this.update(affineTransform);
+                this.updateViewportAffineTransform(imMatch.socketClient.caches.getNRemove("stitchingInfo")[0]);
                 this.sendAllData();
                 this.mode = imMatch.mode.stitching.done;
             break;
@@ -133,12 +131,20 @@ imMatch.engine = {
         return this;
     },
 
-    computeAffineTransform: function(stitchingInfo) {
-        console.log(stitchingInfo);
-    },
+    updateViewportAffineTransform: function(stitchingInfo) {
+        var rad = imMatch.rad(stitchingInfo[0].orientation, {x: 1, y: 0}),
+            affineTransform = imMatch.AffineTransform.getRotateInstance(rad),
+            margin = affineTransform.transform(stitchingInfo[0].margin),
+            point = affineTransform.transform(stitchingInfo[0].point);
 
-    update: function(affineTransform) {
-        console.log(affineTransform);
+        affineTransform.preConcatenate(imMatch.AffineTransform.getTranslationInstance({
+            x: point.x + margin.x,
+            y: point.y + margin.y
+        }));
+
+        imMatch.viewport.affineTransform.preConcatenate(affineTransform);
+
+        return this;
     },
 
     sendAllData: function() {

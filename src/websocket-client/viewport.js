@@ -12,7 +12,7 @@ imMatch.viewport = {
 imMatch.viewport.affineTransform = imMatch.AffineTransform.getTranslationInstance({
     x: (imMatch.viewport.width / 2), y: (imMatch.viewport.height / 2)});
 
-jQuery.extend(imMatch.viewport, imMatch.transformPrototype, {
+jQuery.extend(imMatch.viewport, imMatch.transformable, {
     transformWithCoordinate: function(vec, /* Optional */ deep) {
         var target, result;
         deep = deep || false;
@@ -35,6 +35,16 @@ jQuery.extend(imMatch.viewport, imMatch.transformPrototype, {
         }
 
         return jQuery.extend(target, result);
+    },
+
+    serialize: function() {
+        return {
+            id: this.id,
+            width: this.width,
+            height: this.height,
+            affineTransform: [this.affineTransform.m00, this.affineTransform.m10, this.affineTransform.m01,
+                                this.affineTransform.m11, this.affineTransform.m02, this.affineTransform.m12]
+        };
     },
 
     transform: function(vec) {

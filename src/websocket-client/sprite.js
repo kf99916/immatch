@@ -22,7 +22,7 @@ imMatch.Sprite = function() {
     this.scalable = true;
 };
 
-jQuery.extend(imMatch.Sprite.prototype, imMatch.transformPrototype, {
+jQuery.extend(imMatch.Sprite.prototype, imMatch.transformable, {
     transformWithCoordinate: function(vec, /* Optional */ deep) {
         var target = {}, result;
         deep = deep || false;
@@ -31,7 +31,7 @@ jQuery.extend(imMatch.Sprite.prototype, imMatch.transformPrototype, {
             // Local -> Global -> Scene -> Sprite
             case imMatch.coordinate.local:
                 target.coordinate = imMatch.coordinate.sprite;
-                result = this.inverseTransform(this.scene.inverseTransform(imMatch.viewport.inverseTransform(target)));
+                result = this.getAffineTransform2Local().createInverse().transform(target);
             break;
             // Global -> Scene -> Sprite
             case imMatch.coordinate.global:
@@ -59,7 +59,28 @@ jQuery.extend(imMatch.Sprite.prototype, imMatch.transformPrototype, {
     getAffineTransform2Local: function() {
         return this.affineTransform.clone().
                     preConcatenate(this.scene.affineTransform).
-                    preConcatenate(imMatch.viewport.affineTransform);
+                    preConcatenate(this.scene.viewport.affineTransform);
+    },
+
+    serialize: function() {
+        return {
+            id: this.id,
+            sceneID: this.scene.id,
+            imageID: this.image.id,
+            z: this.z,
+            width: this.width,
+            height: this.height,
+            alpha: this.alpha,
+            scalingFactor: this.scalingFactor,
+            maxScalingFactor: this.maxScalingFactor,
+            minScalingFactor: this.minScalingFactor,
+            touchable: this.touchable,
+            movable: this.movable,
+            rotatable: this.rotatable,
+            scalable: this.scalable,
+            affineTransform: [this.affineTransform.m00, this.affineTransform.m10, this.affineTransform.m01,
+                                this.affineTransform.m11, this.affineTransform.m02, this.affineTransform.m12]
+        };
     },
 
     getFrame: function() {
@@ -75,7 +96,7 @@ jQuery.extend(imMatch.Sprite.prototype, imMatch.transformPrototype, {
         }
 
         this.scene = scene;
-        this.z = scene.z * scene.maxNumSprites + scene.spriteZ;
+        this.z = scene.z * imMatch.maxNumSpritesInScene + scene.spriteZ;
     },
 
     setImage: function(id) {
@@ -91,7 +112,7 @@ jQuery.extend(imMatch.Sprite.prototype, imMatch.transformPrototype, {
     },
 
     isInViewport: function() {
-        var viewportBoundingBox = imMatch.viewport.getBoundingBox(),
+        var viewportBoundingBox = this.scene.viewport.getBoundingBox(),
             selfBoundingBox = this.getBoundingBox(),
             diff = {
                 x: Math.abs(viewportBoundingBox.x - selfBoundingBox.x),
