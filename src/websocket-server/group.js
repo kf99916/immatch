@@ -37,15 +37,14 @@ imMatch.Group = function(devices) {
     }
 
     this.id = Math.uuidFast();
-    this.devices = {};
-    this.numDevices = 0;
+    this.devices = [];
+    this.numExchangedDoneDevices = 0;
     this.numDevicesSynced = {};
     this.addDevices(devices);
 };
 
 imMatch.Group.prototype = {
     addDevices: function(devices) {
-        var self = this;
         if (jQuery.isEmptyObject(devices)) {
             return this;
         }
@@ -54,11 +53,7 @@ imMatch.Group.prototype = {
             devices = [devices];
         }
 
-        jQuery.each(devices, function(i, device) {
-            device.group = self;
-            self.devices[device.id] = device;
-            ++self.numDevices;
-        });
+        push.apply(this.devices, devices);
 
         return this;
     },
@@ -75,11 +70,20 @@ imMatch.Group.prototype = {
         }
 
         ++this.numDevicesSynced[jsonObject.chunk];
-        if (this.numDevicesSynced[jsonObject.chunk] !== this.numDevices) {
+        if (this.numDevicesSynced[jsonObject.chunk] !== this.devices.length) {
             return this;
         }
 
-        return this.stitch();
+        delete this.numDevicesSynced[jsonObject.chunk];
+        if (this.stitch()) {
+            return this;
+        }
+
+        this.broadcast({
+            action: "synchronizeDone",
+            chunk: jsonObject.chunk
+        });
+        return this;
     },
 
     // Send data to all devices in the group
@@ -88,7 +92,7 @@ imMatch.Group.prototype = {
             return this;
         }
 
-        jQuery.each(this.devices, function(id, device) {
+        jQuery.each(this.devices, function(i, device) {
             device.send(data);
         });
 
@@ -110,7 +114,7 @@ imMatch.Group.prototype = {
     stitch: function() {
         var stitchingInfo = this.getStitchingInfo();
         if (jQuery.isEmptyObject(stitchingInfo)) {
-            return this;
+            return false;
         }
 
         if (this.id === stitchingInfo[1].groupID) {
@@ -124,6 +128,6 @@ imMatch.Group.prototype = {
 
         imMatch.logInfo("[imMatch.Group.stitch][device1]", stitchingInfo[0], "[device2]", stitchingInfo[1]);
 
-        return this;
+        return true;
     }
 };

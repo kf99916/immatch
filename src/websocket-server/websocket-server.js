@@ -19,7 +19,7 @@ jQuery.extend(ws.Server.prototype, {
             action: "connectionSuccess",
             groupID: group.id,
             deviceID: device.id,
-            numDevices: group.numDevices
+            numDevices: group.devices.length
          });
 
         return group;
@@ -79,8 +79,6 @@ jQuery.extend(ws.Server.prototype, {
             imMatch.logInfo("[ws.Server.response.close] The client closes WebSocket." +
                 " deviceID = " + webSocket.deviceID + ", groupID = " + webSocket.groupID + ". Message: " + event.message);
 
-            //this.groups[webSocket.groupID].removeDeviceWithID(webSocket.deviceID);
-
             return this;
         },
 
@@ -90,7 +88,7 @@ jQuery.extend(ws.Server.prototype, {
         },
 
         tryToStitch: function(jsonObject) {
-            var match = this.searchMatchCandidate(jsonObject), group, matchGroup;
+            var match = this.searchMatchCandidate(jsonObject), group, matchGroup, numDevicesInGroup, numDevicesInMatchGroup;
             if (jQuery.isEmptyObject(match)) {
                 this.addCandidate(jsonObject);
                 return this;
@@ -111,12 +109,18 @@ jQuery.extend(ws.Server.prototype, {
                 return this;
             }
 
+            numDevicesInGroup = group.devices.length;
+            numDevicesInMatchGroup = matchGroup.devices.length;
+
             // Reverse stitch orientation of the later device
             jsonObject.orientation.x = -jsonObject.orientation.x;
             jsonObject.orientation.y = -jsonObject.orientation.y;
 
+            jsonObject.numExchangedDevices = numDevicesInMatchGroup;
+            match.numExchangedDevices = numDevicesInGroup;
+
             this.caches.queue("stitchingInfo", [jsonObject, match]);
-            if (group.numDevices === 1 && matchGroup.numDevices === 1) {
+            if (numDevicesInGroup === 1 && numDevicesInMatchGroup === 1) {
                 group.stitch();
                 matchGroup.stitch();
             }
@@ -125,6 +129,41 @@ jQuery.extend(ws.Server.prototype, {
         synchronize: function(jsonObject) {
             this.groups[jsonObject.groupID].synchronize(jsonObject);
             return this;
+        },
+
+        exchange: function(jsonObject) {
+            var toGroup = this.groups[jsonObject.toGroupID];
+            if (jQuery.isEmptyObject(toGroup)) {
+                console.log("========================= " + jsonObject.toGroupID);
+                return this;
+            }
+
+            toGroup.broadcast(jsonObject);
+        },
+
+        exchangeDone: function(jsonObject) {
+            var group = this.groups[jsonObject.groupID], toGroup = this.groups[jsonObject.toGroupID],
+                totalNumDevies = group.devices.length + toGroup.devices.length;
+
+            ++group.numExchangedDoneDevices;
+            ++toGroup.numExchangedDoneDevices;
+            if (totalNumDevies !== group.numExchangedDoneDevices ||
+                totalNumDevies !== toGroup.numExchangedDoneDevices) {
+                return this;
+            }
+
+            group.numExchangedDoneDevices = 0;
+
+            this.caches.remove("stitchingInfo");
+
+            group.addDevices(toGroup.devices);
+            delete this.groups[jsonObject.toGroupID];
+
+            group.broadcast({
+                action: "exchangeDone",
+                groupID: group.id,
+                numDevices: group.devices.length
+            });
         }
     }
 });
@@ -147,7 +186,7 @@ imMatch.webSocketServer.on("connection", function(webSocket) {
         }
 
         jsonObject = jQuery.parseJSON(event);
-        imMatch.logInfo("[WebSocket.onmessage] The websocket received a message: ", jsonObject);
+        imMatch.logInfo("[WebSocket.onmessage] Action Type: " + jsonObject.action, jsonObject);
 
         response = self.response[jsonObject.action];
         if (imMatch.isEmpty(response)) {

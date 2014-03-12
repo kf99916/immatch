@@ -1,18 +1,20 @@
-imMatch.viewport = {
-    id: Math.uuidFast(),
+imMatch.Viewport = function(affineTransform) {
+    // Allow instantiation without the 'new' keyword
+    if ( !(this instanceof imMatch.Viewport) ) {
+        return new imMatch.Viewport();
+    }
 
-    width: window.innerWidth / imMatch.device.ppi,
+    this.id = Math.uuidFast();
 
-    height: window.innerHeight / imMatch.device.ppi,
+    this.width = window.innerWidth / imMatch.device.ppi;
+    this.height = window.innerHeight / imMatch.device.ppi;
 
-    affineTransform: null
+    //  Global Coordinate: The origin is initialized as the center of imMatch.viewport
+    this.affineTransform = affineTransform || imMatch.AffineTransform.getTranslationInstance({
+        x: (this.width / 2), y: (this.height / 2)});
 };
 
-//  Global Coordinate: The origin is initialized as the center of imMatch.viewport
-imMatch.viewport.affineTransform = imMatch.AffineTransform.getTranslationInstance({
-    x: (imMatch.viewport.width / 2), y: (imMatch.viewport.height / 2)});
-
-jQuery.extend(imMatch.viewport, imMatch.transformable, {
+jQuery.extend(imMatch.Viewport.prototype, imMatch.transformable, {
     transformWithCoordinate: function(vec, /* Optional */ deep) {
         var target, result;
         deep = deep || false;
@@ -74,3 +76,5 @@ jQuery.extend(imMatch.viewport, imMatch.transformable, {
         return this.affineTransform.preShear(shearFactor);
     }
 });
+
+imMatch.viewport = new imMatch.Viewport();

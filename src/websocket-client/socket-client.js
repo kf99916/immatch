@@ -28,7 +28,7 @@ imMatch.SocketClient = function() {
         }
 
         jsonObject = jQuery.parseJSON(event.data);
-        imMatch.logInfo("[WebSocket.onmessage] The websocket received a message: ", jsonObject);
+        imMatch.logInfo("[WebSocket.onmessage] Action Type: " + jsonObject.action, jsonObject);
 
         response = self.response[jsonObject.action];
         if (imMatch.isEmpty(response)) {
@@ -82,6 +82,8 @@ imMatch.SocketClient.prototype = {
         jQuery.each(data.touchMouseEvents, function(i, touchMouseEvent) {
             touchMouseEvent.frame += 2 * imMatch.chunkSize;
         });
+
+        return data;
     },
 
     request: {
@@ -94,6 +96,16 @@ imMatch.SocketClient.prototype = {
             data = this.fixSynchronizData(data);
             this.send(this.fixRequestData(data, "synchronize"));
             imMatch.logInfo("[SocketClient.request.synchronize] data:", data);
+        },
+
+        exchange: function(data) {
+            this.send(this.fixRequestData(data, "exchange"));
+            imMatch.logInfo("[SocketClient.request.exchange] data:", data);
+        },
+
+        exchangeDone: function(data) {
+            this.send(this.fixRequestData(data, "exchangeDone"));
+            imMatch.logInfo("[SocketClient.request.exchangeDone] data:", data);
         }
     },
 
@@ -102,6 +114,7 @@ imMatch.SocketClient.prototype = {
             imMatch.device.id = jsonObject.deviceID;
             imMatch.device.groupID = jsonObject.groupID;
             imMatch.device.numDevices = jsonObject.numDevices;
+            imMatch.device.numExchangedDevices = 0;
             return this;
         },
 
@@ -113,12 +126,11 @@ imMatch.SocketClient.prototype = {
                 });
             });
 
-            if (imMatch.isEmpty(imMatch.engine.numDevicesSynced[jsonObject.chunk])) {
-                imMatch.engine.numDevicesSynced[jsonObject.chunk] = 1;
-                return this;
-            }
+            return this;
+        },
 
-            ++imMatch.engine.numDevicesSynced[jsonObject.chunk];
+        synchronizeDone: function(jsonObject) {
+            this.caches.queue("synchronizeDoneInfo", jsonObject.chunk);
             return this;
         },
 
@@ -127,26 +139,19 @@ imMatch.SocketClient.prototype = {
                 return this;
             }
 
-            console.log(jsonObject);
-
             this.caches.queue("stitchingInfo", jsonObject.stitchingInfo);
             return this;
         },
-/*
-        exchangeData: function(jsonObject) {
 
+        exchange: function(jsonObject) {
+            ++imMatch.device.numExchangedDevices;
+            imMatch.engine.addTransformableObjects(jsonObject);
         },
 
-        exchangeDataDone: function(jsonObject) {
-
-        },
-
-        unstitchStart: function(jsonObject) {
-
-        },
-
-        unstitchDone: function(jsonObject) {
-
-        }*/
+        exchangeDone: function(jsonObject) {
+            imMatch.device.groupID = jsonObject.groupID;
+            this.caches.queue("exchangeDoneInfo", jsonObject.numDevices);
+            return this;
+        }
     }
 };

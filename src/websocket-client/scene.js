@@ -1,12 +1,17 @@
-imMatch.Scene = function() {
+imMatch.Scene = function(incrementSceneZ) {
     // Allow instantiation without the 'new' keyword
     if ( !(this instanceof imMatch.Scene) ) {
-        return new imMatch.Scene();
+        return new imMatch.Scene(incrementSceneZ);
     }
+
+    incrementSceneZ = incrementSceneZ || true;
 
     this.id = Math.uuidFast();
 
-    this.z = sceneZ++;
+    this.z = sceneZ;
+    if (incrementSceneZ) {
+        ++sceneZ;
+    }
 
     this.viewport = imMatch.viewport;
     this.width = this.viewport.width;

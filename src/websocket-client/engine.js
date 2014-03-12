@@ -1,4 +1,6 @@
 imMatch.engine = {
+    isReady: returnFalse,
+
     interval: 0,
 
     mode: imMatch.mode.alone,
@@ -7,9 +9,11 @@ imMatch.engine = {
 
     frame: 0, // TODO: Reset
 
-    numDevices: 0,
+    // imMatch.socketClient.request
+    request: null,
 
-    numDevicesSynced: {},
+    // imMatch.socketClient.caches
+    caches: null,
 
     run: function(timestamp) {
         var stamp = {
@@ -18,26 +22,45 @@ imMatch.engine = {
                 chunk: Math.floor(this.frame / imMatch.chunkSize) * imMatch.chunkSize};
 
         this.updateMode(stamp);
+        this.updateReady(stamp);
         this.runWithMode(stamp);
         this.updateIntervalWithMode(stamp);
         this.setTimerWithMode(stamp);
     },
 
     updateMode: function() {
+        var stitchingInfo;
         switch(this.mode) {
             case imMatch.mode.alone:
-                if (!jQuery.isEmptyObject(imMatch.socketClient.caches.get("stitchingInfo"))) {
+                stitchingInfo = this.caches.get("stitchingInfo")[0];
+                if (!jQuery.isEmptyObject(stitchingInfo)) {
                     this.mode = imMatch.mode.stitching.exchange;
                 }
             break;
             case imMatch.mode.stitching.exchange:
-                this.updateViewportAffineTransform(imMatch.socketClient.caches.getNRemove("stitchingInfo")[0]);
-                this.sendAllData();
+                stitchingInfo = this.caches.get("stitchingInfo")[0];
+                this.updateViewportAffineTransform(stitchingInfo);
+                this.exchange(stitchingInfo);
                 this.mode = imMatch.mode.stitching.done;
             break;
             case imMatch.mode.stitching.done:
+                stitchingInfo = this.caches.get("stitchingInfo")[0];
+
+                if (imMatch.device.numExchangedDevices === stitchingInfo[0].numExchangedDevices) {
+                    this.request.exchangeDone.call(imMatch.socketClient, {toGroupID: stitchingInfo[1].groupID});
+                    this.mode = imMatch.mode.stitching.wait;
+                }
             break;
             case imMatch.mode.stitching.wait:
+                var exchangeDoneInfo = this.caches.get("exchangeDoneInfo")[0];
+                if (exchangeDoneInfo === imMatch.device.numDevices) {
+                    this.caches.remove("exchangeDoneInfo");
+                    this.caches.remove("stitchingInfo");
+
+                    imMatch.device.numExchangedDevices = 0;
+                    this.frame = 0;
+                    this.mode = imMatch.mode.stitched;
+                }
             break;
             case imMatch.mode.stitched:
             break;
@@ -47,31 +70,39 @@ imMatch.engine = {
         return this;
     },
 
-    runWithMode: function(stamp) {
-        var ready = false, mainMode = imMatch.getMainMode(this.mode), touchedSprites;
-        switch(mainMode) {
+    updateReady: function(stamp) {
+        switch(imMatch.getMainMode(this.mode)) {
             case imMatch.mainMode.alone:
-                ready = true;
+                this.isReady = returnTrue;
             break;
             case imMatch.mainMode.stitching:
-                ready = false;
+                this.isReady = returnFalse;
             break;
             case imMatch.mainMode.stitched:
-                if (this.numDevices === this.numDevicesSynced[stamp.chunk + imMatch.chunkSize]) {
-                    ready = true;
+                this.isReady = returnFalse;
+                var synchronizeDoneInfo = this.caches.get("synchronizeDoneInfo")[0];
+                if (this.frames % imMatch.chunkSize !== imMatch.chunkSize - 1 ||
+                    synchronizeDoneInfo === stamp.chunk + imMatch.chunkSize) {
+                    this.caches.remove("synchronizeDoneInfo");
+                    this.isReady = returnTrue;
                 }
             break;
             default:
             break;
         }
 
-        if (!ready) {
+        return this;
+    },
+
+    runWithMode: function(stamp) {
+        var touchedSprites;
+        if (!this.isReady()) {
             return this;
         }
 
-        if (mainMode === imMatch.mainMode.stitched && this.frame % imMatch.chunkSize === 0) {
+        if (imMatch.getMainMode(this.mode) === imMatch.mainMode.stitched && this.frame % imMatch.chunkSize === 0) {
             imMatch.trigger("infoWillSynchronized", stamp);
-            this.synchronize.call(imMatch.socketClient, stamp);
+            this.request.synchronize.call(imMatch.socketClient, stamp);
             imMatch.trigger("infoDidSynchronized", stamp);
         }
 
@@ -132,10 +163,10 @@ imMatch.engine = {
     },
 
     updateViewportAffineTransform: function(stitchingInfo) {
-        var rad = imMatch.rad(stitchingInfo[0].orientation, {x: 1, y: 0}),
+        var rad = imMatch.rad(stitchingInfo.orientation, {x: 1, y: 0}),
             affineTransform = imMatch.AffineTransform.getRotateInstance(rad),
-            margin = affineTransform.transform(stitchingInfo[0].margin),
-            point = affineTransform.transform(stitchingInfo[0].point);
+            margin = affineTransform.transform(stitchingInfo.margin),
+            point = affineTransform.transform(stitchingInfo.point);
 
         affineTransform.preConcatenate(imMatch.AffineTransform.getTranslationInstance({
             x: point.x + margin.x,
@@ -147,8 +178,51 @@ imMatch.engine = {
         return this;
     },
 
-    sendAllData: function() {
+    exchange: function(stitchingInfo) {
+        var serializedViewport = imMatch.viewport.serialize(), serializedScenes = [], serializedSprites = [];
+        jQuery.each(imMatch.scenes, function(i, scene) {
+            if (scene.viewport.id !== imMatch.viewport.id) {
+                return;
+            }
 
+            push.call(serializedScenes, scene.serialize());
+            jQuery.each(scene.sprites, function(i, sprite) {
+                push.call(serializedSprites, sprite.serialize());
+            });
+        });
+
+        this.request.exchange.call(imMatch.socketClient, {
+            toGroupID: stitchingInfo[1].groupID,
+            viewport: serializedViewport,
+            scenes: serializedScenes,
+            sprites: serializedSprites
+        });
+    },
+
+    addTransformableObjects: function(jsonObject) {
+        var viewport = new imMatch.Viewport();
+        viewport.deserialize(jsonObject.viewport);
+
+        jQuery.each(jsonObject.scenes, function(i, serializedScene) {
+            var scene = new imMatch.Scene(false);
+            scene.deserialize(serializedScene);
+            scene.viewport = viewport;
+
+            jQuery.each(jsonObject.sprites, function(i, serializedSprite) {
+                if (serializedSprite.sceneID !== scene.id) {
+                    return;
+                }
+
+                var sprite = new imMatch.Sprite();
+                sprite.scene = scene;
+                sprite.deserialize(serializedSprite);
+                push.call(scene.sprites, sprite);
+            });
+
+            push.call(imMatch.scenes, scene);
+        });
+
+        ++imMatch.device.numDevices;
     }
 };
 
@@ -159,7 +233,9 @@ jQuery.extend(imMatch, {
         }
 
         imMatch.socketClient = new imMatch.SocketClient();
-        imMatch.engine.synchronize = imMatch.socketClient.request.synchronize;
+        imMatch.engine.request = imMatch.socketClient.request;
+        imMatch.engine.caches = imMatch.socketClient.caches;
+
         imMatch.canvas = new imMatch.CanvasAdapter(canvasID);
 
         imMatch.addTouchMouseHandlers();

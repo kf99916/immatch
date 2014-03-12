@@ -7,7 +7,7 @@ imMatch.Cache = function() {
 
 imMatch.Cache.prototype = {
     queue: function(type, data, cmp) {
-        if (imMatch.isEmpty(type) || jQuery.isEmptyObject(data)) {
+        if (imMatch.isEmpty(type) || imMatch.isEmpty(data)) {
             return this;
         }
 

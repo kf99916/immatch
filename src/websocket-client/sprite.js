@@ -14,6 +14,7 @@ imMatch.Sprite = function() {
     this.cursorGroup = new imMatch.CursorGroup();
     this.affineTransform = new imMatch.AffineTransform();
 
+    this.scene = null;
     this.image = null;
 
     this.touchable = true;
@@ -81,6 +82,22 @@ jQuery.extend(imMatch.Sprite.prototype, imMatch.transformable, {
             affineTransform: [this.affineTransform.m00, this.affineTransform.m10, this.affineTransform.m01,
                                 this.affineTransform.m11, this.affineTransform.m02, this.affineTransform.m12]
         };
+    },
+
+    deserialize: function(data) {
+        if (jQuery.isArray(data.affineTransform) && data.affineTransform.length === 6) {
+            this.affineTransform = imMatch.AffineTransform.apply(this, data.affineTransform);
+            delete data.affineTransform;
+        }
+
+        if (!jQuery.isEmptyObject(data.imageID)) {
+            this.setImage(data.imageID);
+            delete data.imageID;
+        }
+
+        delete data.sceneID;
+
+        return jQuery.extend(true, this, data);
     },
 
     getFrame: function() {
