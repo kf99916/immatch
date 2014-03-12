@@ -12,7 +12,7 @@ imMatch.Cache.prototype = {
         }
 
         this[type] = this[type] || [];
-        this[type].push(data);
+        push.call(this[type], data);
 
         if (!jQuery.isFunction(cmp)) {
             return this;

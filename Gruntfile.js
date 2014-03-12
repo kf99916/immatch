@@ -134,7 +134,7 @@ module.exports = function(grunt) {
 			},
 			dist: {
                 options: srcHintOptions,
-                src: ["dist/immatch-jshint.js", "dist/dist/immatch-ws-server-jshint.js"]
+                src: ["dist/immatch-jshint.js", "dist/immatch-ws-server-jshint.js"]
             }
 		},
         clean: ["dist/immatch-jshint.js", "dist/immatch-ws-server-jshint.js"],

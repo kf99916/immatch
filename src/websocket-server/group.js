@@ -70,12 +70,12 @@ imMatch.Group.prototype = {
 
         this.broadcast(jsonObject);
 
-        if (imMatch.isEmpty(this.numDevicesSynced[data.chunk])) {
-            this.numDevicesSynced[data.chunk] = 0;
+        if (imMatch.isEmpty(this.numDevicesSynced[jsonObject.chunk])) {
+            this.numDevicesSynced[jsonObject.chunk] = 0;
         }
 
-        ++this.numDevicesSynced[data.chunk];
-        if (this.numDevicesSynced[data.chunk] !== this.numDevices) {
+        ++this.numDevicesSynced[jsonObject.chunk];
+        if (this.numDevicesSynced[jsonObject.chunk] !== this.numDevices) {
             return this;
         }
 
@@ -98,7 +98,7 @@ imMatch.Group.prototype = {
     getStitchingInfo: function() {
         var self = this, stitchingInfos = imMatch.webSocketServer.caches.get("stitchingInfo"), result;
         jQuery.each(stitchingInfos, function(i, stitchingInfo) {
-            if (self.id == stitchingInfo[0].groupID || self.id == stitchingInfo[1].groupID) {
+            if (self.id === stitchingInfo[0].groupID || self.id === stitchingInfo[1].groupID) {
                 result = stitchingInfo;
                 return false;
             }
@@ -113,7 +113,7 @@ imMatch.Group.prototype = {
             return this;
         }
 
-        if (this.id == stitchingInfo[1].groupID) {
+        if (this.id === stitchingInfo[1].groupID) {
             stitchingInfo = stitchingInfo.reverse();
         }
 

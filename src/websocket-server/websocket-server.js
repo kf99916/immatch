@@ -4,7 +4,7 @@ jQuery.extend(ws.Server.prototype, {
 
     caches: new imMatch.Cache(),
 
-    addGroup: function(webSocket, /* Optional */ deviceID) {
+    addGroup: function(webSocket) {
         var group, device;
         if (jQuery.isEmptyObject(webSocket)) {
             imMatch.logWarn("[ws.Server.addGroup] NO webSocket.");
@@ -27,7 +27,7 @@ jQuery.extend(ws.Server.prototype, {
 
     monitorCaches: function() {
         var now = Date.now();
-        this.caches.remove("stitchingCandidate", function(candidate, i) {
+        this.caches.remove("stitchingCandidate", function(candidate) {
             return (Math.abs(now - candidate.timestamp) > imMatch.lifetimeCandidate);
         });
 
@@ -41,8 +41,8 @@ jQuery.extend(ws.Server.prototype, {
             return this;
         }
 
-        this.caches.remove("stitchingCandidate", function(candidate, i) {
-            return (newCandidate.groupID == candidate.groupID && newCandidate.deviceID == candidate.deviceID);
+        this.caches.remove("stitchingCandidate", function(candidate) {
+            return (newCandidate.groupID === candidate.groupID && newCandidate.deviceID === candidate.deviceID);
         });
 
         this.caches.queue("stitchingCandidate", newCandidate);
@@ -57,7 +57,7 @@ jQuery.extend(ws.Server.prototype, {
         }
 
         jQuery.each(candidates.reverse(), function(i, candidate) {
-            if (jsonObject.deviceID != candidate.deviceID &&
+            if (jsonObject.deviceID !== candidate.deviceID &&
                 Math.abs(now - candidate.timestamp) < imMatch.lifetimeCandidate) {
                 match = candidate;
                 return false;
@@ -107,7 +107,7 @@ jQuery.extend(ws.Server.prototype, {
             }
 
             // Restitch devices
-            if (group.id == matchGroup.id) {
+            if (group.id === matchGroup.id) {
                 return this;
             }
 
@@ -130,6 +130,7 @@ jQuery.extend(ws.Server.prototype, {
 });
 
 imMatch.logLevel = imMatch.infoLevel;
+imMatch.isReady = returnTrue;
 
 imMatch.webSocketServer = new ws.Server({port: 8080, host:null});
 

@@ -28,7 +28,7 @@ imMatch.Cursor.prototype = {
                 return;
             }
 
-            self.points.push(point);
+            push.call(self.points, point);
             ++self.numPoints;
         });
 
@@ -204,7 +204,7 @@ imMatch.CursorGroup.prototype = {
                 return false;
             }
 
-            startEndPoints.push({
+            push.call(startEndPoints, {
                 start: cursor.points[0],
                 end: cursor.points[cursor.numPoints-1]
             });
@@ -239,7 +239,7 @@ imMatch.CursorGroup.prototype = {
                 return false;
             }
 
-            startEndPoints.push({
+            push.call(startEndPoints, {
                 start: cursor.points[0],
                 end: cursor.points[cursor.numPoints-1]
             });
