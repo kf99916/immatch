@@ -39,7 +39,7 @@ imMatch.engine = {
             break;
             case imMatch.mode.stitching.exchange:
                 stitchingInfo = this.caches.get("stitchingInfo")[0];
-                this.updateViewportAffineTransform(stitchingInfo);
+                this.updateViewportAffineTransform(stitchingInfo[0]);
                 this.exchange(stitchingInfo);
                 this.mode = imMatch.mode.stitching.done;
             break;
@@ -148,9 +148,12 @@ imMatch.engine = {
                 });
             break;
             case imMatch.mainMode.stitched:
-                setTimeout(function() {
+              /*  setTimeout(function() {
                     self.run();
-                }, this.interval, Date.now() + this.interval);
+                }, this.interval, Date.now() + this.interval);*/
+                window.requestAnimationFrame(function() {
+                    self.run();
+                });
             break;
             default:
                 window.requestAnimationFrame(function() {
@@ -163,17 +166,21 @@ imMatch.engine = {
     },
 
     updateViewportAffineTransform: function(stitchingInfo) {
-        var rad = imMatch.rad(stitchingInfo.orientation, {x: 1, y: 0}),
-            affineTransform = imMatch.AffineTransform.getRotateInstance(rad),
+        var rad = imMatch.rad(stitchingInfo.orientation, {x: 1, y: 0}) - imMatch.viewport.rad,
             margin = affineTransform.transform(stitchingInfo.margin),
-            point = affineTransform.transform(stitchingInfo.point);
+            point = affineTransform.transform(stitchingInfo.point),
+            translationFactor = {
+                x: point.x + margin.x,
+                y: point.y + margin.y
+            };
 
-        affineTransform.preConcatenate(imMatch.AffineTransform.getTranslationInstance({
-            x: point.x + margin.x,
-            y: point.y + margin.y
-        }));
+        imMatch.viewport.rotate(rad);
+        imMatch.viewport.translate(translationFactor);
 
-        imMatch.viewport.affineTransform.preConcatenate(affineTransform);
+        jQuery.each(imMatch.scenes, function(i, scene) {
+            scene.rotate(rad);
+            scene.translate(translationFactor);
+        });
 
         return this;
     },

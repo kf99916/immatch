@@ -20,7 +20,8 @@ imMatch.Scene = function(incrementSceneZ) {
     this.sprites = [];
     this.spriteZ = 0;
 
-    this.affineTransform = new imMatch.AffineTransform();
+    this.translationFactor = {x: 0, y: 0};
+    this.rad = 0;
 };
 
 jQuery.extend(imMatch.Scene.prototype, imMatch.transformable, {
@@ -32,7 +33,7 @@ jQuery.extend(imMatch.Scene.prototype, imMatch.transformable, {
             // Local -> Global -> Scene
             case imMatch.coordinate.local:
                 target.coordinate = imMatch.coordinate.scene;
-                result = this.getAffineTransform2Local().createInverse().transform(target);
+                result = this.viewport.inverseTransform(this.inverseTransform(target));
             break;
             // Global -> Scene
             case imMatch.coordinate.global:
@@ -52,8 +53,14 @@ jQuery.extend(imMatch.Scene.prototype, imMatch.transformable, {
         return jQuery.extend(target, result);
     },
 
+    getAppliedTransform: function() {
+        return imMatch.AffineTransform.getTranslationInstance(this.translationFactor).preRotate(this.rad);
+    },
+
     getAffineTransform2Local: function() {
-        return this.affineTransform.clone().preConcatenate(this.viewport.affineTransform);
+        return this.viewport.getAppliedTransform().createInverse().
+                    preConcatenate(this.getAppliedTransform()).
+                    preConcatenate(this.viewport.getAffineTransform2Local());
     },
 
     serialize: function() {
@@ -62,10 +69,29 @@ jQuery.extend(imMatch.Scene.prototype, imMatch.transformable, {
             z: this.z,
             width: this.width,
             height: this.height,
-            spriteZ: this.spriteZ,
-            affineTransform: [this.affineTransform.m00, this.affineTransform.m10, this.affineTransform.m01,
-                                this.affineTransform.m11, this.affineTransform.m02, this.affineTransform.m12]
+            translationFactor: this.translationFactor,
+            rad: this.rad,
+            spriteZ: this.spriteZ
         };
+    },
+
+    translate: function(translationFactor) {
+        this.translationFactor.x += translationFactor.x;
+        this.translationFactor.y += translationFactor.y;
+        return this;
+    },
+
+    rotate: function(rad) {
+        this.rad += rad;
+        return this;
+    },
+
+    scale: function() {
+        return this;
+    },
+
+    shear: function() {
+        return this;
     },
 
     isTouched: function(point) {

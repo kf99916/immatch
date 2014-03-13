@@ -32,7 +32,7 @@ jQuery.extend(imMatch.Sprite.prototype, imMatch.transformable, {
             // Local -> Global -> Scene -> Sprite
             case imMatch.coordinate.local:
                 target.coordinate = imMatch.coordinate.sprite;
-                result = this.getAffineTransform2Local().createInverse().transform(target);
+                result = this.scene.viewport.inverseTransform(this.scene.inverseTransform(this.inverseTransform(target)));
             break;
             // Global -> Scene -> Sprite
             case imMatch.coordinate.global:
@@ -58,9 +58,10 @@ jQuery.extend(imMatch.Sprite.prototype, imMatch.transformable, {
     },
 
     getAffineTransform2Local: function() {
-        return this.affineTransform.clone().
-                    preConcatenate(this.scene.affineTransform).
-                    preConcatenate(this.scene.viewport.affineTransform);
+        return this.scene.viewport.getAppliedTransform().createInverse().
+                    preConcatenate(this.scene.getAppliedTransform()).
+                    preConcatenate(this.affineTransform).
+                    preConcatenate(this.scene.viewport.getAffineTransform2Local());
     },
 
     serialize: function() {
@@ -102,8 +103,8 @@ jQuery.extend(imMatch.Sprite.prototype, imMatch.transformable, {
 
     getFrame: function() {
         return imMatch.AffineTransform.getScaleInstance({
-                        x: this.image.ppi * imMatch.canvas.ratio,
-                        y: this.image.ppi * imMatch.canvas.ratio}).
+                        x: this.image.ppi ,
+                        y: this.image.ppi}).
                         transform({x: this.width, y: this.height});
     },
 

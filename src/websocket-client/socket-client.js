@@ -28,7 +28,7 @@ imMatch.SocketClient = function() {
         }
 
         jsonObject = jQuery.parseJSON(event.data);
-        imMatch.logInfo("[WebSocket.onmessage] Action Type: " + jsonObject.action, jsonObject);
+        imMatch.logDebug("[WebSocket.onmessage] Action Type: " + jsonObject.action, jsonObject);
 
         response = self.response[jsonObject.action];
         if (imMatch.isEmpty(response)) {
@@ -95,7 +95,7 @@ imMatch.SocketClient.prototype = {
         synchronize: function(data) {
             data = this.fixSynchronizData(data);
             this.send(this.fixRequestData(data, "synchronize"));
-            imMatch.logInfo("[SocketClient.request.synchronize] data:", data);
+            imMatch.logDebug("[SocketClient.request.synchronize] data:", data);
         },
 
         exchange: function(data) {

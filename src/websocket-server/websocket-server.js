@@ -186,7 +186,7 @@ imMatch.webSocketServer.on("connection", function(webSocket) {
         }
 
         jsonObject = jQuery.parseJSON(event);
-        imMatch.logInfo("[WebSocket.onmessage] Action Type: " + jsonObject.action, jsonObject);
+        imMatch.logDebug("[WebSocket.onmessage] Action Type: " + jsonObject.action, jsonObject);
 
         response = self.response[jsonObject.action];
         if (imMatch.isEmpty(response)) {

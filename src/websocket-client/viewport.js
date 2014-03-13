@@ -1,4 +1,4 @@
-imMatch.Viewport = function(affineTransform) {
+imMatch.Viewport = function() {
     // Allow instantiation without the 'new' keyword
     if ( !(this instanceof imMatch.Viewport) ) {
         return new imMatch.Viewport();
@@ -9,9 +9,11 @@ imMatch.Viewport = function(affineTransform) {
     this.width = window.innerWidth / imMatch.device.ppi;
     this.height = window.innerHeight / imMatch.device.ppi;
 
-    //  Global Coordinate: The origin is initialized as the center of imMatch.viewport
-    this.affineTransform = affineTransform || imMatch.AffineTransform.getTranslationInstance({
-        x: (this.width / 2), y: (this.height / 2)});
+    this.translationFactor = {x: 0, y: 0};
+    this.rad = 0;
+
+    this.affineTransform = imMatch.AffineTransform.getTranslationInstance({
+        x: this.width / 2, y: this.height / 2});
 };
 
 jQuery.extend(imMatch.Viewport.prototype, imMatch.transformable, {
@@ -39,41 +41,47 @@ jQuery.extend(imMatch.Viewport.prototype, imMatch.transformable, {
         return jQuery.extend(target, result);
     },
 
+    getAppliedTransform: function() {
+        return imMatch.AffineTransform.getTranslationInstance(this.translationFactor).preRotate(this.rad);
+    },
+
     serialize: function() {
         return {
             id: this.id,
             width: this.width,
             height: this.height,
-            affineTransform: [this.affineTransform.m00, this.affineTransform.m10, this.affineTransform.m01,
-                                this.affineTransform.m11, this.affineTransform.m02, this.affineTransform.m12]
+            translationFactor: this.translationFactor,
+            rad: this.rad
         };
     },
 
     transform: function(vec) {
-        return this.affineTransform.transform(vec);
+        var affineTransform = this.getAppliedTransform().createInverse().concatenate(this.affineTransform);
+        return affineTransform.transform(vec);
     },
 
     inverseTransform: function(vec) {
-        return this.affineTransform.createInverse().transform(vec);
+        var affineTransform = this.affineTransform.createInverse().preConcatenate(this.getAppliedTransform());
+        return affineTransform.transform(vec);
     },
 
     translate: function(translationFactor) {
-        translationFactor.x = -translationFactor.x;
-        translationFactor.y = -translationFactor.y;
-        return this.affineTransform.preTranslate(translationFactor);
+        this.translationFactor.x += translationFactor.x;
+        this.translationFactor.y += translationFactor.y;
+        return this;
     },
 
-    rotate: function(rad, anchorPoint) {
-        rad = -rad;
-        return this.affineTransform.preRotate(rad, anchorPoint);
+    rotate: function(rad) {
+        this.rad += rad;
+        return this;
     },
 
-    scale: function(scalingFactor) {
-        return this.affineTransform.preScale(scalingFactor);
+    scale: function() {
+        return this;
     },
 
-    shear: function(shearFactor) {
-        return this.affineTransform.preShear(shearFactor);
+    shear: function() {
+        return this;
     }
 });
 

@@ -1,11 +1,14 @@
 imMatch.transformable = {
-    // ===================== The following functions must be overriding =====================
     transformWithCoordinate: function(vec, /* Optional */ deep) {
         var target, result;
         deep = deep || false;
         target = (deep)? jQuery.extend(target, vec) : vec;
         result = this.transform(target);
         return jQuery.extend(target, result);
+    },
+
+    getAppliedTransform: function() {
+        return this.affineTransform;
     },
 
     getAffineTransform2Local: function() {
@@ -28,7 +31,12 @@ imMatch.transformable = {
         return jQuery.extend(true, this, data);
     },
 
-    // ===================== The above functions must be overriding =====================
+    getFrame: function() {
+        return imMatch.AffineTransform.getScaleInstance({
+                        x: imMatch.device.ppi,
+                        y: imMatch.device.ppi}).
+                        transform({x: this.width, y: this.height});
+    },
 
     getBoundingBox: function() {
         var affineTransform2Local = this.getAffineTransform2Local(),
@@ -50,11 +58,11 @@ imMatch.transformable = {
     },
 
     transform: function(vec) {
-        return this.affineTransform.transform(vec);
+        return this.getAppliedTransform().transform(vec);
     },
 
     inverseTransform: function(vec) {
-        return this.affineTransform.createInverse().transform(vec);
+        return this.getAppliedTransform().createInverse().transform(vec);
     },
 
     translate: function(translationFactor) {
