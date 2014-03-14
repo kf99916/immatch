@@ -56,7 +56,7 @@ imMatch.localGesture = {
     searchTouchedSprite: function(touchMouseEvent) {
         var result;
         jQuery.each(imMatch.scenes, function(i, scene) {
-            if (!scene.isTouched(touchMouseEvent)) {
+            if (scene.solid && !scene.isTouched(touchMouseEvent)) {
                 return;
             }
 

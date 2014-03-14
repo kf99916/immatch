@@ -19,8 +19,11 @@ imMatch.engine = {
 
     createDebugPanel: function(debugPanelID) {
         this.debugPanel = jQuery("<div>", {id: debugPanelID}).appendTo("body");
-        this.debugPanel.offset({top: 15, left: 15});
-        this.debugPanel.width(200).css("background-color","#E5E4E2");
+        this.debugPanel.offset({top: 10, left: 10});
+        this.debugPanel.width(200).css({
+            "font-size": 10,
+            "background-color": "#E5E4E2"
+        });
         return this.debugPanel;
     },
 
@@ -30,10 +33,13 @@ imMatch.engine = {
         this.debugPanel.append("<b>Group</b>: " + imMatch.device.groupID + "<br>");
         this.debugPanel.append("<b>#Devices</b>: " + imMatch.device.numDevices + "<br>");
         this.debugPanel.append("<b>Mode</b>: 0x" + this.mode.toString(16) + "<br>");
+        this.debugPanel.append("<b>Ready</b>: " + this.isReady() + "<br>");
         this.debugPanel.append("<b>Web Socket Status</b>: " + imMatch.socketClient.webSocket.readyState + "<br>");
         this.debugPanel.append("<b>Position</b>: (" +
-            imMatch.viewport.translationFactor.x.toFixed(3) + ", " + imMatch.viewport.translationFactor.y.toFixed(3) + ")<br>");
-        this.debugPanel.append("<b>Angle </b>: " + (imMatch.viewport.rad * 180 / Math.PI).toFixed(3) + " degree<br>");
+            imMatch.viewport.translationFactor.x.toFixed(5) + ", " + imMatch.viewport.translationFactor.y.toFixed(5) + ")<br>");
+        this.debugPanel.append("<b>Width </b>: " + imMatch.viewport.width.toFixed(5) + " inches<br>");
+        this.debugPanel.append("<b>Height </b>: " + imMatch.viewport.height.toFixed(5) + " inches<br>");
+        this.debugPanel.append("<b>Angle </b>: " + (imMatch.viewport.rad * 180 / Math.PI).toFixed(5) + " degrees<br>");
         return this;
     },
 

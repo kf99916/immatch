@@ -51,7 +51,9 @@ jQuery.extend(imMatch.Viewport.prototype, imMatch.transformable, {
             width: this.width,
             height: this.height,
             translationFactor: this.translationFactor,
-            rad: this.rad
+            rad: this.rad,
+            affineTransform: [this.affineTransform.m00, this.affineTransform.m10, this.affineTransform.m01,
+                                this.affineTransform.m11, this.affineTransform.m02, this.affineTransform.m12]
         };
     },
 

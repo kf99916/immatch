@@ -134,7 +134,6 @@ jQuery.extend(ws.Server.prototype, {
         exchange: function(jsonObject) {
             var toGroup = this.groups[jsonObject.toGroupID];
             if (jQuery.isEmptyObject(toGroup)) {
-                console.log("========================= " + jsonObject.toGroupID);
                 return this;
             }
 

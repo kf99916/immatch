@@ -20,6 +20,7 @@ imMatch.Scene = function(incrementSceneZ) {
     this.sprites = [];
     this.spriteZ = 0;
 
+    this.solid = false;
     this.translationFactor = {x: 0, y: 0};
     this.rad = 0;
 };
@@ -69,6 +70,7 @@ jQuery.extend(imMatch.Scene.prototype, imMatch.transformable, {
             z: this.z,
             width: this.width,
             height: this.height,
+            solid: this.solid,
             translationFactor: this.translationFactor,
             rad: this.rad,
             spriteZ: this.spriteZ

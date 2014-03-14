@@ -13,8 +13,6 @@ $im.ready(function() {
     sprite.maxScalingFactor = 2;
     sprite.minScalingFactor = 0.5;
 
-    sprite.translate({x: imMatch.viewport.width / 2, y: 0});
-
     scene.addSprite(sprite);
 
     $im.addScene(scene);
