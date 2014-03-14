@@ -15,11 +15,37 @@ imMatch.engine = {
     // imMatch.socketClient.caches
     caches: null,
 
+    debugPanel: null,
+
+    createDebugPanel: function(debugPanelID) {
+        this.debugPanel = jQuery("<div>", {id: debugPanelID}).appendTo("body");
+        this.debugPanel.offset({top: 15, left: 15});
+        this.debugPanel.width(200).css("background-color","#E5E4E2");
+        return this.debugPanel;
+    },
+
+    updateDebugPanel: function() {
+        this.debugPanel.empty();
+        this.debugPanel.append("<b>Device ID</b>: " + imMatch.device.id + "<br>");
+        this.debugPanel.append("<b>Group</b>: " + imMatch.device.groupID + "<br>");
+        this.debugPanel.append("<b>#Devices</b>: " + imMatch.device.numDevices + "<br>");
+        this.debugPanel.append("<b>Mode</b>: 0x" + this.mode.toString(16) + "<br>");
+        this.debugPanel.append("<b>Web Socket Status</b>: " + imMatch.socketClient.webSocket.readyState + "<br>");
+        this.debugPanel.append("<b>Position</b>: (" +
+            imMatch.viewport.translationFactor.x.toFixed(3) + ", " + imMatch.viewport.translationFactor.y.toFixed(3) + ")<br>");
+        this.debugPanel.append("<b>Angle </b>: " + (imMatch.viewport.rad * 180 / Math.PI).toFixed(3) + " degree<br>");
+        return this;
+    },
+
     run: function(timestamp) {
         var stamp = {
                 time: timestamp,
                 frame: this.frame,
                 chunk: Math.floor(this.frame / imMatch.chunkSize) * imMatch.chunkSize};
+
+        if (imMatch.logLevel === imMatch.debugLevel) {
+            this.updateDebugPanel();
+        }
 
         this.updateMode(stamp);
         this.updateReady(stamp);
@@ -167,6 +193,7 @@ imMatch.engine = {
 
     updateViewportAffineTransform: function(stitchingInfo) {
         var rad = imMatch.rad(stitchingInfo.orientation, {x: 1, y: 0}) - imMatch.viewport.rad,
+            affineTransform = imMatch.AffineTransform.getRotateInstance(rad),
             margin = affineTransform.transform(stitchingInfo.margin),
             point = affineTransform.transform(stitchingInfo.point),
             translationFactor = {
@@ -235,6 +262,7 @@ imMatch.engine = {
 
 jQuery.extend(imMatch, {
     run: function(canvasID) {
+        var debugPanelID = "debugPanel";
         if (!imMatch.isReady()) {
             jQuery.error("Please invoke $im.ready(fn).");
         }
@@ -246,6 +274,13 @@ jQuery.extend(imMatch, {
         imMatch.canvas = new imMatch.CanvasAdapter(canvasID);
 
         imMatch.addTouchMouseHandlers();
+
+        if (imMatch.logLevel === imMatch.debugLevel) {
+            imMatch.engine.debugPanel = document.getElementById(debugPanelID);
+            if (jQuery.isEmptyObject(imMatch.engine.debugPanel)) {
+                imMatch.engine.createDebugPanel(debugPanelID);
+            }
+        }
 
         imMatch.engine.lastRunTimestamp = Date.now();
         imMatch.engine.run(imMatch.engine.lastRunTimestamp);
