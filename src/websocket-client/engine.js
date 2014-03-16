@@ -17,6 +17,10 @@ imMatch.engine = {
 
     debugPanel: null,
 
+    isShowDebugPanel: function() {
+        return (imMatch.logLevel <= imMatch.infoLevel);
+    },
+
     createDebugPanel: function(debugPanelID) {
         this.debugPanel = jQuery("<div>", {id: debugPanelID}).appendTo("body");
         this.debugPanel.offset({top: 10, left: 10});
@@ -49,7 +53,7 @@ imMatch.engine = {
                 frame: this.frame,
                 chunk: Math.floor(this.frame / imMatch.chunkSize) * imMatch.chunkSize};
 
-        if (imMatch.logLevel === imMatch.debugLevel) {
+        if (this.isShowDebugPanel()) {
             this.updateDebugPanel();
         }
 
@@ -282,7 +286,7 @@ jQuery.extend(imMatch, {
 
         imMatch.addTouchMouseHandlers();
 
-        if (imMatch.logLevel === imMatch.debugLevel) {
+        if (imMatch.engine.isShowDebugPanel()) {
             imMatch.engine.debugPanel = document.getElementById(debugPanelID);
             if (jQuery.isEmptyObject(imMatch.engine.debugPanel)) {
                 imMatch.engine.createDebugPanel(debugPanelID);
