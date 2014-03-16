@@ -50,7 +50,7 @@ imMatch.Cursor.prototype = {
         var result = true, lastPoint = this.points[0], lastVelocity;
         jQuery.each(this.points, function(i, point) {
             // Sampling each imMatch.threadsholdAboutSyncGesture.samplingTime ms
-            var duration = point.timestamp - lastPoint.timestamp, velocity;
+            var duration = point.timeStamp - lastPoint.timeStamp, velocity;
             if (duration < imMatch.threadsholdAboutSyncGesture.samplingTime) {
                 return;
             }

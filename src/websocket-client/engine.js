@@ -5,7 +5,7 @@ imMatch.engine = {
 
     mode: imMatch.mode.alone,
 
-    lastRunTimestamp: 0,
+    lastRunTimeStamp: 0,
 
     frame: 0, // TODO: Reset
 
@@ -43,9 +43,9 @@ imMatch.engine = {
         return this;
     },
 
-    run: function(timestamp) {
+    run: function(timeStamp) {
         var stamp = {
-                time: timestamp,
+                time: timeStamp,
                 frame: this.frame,
                 chunk: Math.floor(this.frame / imMatch.chunkSize) * imMatch.chunkSize};
 
@@ -71,7 +71,7 @@ imMatch.engine = {
             break;
             case imMatch.mode.stitching.exchange:
                 stitchingInfo = this.caches.get("stitchingInfo")[0];
-                this.updateViewportAffineTransform(stitchingInfo[0]);
+                this.updateViewportAffineTransform(stitchingInfo[1]);
                 this.exchange(stitchingInfo);
                 this.mode = imMatch.mode.stitching.done;
             break;
@@ -156,13 +156,14 @@ imMatch.engine = {
         switch(imMatch.getMainMode(this.mode)) {
             case imMatch.mainMode.alone:
             case imMatch.mainMode.stitching:
-                this.interval = stamp.time - this.lastRunTimestamp;
+                this.interval = stamp.time - this.lastRunTimeStamp;
             break;
             case imMatch.mainMode.stitched:
             // TODO
+                this.interval = stamp.time - this.lastRunTimeStamp;
             break;
             default:
-                this.interval = stamp.time - this.lastRunTimestamp;
+                this.interval = stamp.time - this.lastRunTimeStamp;
             break;
         }
 
@@ -176,7 +177,7 @@ imMatch.engine = {
             case imMatch.mainMode.alone:
             case imMatch.mainMode.stitching:
                 window.requestAnimationFrame(function() {
-                    self.run();
+                    self.run(Date.now());
                 });
             break;
             case imMatch.mainMode.stitched:
@@ -184,12 +185,12 @@ imMatch.engine = {
                     self.run();
                 }, this.interval, Date.now() + this.interval);*/
                 window.requestAnimationFrame(function() {
-                    self.run();
+                    self.run(Date.now());
                 });
             break;
             default:
                 window.requestAnimationFrame(function() {
-                    self.run();
+                    self.run(Date.now());
                 });
             break;
         }
@@ -245,8 +246,8 @@ imMatch.engine = {
 
         jQuery.each(jsonObject.scenes, function(i, serializedScene) {
             var scene = new imMatch.Scene(false);
-            scene.deserialize(serializedScene);
             scene.viewport = viewport;
+            scene.deserialize(serializedScene);
 
             jQuery.each(jsonObject.sprites, function(i, serializedSprite) {
                 if (serializedSprite.sceneID !== scene.id) {
@@ -288,7 +289,7 @@ jQuery.extend(imMatch, {
             }
         }
 
-        imMatch.engine.lastRunTimestamp = Date.now();
-        imMatch.engine.run(imMatch.engine.lastRunTimestamp);
+        imMatch.engine.lastRunTimeStamp = Date.now();
+        imMatch.engine.run(imMatch.engine.lastRunTimeStamp);
     }
 });

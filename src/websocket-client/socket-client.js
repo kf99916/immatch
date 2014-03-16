@@ -70,7 +70,7 @@ imMatch.SocketClient.prototype = {
         data.action = action;
         data.deviceID = imMatch.device.id;
         data.groupID = imMatch.device.groupID;
-        data.timestamp = Date.now();
+        data.timeStamp = data.timeStamp || Date.now();
         return data;
     },
 
@@ -88,24 +88,24 @@ imMatch.SocketClient.prototype = {
 
     request: {
         tryToStitch: function(data) {
-            this.send(this.fixRequestData(data, "tryToStitch"));
             imMatch.logInfo("[SocketClient.request.tryToStitch] data:", data);
+            this.send(this.fixRequestData(data, "tryToStitch"));
         },
 
         synchronize: function(data) {
             data = this.fixSynchronizData(data);
-            this.send(this.fixRequestData(data, "synchronize"));
             imMatch.logDebug("[SocketClient.request.synchronize] data:", data);
+            this.send(this.fixRequestData(data, "synchronize"));
         },
 
         exchange: function(data) {
-            this.send(this.fixRequestData(data, "exchange"));
             imMatch.logInfo("[SocketClient.request.exchange] data:", data);
+            this.send(this.fixRequestData(data, "exchange"));
         },
 
         exchangeDone: function(data) {
-            this.send(this.fixRequestData(data, "exchangeDone"));
             imMatch.logInfo("[SocketClient.request.exchangeDone] data:", data);
+            this.send(this.fixRequestData(data, "exchangeDone"));
         }
     },
 

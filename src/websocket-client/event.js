@@ -1,21 +1,23 @@
 jQuery.extend(imMatch, {
     fixTouchMouseEvent: function(event, touchMouse) {
+        var jQueryEvent;
         touchMouse.identifier = touchMouse.identifier || 0;
         touchMouse.pageX = touchMouse.pageX || 0;
         touchMouse.pageY = touchMouse.pageY || 0;
-        touchMouse.timestamp = Date.now();
 
         // Local Coordinate: The origin is initialized as the upper left corner of imMatch.viewport
-        return new jQuery.Event(event, {
-                    id: touchMouse.identifier,
-                    x: touchMouse.pageX / imMatch.device.ppi,
-                    y: touchMouse.pageY / imMatch.device.ppi,
-                    order: touchOrder++,
-                    coordinate: imMatch.coordinate.local,
-                    deviceID: imMatch.device.id,
-                    frame: imMatch.engine.frame,
-                    timestamp: touchMouse.timestamp
-                });
+        jQueryEvent =  new jQuery.Event(event, {
+                        id: touchMouse.identifier,
+                        x: touchMouse.pageX / imMatch.device.ppi,
+                        y: touchMouse.pageY / imMatch.device.ppi,
+                        order: touchOrder++,
+                        coordinate: imMatch.coordinate.local,
+                        deviceID: imMatch.device.id,
+                        frame: imMatch.engine.frame
+                    });
+
+        delete jQueryEvent.originalEvent;
+        return jQueryEvent;
     }
 });
 

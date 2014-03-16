@@ -28,7 +28,7 @@ jQuery.extend(ws.Server.prototype, {
     monitorCaches: function() {
         var now = Date.now();
         this.caches.remove("stitchingCandidate", function(candidate) {
-            return (Math.abs(now - candidate.timestamp) > imMatch.lifetimeCandidate);
+            return (Math.abs(now - candidate.timeStamp) > imMatch.lifetimeCandidate);
         });
 
         setTimeout(this.monitorCaches.bind(this), imMatch.lifetimeCandidate);
@@ -58,7 +58,7 @@ jQuery.extend(ws.Server.prototype, {
 
         jQuery.each(candidates.reverse(), function(i, candidate) {
             if (jsonObject.deviceID !== candidate.deviceID &&
-                Math.abs(now - candidate.timestamp) < imMatch.lifetimeCandidate) {
+                Math.abs(now - candidate.timeStamp) < imMatch.lifetimeCandidate) {
                 match = candidate;
                 return false;
             }
