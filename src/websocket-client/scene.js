@@ -13,9 +13,9 @@ imMatch.Scene = function(incrementSceneZ) {
         ++sceneZ;
     }
 
-    this.viewport = imMatch.viewport;
-    this.width = this.viewport.width;
-    this.height = this.viewport.height;
+    this.viewportID = imMatch.viewport.id;
+    this.width = imMatch.viewport.width;
+    this.height = imMatch.viewport.height;
 
     this.sprites = [];
     this.spriteZ = 0;
@@ -34,7 +34,7 @@ jQuery.extend(imMatch.Scene.prototype, imMatch.transformable, {
             // Local -> Global -> Scene
             case imMatch.coordinate.local:
                 target.coordinate = imMatch.coordinate.scene;
-                result = this.viewport.inverseTransform(this.inverseTransform(target));
+                result = imMatch.viewport.inverseTransform(this.inverseTransform(target));
             break;
             // Global -> Scene
             case imMatch.coordinate.global:
@@ -59,22 +59,31 @@ jQuery.extend(imMatch.Scene.prototype, imMatch.transformable, {
     },
 
     getAffineTransform2Local: function() {
-        return this.viewport.getAppliedTransform().createInverse().
+        return imMatch.viewport.getAppliedTransform().createInverse().
                     preConcatenate(this.getAppliedTransform()).
-                    preConcatenate(this.viewport.getAffineTransform2Local());
+                    preConcatenate(imMatch.viewport.getAffineTransform2Local());
     },
 
     serialize: function() {
         return {
             id: this.id,
+            viewportID: this.viewportID,
             z: this.z,
             width: this.width,
             height: this.height,
             solid: this.solid,
             translationFactor: this.translationFactor,
-            rad: this.rad,
-            spriteZ: this.spriteZ
+            rad: this.rad
         };
+    },
+
+    deserialize: function(data) {
+        if (jQuery.isArray(data.affineTransform) && data.affineTransform.length === 6) {
+            this.affineTransform = imMatch.AffineTransform.apply(this, data.affineTransform);
+            delete data.affineTransform;
+        }
+
+        return jQuery.extend(true, this, data);
     },
 
     translate: function(translationFactor) {

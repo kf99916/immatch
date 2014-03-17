@@ -17,7 +17,7 @@ imMatch.engine = {
 
     debugPanel: null,
 
-    isShowDebugPanel: function() {
+    isShowDebugInfo: function() {
         return (imMatch.logLevel <= imMatch.infoLevel);
     },
 
@@ -37,6 +37,7 @@ imMatch.engine = {
         this.debugPanel.append("<b>Group</b>: " + imMatch.device.groupID + "<br>");
         this.debugPanel.append("<b>#Devices</b>: " + imMatch.device.numDevices + "<br>");
         this.debugPanel.append("<b>Mode</b>: 0x" + this.mode.toString(16) + "<br>");
+        this.debugPanel.append("<b>Frame</b>: " + this.frame + "<br>");
         this.debugPanel.append("<b>Ready</b>: " + this.isReady() + "<br>");
         this.debugPanel.append("<b>Web Socket Status</b>: " + imMatch.socketClient.webSocket.readyState + "<br>");
         this.debugPanel.append("<b>Position</b>: (" +
@@ -53,15 +54,21 @@ imMatch.engine = {
                 frame: this.frame,
                 chunk: Math.floor(this.frame / imMatch.chunkSize) * imMatch.chunkSize};
 
-        if (this.isShowDebugPanel()) {
+        if (this.isShowDebugInfo()) {
             this.updateDebugPanel();
         }
 
-        this.updateMode(stamp);
-        this.updateReady(stamp);
-        this.runWithMode(stamp);
-        this.updateIntervalWithMode(stamp);
-        this.setTimerWithMode(stamp);
+        try {
+            this.updateMode(stamp);
+            this.updateReady(stamp);
+            this.runWithMode(stamp);
+            this.updateIntervalWithMode(stamp);
+            this.setTimerWithMode(stamp);
+        }
+        catch(error) {
+            window.alert("Crash! Error Message: " + error);
+            window.stop();
+        }
     },
 
     updateMode: function() {
@@ -226,7 +233,7 @@ imMatch.engine = {
     exchange: function(stitchingInfo) {
         var serializedViewport = imMatch.viewport.serialize(), serializedScenes = [], serializedSprites = [];
         jQuery.each(imMatch.scenes, function(i, scene) {
-            if (scene.viewport.id !== imMatch.viewport.id) {
+            if (scene.viewportID !== imMatch.viewport.id) {
                 return;
             }
 
@@ -250,7 +257,6 @@ imMatch.engine = {
 
         jQuery.each(jsonObject.scenes, function(i, serializedScene) {
             var scene = new imMatch.Scene(false);
-            scene.viewport = viewport;
             scene.deserialize(serializedScene);
 
             jQuery.each(jsonObject.sprites, function(i, serializedSprite) {
@@ -261,10 +267,10 @@ imMatch.engine = {
                 var sprite = new imMatch.Sprite();
                 sprite.scene = scene;
                 sprite.deserialize(serializedSprite);
-                push.call(scene.sprites, sprite);
+                scene.addSprite(sprite);
             });
 
-            push.call(imMatch.scenes, scene);
+            imMatch.addScene(scene);
         });
 
         ++imMatch.device.numDevices;
@@ -286,7 +292,7 @@ jQuery.extend(imMatch, {
 
         imMatch.addTouchMouseHandlers();
 
-        if (imMatch.engine.isShowDebugPanel()) {
+        if (imMatch.engine.isShowDebugInfo()) {
             imMatch.engine.debugPanel = document.getElementById(debugPanelID);
             if (jQuery.isEmptyObject(imMatch.engine.debugPanel)) {
                 imMatch.engine.createDebugPanel(debugPanelID);

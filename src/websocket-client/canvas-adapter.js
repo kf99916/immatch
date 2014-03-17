@@ -78,7 +78,7 @@ imMatch.CanvasAdapter.prototype = {
                     return;
                 }
 
-                self.drawTransformableObject(sprite, {alpha: sprite.alpha});
+                self.drawTransformableObject(sprite);
             });
         });
     },
@@ -109,8 +109,8 @@ imMatch.CanvasAdapter.prototype = {
             affineTransform2Local.m02 * imMatch.device.ppi,
             affineTransform2Local.m12 * imMatch.device.ppi);
 
-        this.context.globalAlpha *= style.alpha;
         if (jQuery.isEmptyObject(transformableObject.image)) {
+            this.context.globalAlpha *= style.alpha;
             this.context.beginPath();
             this.context.lineWidth = style.lineWidth;
             this.context.strokeStyle = style.color;
@@ -120,6 +120,12 @@ imMatch.CanvasAdapter.prototype = {
             this.context.closePath();
         }
         else {
+            this.context.globalAlpha *= transformableObject.alpha;
+
+            if (imMatch.engine.isShowDebugInfo()) {
+                this.context.fillText(transformableObject.id, frame.x, frame.y);
+            }
+
             this.context.drawImage(transformableObject.image, frame.x, frame.y, frame.width, frame.height);
         }
 
