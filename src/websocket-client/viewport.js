@@ -4,19 +4,21 @@ imMatch.Viewport = function() {
         return new imMatch.Viewport();
     }
 
+    jQuery.extend(this, imMatch.transformable.members);
+
     this.id = Math.uuidFast();
 
     this.width = window.innerWidth / imMatch.device.ppi;
     this.height = window.innerHeight / imMatch.device.ppi;
 
-    this.translationFactor = {x: 0, y: 0};
-    this.rad = 0;
-
-    this.affineTransform = imMatch.AffineTransform.getTranslationInstance({
+    this.global2LocalTransform = imMatch.AffineTransform.getTranslationInstance({
         x: this.width / 2, y: this.height / 2});
+
+    this.movable = true;
+    this.rotatable = true;
 };
 
-jQuery.extend(imMatch.Viewport.prototype, imMatch.transformable, {
+jQuery.extend(imMatch.Viewport.prototype, imMatch.transformable.prototype, {
     transformWithCoordinate: function(vec, /* Optional */ deep) {
         var target, result;
         deep = deep || false;
@@ -41,50 +43,30 @@ jQuery.extend(imMatch.Viewport.prototype, imMatch.transformable, {
         return jQuery.extend(target, result);
     },
 
-    getAppliedTransform: function() {
-        return imMatch.AffineTransform.getTranslationInstance(this.translationFactor).preRotate(this.rad);
+    getAffineTransform2Local: function() {
+        return this.getAppliedTransform().createInverse().concatenate(this.global2LocalTransform);
     },
 
-    serialize: function() {
-        return {
-            id: this.id,
-            width: this.width,
-            height: this.height,
-            translationFactor: this.translationFactor,
-            rad: this.rad,
-            affineTransform: [this.affineTransform.m00, this.affineTransform.m10, this.affineTransform.m01,
-                                this.affineTransform.m11, this.affineTransform.m02, this.affineTransform.m12]
-        };
+    getAffineTransformForDraw: function() {
+        return this.global2LocalTransform;
     },
 
     transform: function(vec) {
-        var affineTransform = this.getAppliedTransform().createInverse().concatenate(this.affineTransform);
-        return affineTransform.transform(vec);
+        return this.getAffineTransform2Local().transform(vec);
     },
 
     inverseTransform: function(vec) {
-        var affineTransform = this.affineTransform.createInverse().preConcatenate(this.getAppliedTransform());
-        return affineTransform.transform(vec);
+        return this.getAffineTransform2Local().createInverse().transform(vec);
     },
 
-    translate: function(translationFactor) {
-        this.translationFactor.x += translationFactor.x;
-        this.translationFactor.y += translationFactor.y;
-        return this;
-    },
+    deserialize: function(data) {
+        if (jQuery.isArray(data.affineTransform) && data.global2LocalTransform.length === 6) {
+            this.global2LocalTransform = imMatch.AffineTransform.apply(this, data.global2LocalTransform);
+            delete data.global2LocalTransform;
+        }
 
-    rotate: function(rad) {
-        this.rad += rad;
-        return this;
+        return jQuery.extend(true, this, data);
     },
-
-    scale: function() {
-        return this;
-    },
-
-    shear: function() {
-        return this;
-    }
 });
 
 imMatch.viewport = new imMatch.Viewport();

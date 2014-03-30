@@ -4,6 +4,8 @@ imMatch.Scene = function(incrementSceneZ) {
         return new imMatch.Scene(incrementSceneZ);
     }
 
+    jQuery.extend(this, imMatch.transformable.members);
+
     incrementSceneZ = incrementSceneZ || true;
 
     this.id = Math.uuidFast();
@@ -21,11 +23,11 @@ imMatch.Scene = function(incrementSceneZ) {
     this.spriteZ = 0;
 
     this.solid = false;
-    this.translationFactor = {x: 0, y: 0};
-    this.rad = 0;
+    this.movable = true;
+    this.rotatable = true;
 };
 
-jQuery.extend(imMatch.Scene.prototype, imMatch.transformable, {
+jQuery.extend(imMatch.Scene.prototype, imMatch.transformable.prototype, {
     transformWithCoordinate: function(vec, /* Optional */ deep) {
         var target = {}, result;
         deep = deep || false;
@@ -54,55 +56,10 @@ jQuery.extend(imMatch.Scene.prototype, imMatch.transformable, {
         return jQuery.extend(target, result);
     },
 
-    getAppliedTransform: function() {
-        return imMatch.AffineTransform.getTranslationInstance(this.translationFactor).preRotate(this.rad);
-    },
-
     getAffineTransform2Local: function() {
         return imMatch.viewport.getAppliedTransform().createInverse().
                     preConcatenate(this.getAppliedTransform()).
-                    preConcatenate(imMatch.viewport.getAffineTransform2Local());
-    },
-
-    serialize: function() {
-        return {
-            id: this.id,
-            viewportID: this.viewportID,
-            z: this.z,
-            width: this.width,
-            height: this.height,
-            solid: this.solid,
-            translationFactor: this.translationFactor,
-            rad: this.rad
-        };
-    },
-
-    deserialize: function(data) {
-        if (jQuery.isArray(data.affineTransform) && data.affineTransform.length === 6) {
-            this.affineTransform = imMatch.AffineTransform.apply(this, data.affineTransform);
-            delete data.affineTransform;
-        }
-
-        return jQuery.extend(true, this, data);
-    },
-
-    translate: function(translationFactor) {
-        this.translationFactor.x += translationFactor.x;
-        this.translationFactor.y += translationFactor.y;
-        return this;
-    },
-
-    rotate: function(rad) {
-        this.rad += rad;
-        return this;
-    },
-
-    scale: function() {
-        return this;
-    },
-
-    shear: function() {
-        return this;
+                    preConcatenate(imMatch.viewport.global2LocalTransform);
     },
 
     isTouched: function(point) {

@@ -240,6 +240,10 @@ imMatch.AffineTransform.prototype = {
 
     },
 
+    toJSON: function() {
+        return [this.m00, this.m10, this.m01, this.m11, this.m02, this.m12];
+    },
+
     print: function() {
         window.console.log("[ " + this.m00 + " " + this.m01 + " " + this.m02 + " ]");
         window.console.log("[ " + this.m10 + " " + this.m11 + " " + this.m12 + " ]");

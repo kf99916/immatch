@@ -88,7 +88,7 @@ imMatch.CanvasAdapter.prototype = {
             return this;
         }
 
-        var affineTransform2Local = transformableObject.getAffineTransform2Local(),
+        var affineTransformForDraw = transformableObject.getAffineTransformForDraw(),
             frame = transformableObject.getFrame();
 
         // Optimization 3: Avoid floating point coordinates to improve performance, so invoke imMatch.round
@@ -99,15 +99,15 @@ imMatch.CanvasAdapter.prototype = {
             height: imMatch.round(frame.y)
         };
 
-        style = style || {lineWidth: 3, color: "black", alpha: 1};
+        style = style || {lineWidth: 5, color: "black", alpha: 1};
 
         this.context.save();
 
         this.context.transform(
-            affineTransform2Local.m00, affineTransform2Local.m10,
-            affineTransform2Local.m01, affineTransform2Local.m11,
-            affineTransform2Local.m02 * imMatch.device.ppi,
-            affineTransform2Local.m12 * imMatch.device.ppi);
+            affineTransformForDraw.m00, affineTransformForDraw.m10,
+            affineTransformForDraw.m01, affineTransformForDraw.m11,
+            affineTransformForDraw.m02 * imMatch.device.ppi,
+            affineTransformForDraw.m12 * imMatch.device.ppi);
 
         if (jQuery.isEmptyObject(transformableObject.image)) {
             this.context.globalAlpha *= style.alpha;

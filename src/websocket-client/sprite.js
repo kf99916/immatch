@@ -4,12 +4,12 @@ imMatch.Sprite = function() {
         return new imMatch.Sprite();
     }
 
+    jQuery.extend(this, imMatch.transformable.members);
+
     this.id = Math.uuidFast();
 
     this.z = 0;
-    this.width = this.height = 0;
     this.alpha = 1;
-    this.scalingFactor = this.maxScalingFactor = this.minScalingFactor = 1;
 
     this.cursorGroup = new imMatch.CursorGroup();
     this.affineTransform = new imMatch.AffineTransform();
@@ -23,7 +23,7 @@ imMatch.Sprite = function() {
     this.scalable = true;
 };
 
-jQuery.extend(imMatch.Sprite.prototype, imMatch.transformable, {
+jQuery.extend(imMatch.Sprite.prototype, imMatch.transformable.prototype, {
     transformWithCoordinate: function(vec, /* Optional */ deep) {
         var target = {}, result;
         deep = deep || false;
@@ -57,32 +57,25 @@ jQuery.extend(imMatch.Sprite.prototype, imMatch.transformable, {
         return jQuery.extend(target, result);
     },
 
+    getAppliedTransform: function() {
+        return this.affineTransform;
+    },
+
     getAffineTransform2Local: function() {
         return imMatch.viewport.getAppliedTransform().createInverse().
                     preConcatenate(this.scene.getAppliedTransform()).
-                    preConcatenate(this.affineTransform).
-                    preConcatenate(imMatch.viewport.getAffineTransform2Local());
+                    preConcatenate(this.getAppliedTransform()).
+                    preConcatenate(imMatch.viewport.global2LocalTransform);
     },
 
-    serialize: function() {
-        return {
-            id: this.id,
-            sceneID: this.scene.id,
-            imageID: this.image.id,
-            z: this.z,
-            width: this.width,
-            height: this.height,
-            alpha: this.alpha,
-            scalingFactor: this.scalingFactor,
-            maxScalingFactor: this.maxScalingFactor,
-            minScalingFactor: this.minScalingFactor,
-            touchable: this.touchable,
-            movable: this.movable,
-            rotatable: this.rotatable,
-            scalable: this.scalable,
-            affineTransform: [this.affineTransform.m00, this.affineTransform.m10, this.affineTransform.m01,
-                                this.affineTransform.m11, this.affineTransform.m02, this.affineTransform.m12]
-        };
+    toJSON: function() {
+        var serializedSprite = jQuery.extend(true, serializedSprite, this);
+        serializedSprite.sceneID = serializedSprite.scene.id;
+        serializedSprite.imageID = serializedSprite.image.id;
+        delete serializedSprite.scene;
+        delete serializedSprite.image;
+
+        return serializedSprite;
     },
 
     deserialize: function(data) {
@@ -166,34 +159,20 @@ jQuery.extend(imMatch.Sprite.prototype, imMatch.transformable, {
     },
 
     updateAffineTransform: function() {
-        var center, vector, rad,
-            distance, scalingFactor, newScalingFactor;
-        if (this.movable) {
-            center = this.cursorGroup.computeStartEndCenters();
-            this.translate({x: center.end.x - center.start.x, y: center.end.y - center.start.y});
-        }
+        var center = this.cursorGroup.computeStartEndCenters(),
+            vector, rad, distance, scalingFactor;
 
-        if (this.rotatable && this.cursorGroup.numCursors === 2) {
+        this.translate({x: center.end.x - center.start.x, y: center.end.y - center.start.y});
+
+        if (this.cursorGroup.numCursors === 2) {
             vector = this.cursorGroup.computeStartEndVectors();
             rad = imMatch.rad(vector.start, vector.end);
             this.rotate(rad, center.start);
-        }
 
-        if (this.scalable && this.cursorGroup.numCursors === 2) {
             distance = this.cursorGroup.computeDistances();
             scalingFactor = distance.end / distance.start || 1;
-            newScalingFactor = this.scalingFactor * scalingFactor;
 
-            if (newScalingFactor <= this.minScalingFactor) {
-                scalingFactor = this.minScalingFactor / this.scalingFactor;
-            }
-            else if (newScalingFactor >= this.maxScalingFactor) {
-                scalingFactor = this.maxScalingFactor / this.scalingFactor;
-            }
-
-            this.scalingFactor *= scalingFactor;
-
-            this.scale({x: scalingFactor, y: scalingFactor});
+            this.scale(scalingFactor);
         }
     },
 

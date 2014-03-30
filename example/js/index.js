@@ -17,5 +17,7 @@ $im.ready(function() {
 
     $im.addScene(scene);
 
+  //  TweenLite.to(sprite, 1.5, {width:100});
+
     $im.run();
 });

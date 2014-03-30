@@ -41,7 +41,7 @@ imMatch.engine = {
         this.debugPanel.append("<b>Ready</b>: " + this.isReady() + "<br>");
         this.debugPanel.append("<b>Web Socket Status</b>: " + imMatch.socketClient.webSocket.readyState + "<br>");
         this.debugPanel.append("<b>Position</b>: (" +
-            imMatch.viewport.translationFactor.x.toFixed(5) + ", " + imMatch.viewport.translationFactor.y.toFixed(5) + ")<br>");
+            imMatch.viewport.x.toFixed(5) + ", " + imMatch.viewport.y.toFixed(5) + ")<br>");
         this.debugPanel.append("<b>Width </b>: " + imMatch.viewport.width.toFixed(5) + " inches<br>");
         this.debugPanel.append("<b>Height </b>: " + imMatch.viewport.height.toFixed(5) + " inches<br>");
         this.debugPanel.append("<b>Angle </b>: " + (imMatch.viewport.rad * 180 / Math.PI).toFixed(5) + " degrees<br>");
@@ -66,6 +66,7 @@ imMatch.engine = {
             this.setTimerWithMode(stamp);
         }
         catch(error) {
+            imMatch.logError("Crash! Error Message: ", error);
             window.alert("Crash! Error Message: " + error);
             window.stop();
         }
@@ -231,23 +232,19 @@ imMatch.engine = {
     },
 
     exchange: function(stitchingInfo) {
-        var serializedViewport = imMatch.viewport.serialize(), serializedScenes = [], serializedSprites = [];
+        var exchangeScenes = [];
         jQuery.each(imMatch.scenes, function(i, scene) {
             if (scene.viewportID !== imMatch.viewport.id) {
                 return;
             }
 
-            push.call(serializedScenes, scene.serialize());
-            jQuery.each(scene.sprites, function(i, sprite) {
-                push.call(serializedSprites, sprite.serialize());
-            });
+            push.call(exchangeScenes, scene);
         });
 
         this.request.exchange.call(imMatch.socketClient, {
             toGroupID: stitchingInfo[1].groupID,
-            viewport: serializedViewport,
-            scenes: serializedScenes,
-            sprites: serializedSprites
+            viewport: imMatch.viewport,
+            scenes: exchangeScenes
         });
     },
 
@@ -257,9 +254,8 @@ imMatch.engine = {
 
         jQuery.each(jsonObject.scenes, function(i, serializedScene) {
             var scene = new imMatch.Scene(false);
-            scene.deserialize(serializedScene);
 
-            jQuery.each(jsonObject.sprites, function(i, serializedSprite) {
+            jQuery.each(serializedScene.sprites, function(i, serializedSprite) {
                 if (serializedSprite.sceneID !== scene.id) {
                     return;
                 }
@@ -270,6 +266,8 @@ imMatch.engine = {
                 scene.addSprite(sprite);
             });
 
+            delete serializedScene.sprites;
+            scene.deserialize(serializedScene);
             imMatch.addScene(scene);
         });
 
