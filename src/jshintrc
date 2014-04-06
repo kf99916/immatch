@@ -25,6 +25,7 @@
 	"globals": {
 		"jQuery": true,
 		"imMatch": true,
-		"MobileEsp": true
+		"MobileEsp": true,
+		"TweenLite": true
 	}
 }

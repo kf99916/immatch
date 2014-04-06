@@ -4,7 +4,7 @@ imMatch.Sprite = function() {
         return new imMatch.Sprite();
     }
 
-    jQuery.extend(this, imMatch.transformable.members);
+    jQuery.extend(true, this, imMatch.transformable.members);
 
     this.id = Math.uuidFast();
 
@@ -12,7 +12,6 @@ imMatch.Sprite = function() {
     this.alpha = 1;
 
     this.cursorGroup = new imMatch.CursorGroup();
-    this.affineTransform = new imMatch.AffineTransform();
 
     this.scene = null;
     this.image = null;
@@ -21,6 +20,7 @@ imMatch.Sprite = function() {
     this.movable = true;
     this.rotatable = true;
     this.scalable = true;
+    this.tweenable = true;
 };
 
 jQuery.extend(imMatch.Sprite.prototype, imMatch.transformable.prototype, {
@@ -57,15 +57,41 @@ jQuery.extend(imMatch.Sprite.prototype, imMatch.transformable.prototype, {
         return jQuery.extend(target, result);
     },
 
-    getAppliedTransform: function() {
-        return this.affineTransform;
-    },
-
     getAffineTransform2Local: function() {
         return imMatch.viewport.getAppliedTransform().createInverse().
                     preConcatenate(this.scene.getAppliedTransform()).
                     preConcatenate(this.getAppliedTransform()).
                     preConcatenate(imMatch.viewport.global2LocalTransform);
+    },
+
+    // Reference for ease: http://www.greensock.com/get-started-js/#easing
+    tween: function(duration, vars, /* Optional */ ease) {
+        if (!this.tweenable || !jQuery.isPlainObject(vars)) {
+            return this;
+        }
+
+        duration = duration || 0;
+        vars.ease = ease || "Power1.easeOut";
+        vars.onStart = this.tweenStart;
+        vars.onComplete = this.tweenComplete;
+
+        TweenLite.to(this, duration, vars);
+
+        return this;
+    },
+
+    tweenStart: function() {
+        this.touchable = false;
+        imMatch.engine.tweened = returnTrue;
+
+        return this;
+    },
+
+    tweenComplete: function() {
+        this.touchable = true;
+        imMatch.engine.tweened = returnFalse;
+
+        return this;
     },
 
     toJSON: function() {
@@ -172,7 +198,7 @@ jQuery.extend(imMatch.Sprite.prototype, imMatch.transformable.prototype, {
             distance = this.cursorGroup.computeDistances();
             scalingFactor = distance.end / distance.start || 1;
 
-            this.scale(scalingFactor);
+            this.scale(scalingFactor, center.start);
         }
     },
 

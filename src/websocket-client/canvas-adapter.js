@@ -123,7 +123,8 @@ imMatch.CanvasAdapter.prototype = {
             this.context.globalAlpha *= transformableObject.alpha;
 
             if (imMatch.engine.isShowDebugInfo()) {
-                this.context.fillText(transformableObject.id, frame.x, frame.y);
+                var center = transformableObject.computePosition();
+                this.context.fillText(transformableObject.id + ": ( " + center.x + ", " + center.y + " )", frame.x, frame.y);
             }
 
             this.context.drawImage(transformableObject.image, frame.x, frame.y, frame.width, frame.height);

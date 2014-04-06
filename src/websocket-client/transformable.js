@@ -19,11 +19,6 @@ imMatch.transformable.members = {
 
 imMatch.transformable.prototype = {
     deserialize: function(data) {
-        if (jQuery.isArray(data.affineTransform) && data.affineTransform.length === 6) {
-            this.affineTransform = imMatch.AffineTransform.apply(this, data.affineTransform);
-            delete data.affineTransform;
-        }
-
         return jQuery.extend(true, this, data);
     },
 
@@ -36,9 +31,8 @@ imMatch.transformable.prototype = {
     },
 
     getAppliedTransform: function() {
-        var center = {x: this.x, y: this.y};
        return imMatch.AffineTransform.getRotateInstance(this.rad).
-                preScale(this.scalingFactor).preShear(this.shearFactor).preTranslate(center);
+                preScale({x: this.scalingFactor, y: this.scalingFactor}).preShear(this.shearFactor).preTranslate(this);
     },
 
     getAffineTransform2Local: function() {
@@ -83,6 +77,11 @@ imMatch.transformable.prototype = {
         return this.getAppliedTransform().createInverse().transform(vec);
     },
 
+    computePosition: function() {
+        var affineTransform = this.affineTransform || this.getAppliedTransform();
+        return affineTransform.transform({x: 0, y: 0});
+    },
+
     translate: function(translationFactor) {
         if (!this.movable) {
             return this;
@@ -90,10 +89,6 @@ imMatch.transformable.prototype = {
 
         this.x += translationFactor.x || 0;
         this.y += translationFactor.y || 0;
-
-        if (!jQuery.isEmptyObject(this.affineTransform)) {
-            this.affineTransform.preTranslate(translationFactor);
-        }
 
         return this;
     },
@@ -103,16 +98,17 @@ imMatch.transformable.prototype = {
             return this;
         }
 
-        this.rad += rad || 0;
+        var rotationTransform = imMatch.AffineTransform.getRotateInstance(rad, this),
+            rotationAnchorPoint = rotationTransform.transform(anchorPoint);
 
-        if (!jQuery.isEmptyObject(this.affineTransform)) {
-            this.affineTransform.preRotate(rad, anchorPoint);
-        }
+        this.translate({x: anchorPoint.x - rotationAnchorPoint.x,
+                        y: anchorPoint.y - rotationAnchorPoint.y});
+        this.rad += rad;
 
         return this;
     },
 
-    scale: function(scalingFactor) {
+    scale: function(scalingFactor, anchorPoint) {
         if (!this.scalable) {
             return this;
         }
@@ -127,11 +123,9 @@ imMatch.transformable.prototype = {
             scalingFactor = this.maxScalingFactor / this.scalingFactor;
         }
 
+        this.translate({x: (anchorPoint.x - this.x) * (1 - scalingFactor),
+                        y: (anchorPoint.y - this.y) * (1 - scalingFactor)});
         this.scalingFactor *= scalingFactor;
-
-        if (!jQuery.isEmptyObject(this.affineTransform)) {
-            this.affineTransform.preScale({x: scalingFactor, y: scalingFactor});
-        }
 
         return this;
     },
@@ -143,9 +137,5 @@ imMatch.transformable.prototype = {
 
         this.shearFactor.x += shearFactor.x || 0;
         this.shearFactor.y += shearFactor.y || 0;
-
-        if (!jQuery.isEmptyObject(this.affineTransform)) {
-            this.affineTransform.preShear(shearFactor);
-        }
     }
 };

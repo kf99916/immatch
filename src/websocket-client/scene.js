@@ -4,7 +4,7 @@ imMatch.Scene = function(incrementSceneZ) {
         return new imMatch.Scene(incrementSceneZ);
     }
 
-    jQuery.extend(this, imMatch.transformable.members);
+    jQuery.extend(true, this, imMatch.transformable.members);
 
     incrementSceneZ = incrementSceneZ || true;
 

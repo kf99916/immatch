@@ -4,7 +4,7 @@ imMatch.Viewport = function() {
         return new imMatch.Viewport();
     }
 
-    jQuery.extend(this, imMatch.transformable.members);
+    jQuery.extend(true, this, imMatch.transformable.members);
 
     this.id = Math.uuidFast();
 

@@ -9,6 +9,10 @@ imMatch.engine = {
 
     frame: 0, // TODO: Reset
 
+    tweened: returnFalse,
+
+    touched: returnFalse,
+
     // imMatch.socketClient.request
     request: null,
 
@@ -144,7 +148,7 @@ imMatch.engine = {
             return this;
         }
 
-        if (imMatch.getMainMode(this.mode) === imMatch.mainMode.stitched && this.frame % imMatch.chunkSize === 0) {
+        if (this.synced()) {
             imMatch.trigger("infoWillSynchronized", stamp);
             this.request.synchronize.call(imMatch.socketClient, stamp);
             imMatch.trigger("infoDidSynchronized", stamp);
@@ -152,9 +156,10 @@ imMatch.engine = {
 
         imMatch.trigger("gestureWillRecognized", stamp);
         touchedSprites = imMatch.gestureRecognizer.recognize(stamp);
+        this.touched = (touchedSprites.length !== 0)? returnTrue : returnFalse;
         imMatch.trigger("gestureDidRecognized", stamp);
 
-        if (this.frame === 0 || touchedSprites.length !== 0) {
+        if (this.reDrawn()) {
             imMatch.trigger("contextWillDrawn", stamp);
             imMatch.canvas.draw();
             imMatch.trigger("contextDidDrawn", stamp);
@@ -208,6 +213,14 @@ imMatch.engine = {
         }
 
         return this;
+    },
+
+    synced: function() {
+        return (imMatch.getMainMode(this.mode) === imMatch.mainMode.stitched && this.frame % imMatch.chunkSize === 0);
+    },
+
+    reDrawn: function() {
+        return (this.frame === 0 || this.touched() || this.tweened());
     },
 
     updateViewportAffineTransform: function(stitchingInfo) {
