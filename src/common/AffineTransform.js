@@ -195,15 +195,31 @@ imMatch.AffineTransform.prototype = {
             jQuery.isNumeric(this.m12) && det !== 0);
     },
 
+    inverse: function() {
+        if (!this.isInvertible) {
+            return this;
+        }
+
+        var det = this.getDeterminant(),
+            m00 = this.m00, m10 = this.m10, m01 = this.m01,
+            m11 = this.m11, m02 = this.m02, m12 = this.m12;
+
+        this.m00 = m11 / det;
+        this.m10 = -m10 / det;
+        this.m01 = -m01 / det;
+        this.m11 = m00 / det;
+        this.m02 = (m01 * m12 - m11 * m02) / det;
+        this.m12 = (m10 * m02 - m00 * m12) / det;
+
+        return this;
+    },
+
     createInverse: function() {
         if (!this.isInvertible) {
             return this;
         }
 
-        var det = this.getDeterminant();
-        return new imMatch.AffineTransform(this.m11 / det, -this.m10 / det, -this.m01 / det,
-                this.m00 / det, (this.m01 * this.m12 - this.m11 * this.m02) / det,
-                (this.m10 * this.m02- this.m00 * this.m12) / det);
+        return this.clone().inverse();
     },
 
     setToScale: function(scalingFactor) {

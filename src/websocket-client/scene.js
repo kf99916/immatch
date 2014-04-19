@@ -25,6 +25,11 @@ imMatch.Scene = function(incrementSceneZ) {
     this.solid = false;
     this.movable = true;
     this.rotatable = true;
+
+    this.frame = imMatch.AffineTransform.getScaleInstance({
+                            x: imMatch.device.ppi,
+                            y: imMatch.device.ppi}).
+                            transform({x: this.width, y: this.height});
 };
 
 jQuery.extend(imMatch.Scene.prototype, imMatch.transformable.prototype, {
@@ -56,9 +61,9 @@ jQuery.extend(imMatch.Scene.prototype, imMatch.transformable.prototype, {
         return jQuery.extend(target, result);
     },
 
-    getAffineTransform2Local: function() {
-        return imMatch.viewport.getAppliedTransform().createInverse().
-                    preConcatenate(this.getAppliedTransform()).
+    computeAffineTransform2Local: function() {
+        return imMatch.viewport.computeAppliedTransform().inverse().
+                    preConcatenate(this.computeAppliedTransform()).
                     preConcatenate(imMatch.viewport.global2LocalTransform);
     },
 

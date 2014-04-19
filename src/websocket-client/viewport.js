@@ -16,6 +16,11 @@ imMatch.Viewport = function() {
 
     this.movable = true;
     this.rotatable = true;
+
+    this.frame = imMatch.AffineTransform.getScaleInstance({
+                            x: imMatch.device.ppi,
+                            y: imMatch.device.ppi}).
+                            transform({x: this.width, y: this.height});
 };
 
 jQuery.extend(imMatch.Viewport.prototype, imMatch.transformable.prototype, {
@@ -43,30 +48,30 @@ jQuery.extend(imMatch.Viewport.prototype, imMatch.transformable.prototype, {
         return jQuery.extend(target, result);
     },
 
-    getAffineTransform2Local: function() {
-        return this.getAppliedTransform().createInverse().concatenate(this.global2LocalTransform);
+    computeAffineTransform2Local: function() {
+        return this.computeAppliedTransform().inverse().preConcatenate(this.global2LocalTransform);
     },
 
-    getAffineTransformForDraw: function() {
+    computeAffineTransformForDraw: function() {
         return this.global2LocalTransform;
     },
 
     transform: function(vec) {
-        return this.getAffineTransform2Local().transform(vec);
+        return this.computeAffineTransform2Local().transform(vec);
     },
 
     inverseTransform: function(vec) {
-        return this.getAffineTransform2Local().createInverse().transform(vec);
+        return this.computeAffineTransform2Local().inverse().transform(vec);
     },
 
-    deserialize: function(data) {
+/*    deserialize: function(data) {
         if (jQuery.isArray(data.affineTransform) && data.global2LocalTransform.length === 6) {
             this.global2LocalTransform = imMatch.AffineTransform.apply(this, data.global2LocalTransform);
             delete data.global2LocalTransform;
         }
 
         return jQuery.extend(true, this, data);
-    },
+    },*/
 });
 
 imMatch.viewport = new imMatch.Viewport();

@@ -107,7 +107,8 @@ imMatch.engine = {
 
                     imMatch.device.numExchangedDevices = 0;
                     this.frame = 0;
-                    this.mode = imMatch.mode.stitched;
+                  //  this.mode = imMatch.mode.stitched;
+                    this.mode = imMatch.mode.alone;
                 }
             break;
             case imMatch.mode.stitched:

@@ -10,6 +10,7 @@ imMatch.transformable.members = {
     shearFactor: {x: 0, y: 0},
     maxScalingFactor: Number.MAX_VALUE,
     minScalingFactor: Number.MIN_VALUE,
+    frame: {x: 0, y: 0},
     touchable: false,
     movable: false,
     rotatable: false,
@@ -30,28 +31,21 @@ imMatch.transformable.prototype = {
         return jQuery.extend(target, result);
     },
 
-    getAppliedTransform: function() {
+    computeAppliedTransform: function() {
        return imMatch.AffineTransform.getRotateInstance(this.rad).
                 preScale({x: this.scalingFactor, y: this.scalingFactor}).preShear(this.shearFactor).preTranslate(this);
     },
 
-    getAffineTransform2Local: function() {
-        return this.getAppliedTransform();
+    computeAffineTransform2Local: function() {
+        return this.computeAppliedTransform();
     },
 
-    getAffineTransformForDraw: function() {
-        return this.getAffineTransform2Local();
-    },
-
-    getFrame: function() {
-        return imMatch.AffineTransform.getScaleInstance({
-                        x: imMatch.device.ppi,
-                        y: imMatch.device.ppi}).
-                        transform({x: this.width, y: this.height});
+    computeAffineTransformForDraw: function() {
+        return this.computeAffineTransform2Local();
     },
 
     getBoundingBox: function() {
-        var affineTransformForDraw = this.getAffineTransformForDraw(),
+        var affineTransformForDraw = this.computeAffineTransformForDraw(),
             diff = {x: this.width / 2, y: this.height / 2},
             c1 = affineTransformForDraw.transform({x: -diff.x, y: -diff.y}),
             c2 = affineTransformForDraw.transform({x: diff.x, y: -diff.y}),
@@ -70,16 +64,15 @@ imMatch.transformable.prototype = {
     },
 
     transform: function(vec) {
-        return this.getAppliedTransform().transform(vec);
+        return this.computeAppliedTransform().transform(vec);
     },
 
     inverseTransform: function(vec) {
-        return this.getAppliedTransform().createInverse().transform(vec);
+        return this.computeAppliedTransform().inverse().transform(vec);
     },
 
     computePosition: function() {
-        var affineTransform = this.affineTransform || this.getAppliedTransform();
-        return affineTransform.transform({x: 0, y: 0});
+        return this.computeAppliedTransform().transform({x: 0, y: 0});
     },
 
     translate: function(translationFactor) {
@@ -97,6 +90,10 @@ imMatch.transformable.prototype = {
         if (!this.rotatable) {
             return this;
         }
+
+        anchorPoint = anchorPoint || {
+            x: 0, y: 0
+        };
 
         var rotationTransform = imMatch.AffineTransform.getRotateInstance(rad, this),
             rotationAnchorPoint = rotationTransform.transform(anchorPoint);

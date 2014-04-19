@@ -88,8 +88,8 @@ imMatch.CanvasAdapter.prototype = {
             return this;
         }
 
-        var affineTransformForDraw = transformableObject.getAffineTransformForDraw(),
-            frame = transformableObject.getFrame();
+        var affineTransformForDraw = transformableObject.computeAffineTransformForDraw(),
+            frame = transformableObject.frame;
 
         // Optimization 3: Avoid floating point coordinates to improve performance, so invoke imMatch.round
         frame = {

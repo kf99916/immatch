@@ -17,7 +17,9 @@ $im.ready(function() {
 
     $im.addScene(scene);
 
-    sprite.tween(1.5, {x: 5});
+    imMatch.viewport.rotate(Math.PI);
+
+    //sprite.tween(1.5, {x: 5});
 
     $im.run();
 });
