@@ -62,16 +62,7 @@ jQuery.extend(imMatch.Viewport.prototype, imMatch.transformable.prototype, {
 
     inverseTransform: function(vec) {
         return this.computeAffineTransform2Local().inverse().transform(vec);
-    },
-
-/*    deserialize: function(data) {
-        if (jQuery.isArray(data.affineTransform) && data.global2LocalTransform.length === 6) {
-            this.global2LocalTransform = imMatch.AffineTransform.apply(this, data.global2LocalTransform);
-            delete data.global2LocalTransform;
-        }
-
-        return jQuery.extend(true, this, data);
-    },*/
+    }
 });
 
 imMatch.viewport = new imMatch.Viewport();

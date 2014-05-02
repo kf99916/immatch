@@ -37,7 +37,9 @@ jQuery.extend(imMatch.Sprite.prototype, imMatch.transformable.prototype, {
             // Global -> Scene -> Sprite
             case imMatch.coordinate.global:
                 target.coordinate = imMatch.coordinate.sprite;
-                result = this.inverseTransform(this.scene.inverseTransform(target));
+           //     result = this.inverseTransform(this.scene.inverseTransform(
+           //                 imMatch.viewport.computeAppliedTransform().inverse().transform(target)));
+                result = this.scene.inverseTransform(this.inverseTransform(target));
             break;
             // Scene -> Sprite
             case imMatch.coordinate.scene:
@@ -105,11 +107,6 @@ jQuery.extend(imMatch.Sprite.prototype, imMatch.transformable.prototype, {
     },
 
     deserialize: function(data) {
-/*        if (jQuery.isArray(data.affineTransform) && data.affineTransform.length === 6) {
-            this.affineTransform = imMatch.AffineTransform.apply(this, data.affineTransform);
-            delete data.affineTransform;
-        }
-*/
         if (!jQuery.isEmptyObject(data.imageID)) {
             this.setImage(data.imageID);
             delete data.imageID;
@@ -127,6 +124,8 @@ jQuery.extend(imMatch.Sprite.prototype, imMatch.transformable.prototype, {
 
         this.scene = scene;
         this.z = scene.z * imMatch.maxNumSpritesInScene + scene.spriteZ;
+
+        return this;
     },
 
     setImage: function(id) {
@@ -138,11 +137,7 @@ jQuery.extend(imMatch.Sprite.prototype, imMatch.transformable.prototype, {
         this.width = this.image.width / this.image.ppi;
         this.height = this.image.height / this.image.ppi;
 
-        this.frame = imMatch.AffineTransform.getScaleInstance({
-                            x: this.image.ppi,
-                            y: this.image.ppi}).
-                            transform({x: this.width, y: this.height});
-
+        this.frame = {x: this.image.width, y: this.image.height};
         return this;
     },
 
@@ -163,35 +158,32 @@ jQuery.extend(imMatch.Sprite.prototype, imMatch.transformable.prototype, {
     },
 
     isTouched: function(touchMouseEvent) {
-        var spritePoint, deviceImageRatio = imMatch.device.ppi / this.image.ppi;
         if (!this.touchable) {
             return false;
         }
 
-        if (!imMatch.is2DVector(touchMouseEvent)) {
+        if (!imMatch.is2DVector(touchMouseEvent) || imMatch.isEmpty(touchMouseEvent.coordinate) ||
+                imMatch.coordinate.sprite !== touchMouseEvent.coordinate) {
             return false;
         }
 
-//        spritePoint = this.transformWithCoordinate(touchMouseEvent, true);
-        spritePoint = this.inverseTransform(this.scene.inverseTransform(
-            imMatch.viewport.computeAppliedTransform().createInverse().transform(touchMouseEvent)));
-        spritePoint.x *= deviceImageRatio;
-        spritePoint.y *= deviceImageRatio;
+        var imageDeviceRatio = this.image.ppi / imMatch.device.ppi,
+            boundary = {
+                width: this.width / 2 * imageDeviceRatio,
+                height: this.height / 2 * imageDeviceRatio
+            };
 
-        if (-this.width / 2 <= spritePoint.x && spritePoint.x <= this.width / 2 &&
-            -this.height / 2 <= spritePoint.y && spritePoint.y <= this.height / 2) {
+        if (-boundary.width <= touchMouseEvent.x && touchMouseEvent.x <= boundary.width &&
+            -boundary.height <= touchMouseEvent.y && touchMouseEvent.y <= boundary.height) {
             return true;
         }
+
+        return false;
     },
 
     updateAffineTransform: function() {
         var center = this.cursorGroup.computeStartEndCenters(),
-            vector, rad, distance, scalingFactor,
-            affineTransform = imMatch.viewport.computeAppliedTransform().createInverse().
-                    preConcatenate(this.scene.computeAppliedTransform().createInverse());
-
-        center.end = affineTransform.transform(center.end);
-        center.start = affineTransform.transform(center.start);
+            vector, rad, distance, scalingFactor;
 
         this.translate({x: center.end.x - center.start.x, y: center.end.y - center.start.y});
 
@@ -205,6 +197,8 @@ jQuery.extend(imMatch.Sprite.prototype, imMatch.transformable.prototype, {
 
             this.scale(scalingFactor, center.start);
         }
+
+        return this;
     },
 
     updateCursorGroup: function() {
@@ -227,5 +221,7 @@ jQuery.extend(imMatch.Sprite.prototype, imMatch.transformable.prototype, {
                 break;
             }
         });
+
+        return this;
     },
 });

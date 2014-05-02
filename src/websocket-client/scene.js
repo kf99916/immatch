@@ -67,18 +67,18 @@ jQuery.extend(imMatch.Scene.prototype, imMatch.transformable.prototype, {
                     preConcatenate(imMatch.viewport.global2LocalTransform);
     },
 
-    isTouched: function(point) {
-        var scenePoint;
-        if (!imMatch.is2DVector(point)) {
+    isTouched: function(touchMouseEvent) {
+        if (!imMatch.is2DVector(touchMouseEvent) || imMatch.isEmpty(touchMouseEvent.coordinate) ||
+                imMatch.coordinate.scene !== touchMouseEvent.coordinate) {
             return false;
         }
 
-        scenePoint = this.transformWithCoordinate(point, true);
-
-        if (-this.width / 2 <= scenePoint.x && scenePoint.x <= this.width / 2 &&
-            -this.height / 2 <= scenePoint.y && scenePoint.y <= this.height / 2) {
+        if (-this.width / 2 <= touchMouseEvent.x && touchMouseEvent.x <= this.width / 2 &&
+            -this.height / 2 <= touchMouseEvent.y && touchMouseEvent.y <= this.height / 2) {
             return true;
         }
+
+        return false;
     },
 
     addSprite: function(sprite) {

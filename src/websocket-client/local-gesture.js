@@ -22,8 +22,8 @@ imMatch.localGesture = {
         }
 
         this.spriteMap[touchMouseEvent.id] = sprite;
-        sprite.cursorGroup.add(new imMatch.Cursor(sprite.scene.transformWithCoordinate(touchMouseEvent, true)));
 
+        sprite.cursorGroup.add(new imMatch.Cursor(sprite.scene.transformWithCoordinate(touchMouseEvent)));
         return sprite;
     },
 
@@ -38,8 +38,7 @@ imMatch.localGesture = {
             return null;
         }
 
-        cursor.add(sprite.scene.transformWithCoordinate(touchMouseEvent, true));
-
+        cursor.add(sprite.scene.transformWithCoordinate(touchMouseEvent));
         return sprite;
     },
 
@@ -55,13 +54,26 @@ imMatch.localGesture = {
 
     searchTouchedSprite: function(touchMouseEvent) {
         var result;
+
+        imMatch.logDebug("TouchMouseEvent @ Global: ", touchMouseEvent.x, touchMouseEvent.y, touchMouseEvent.coordinate);
+
         jQuery.each(imMatch.scenes, function(i, scene) {
-            if (scene.solid && !scene.isTouched(touchMouseEvent)) {
+            var touchMouseEventInScene = scene.transformWithCoordinate(touchMouseEvent, true);
+
+            imMatch.logDebug("TouchMouseEvent @ Scene: ",
+                touchMouseEventInScene.x, touchMouseEventInScene.y, touchMouseEventInScene.coordinate);
+
+            if (scene.solid && !scene.isTouched(touchMouseEventInScene)) {
                 return;
             }
 
             jQuery.each(scene.sprites, function(i, sprite) {
-                if (sprite.touchable && sprite.isTouched(touchMouseEvent)) {
+                var touchMouseEventInSprite = sprite.transformWithCoordinate(touchMouseEventInScene, true);
+
+                imMatch.logDebug("TouchMouseEvent @ Sprite: ",
+                    touchMouseEventInSprite.x, touchMouseEventInSprite.y, touchMouseEventInSprite.coordinate);
+
+                if (sprite.isTouched(touchMouseEventInSprite)) {
                     result = sprite;
                     return false;
                 }
