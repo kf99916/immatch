@@ -20,7 +20,7 @@ imMatch.transformable.members = {
 
 imMatch.transformable.prototype = {
     deserialize: function(data) {
-        return jQuery.extend(true, this, data);
+        return jQuery.extend(this, data);
     },
 
     transformWithCoordinate: function(vec, /* Optional */ deep) {

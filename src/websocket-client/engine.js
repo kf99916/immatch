@@ -40,6 +40,7 @@ imMatch.engine = {
         this.debugPanel.append("<b>Device ID</b>: " + imMatch.device.id + "<br>");
         this.debugPanel.append("<b>Group</b>: " + imMatch.device.groupID + "<br>");
         this.debugPanel.append("<b>#Devices</b>: " + imMatch.device.numDevices + "<br>");
+        this.debugPanel.append("<b>#Scenes</b>: " + imMatch.scenes.length + "<br>");
         this.debugPanel.append("<b>Mode</b>: 0x" + this.mode.toString(16) + "<br>");
         this.debugPanel.append("<b>Frame</b>: " + this.frame + "<br>");
         this.debugPanel.append("<b>Ready</b>: " + this.isReady() + "<br>");
@@ -49,6 +50,13 @@ imMatch.engine = {
         this.debugPanel.append("<b>Width </b>: " + imMatch.viewport.width.toFixed(5) + " inches<br>");
         this.debugPanel.append("<b>Height </b>: " + imMatch.viewport.height.toFixed(5) + " inches<br>");
         this.debugPanel.append("<b>Angle </b>: " + (imMatch.viewport.rad * 180 / Math.PI).toFixed(5) + " degrees<br>");
+
+        var self = this;
+        jQuery.each(imMatch.scenes, function(i, scene) {
+            jQuery.each(scene.sprites, function(j, sprite) {
+                self.debugPanel.append("<b>Sprite </b>(" + sprite.id + ") : (" + sprite.x.toFixed(5) + ", " + sprite.y.toFixed(5) + " )<br>");
+            });
+        });
         return this;
     },
 
@@ -268,19 +276,6 @@ imMatch.engine = {
 
         jQuery.each(jsonObject.scenes, function(i, serializedScene) {
             var scene = new imMatch.Scene(false);
-
-            jQuery.each(serializedScene.sprites, function(i, serializedSprite) {
-                if (serializedSprite.sceneID !== scene.id) {
-                    return;
-                }
-
-                var sprite = new imMatch.Sprite();
-                sprite.scene = scene;
-                sprite.deserialize(serializedSprite);
-                scene.addSprite(sprite);
-            });
-
-            delete serializedScene.sprites;
             scene.deserialize(serializedScene);
             imMatch.addScene(scene);
         });

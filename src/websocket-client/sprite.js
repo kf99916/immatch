@@ -114,7 +114,7 @@ jQuery.extend(imMatch.Sprite.prototype, imMatch.transformable.prototype, {
 
         delete data.sceneID;
 
-        return jQuery.extend(true, this, data);
+        return jQuery.extend(this, data);
     },
 
     setContainedScene: function(scene) {

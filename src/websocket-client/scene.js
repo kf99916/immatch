@@ -67,6 +67,24 @@ jQuery.extend(imMatch.Scene.prototype, imMatch.transformable.prototype, {
                     preConcatenate(imMatch.viewport.global2LocalTransform);
     },
 
+    deserialize: function(data) {
+        var self = this;
+        jQuery.each(data.sprites, function(i, serializedSprite) {
+            if (serializedSprite.sceneID !== data.id) {
+                return;
+            }
+
+            var sprite = new imMatch.Sprite();
+            sprite.scene = self;
+            sprite.deserialize(serializedSprite);
+            self.addSprite(sprite);
+        });
+
+        delete data.sprites;
+
+        return jQuery.extend(this, data);
+    },
+
     isTouched: function(touchMouseEvent) {
         if (!imMatch.is2DVector(touchMouseEvent) || imMatch.isEmpty(touchMouseEvent.coordinate) ||
                 imMatch.coordinate.scene !== touchMouseEvent.coordinate) {
