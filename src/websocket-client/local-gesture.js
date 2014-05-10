@@ -23,7 +23,7 @@ imMatch.localGesture = {
 
         this.spriteMap[touchMouseEvent.id] = sprite;
 
-        sprite.cursorGroup.add(new imMatch.Cursor(sprite.scene.transformWithCoordinate(touchMouseEvent)));
+        sprite.cursorGroup.add(new imMatch.Cursor(sprite.scene.transformWithCoordinate(touchMouseEvent, true)));
         return sprite;
     },
 
@@ -38,7 +38,7 @@ imMatch.localGesture = {
             return null;
         }
 
-        cursor.add(sprite.scene.transformWithCoordinate(touchMouseEvent));
+        cursor.add(sprite.scene.transformWithCoordinate(touchMouseEvent, true));
         return sprite;
     },
 
