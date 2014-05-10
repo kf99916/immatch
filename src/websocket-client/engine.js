@@ -53,6 +53,7 @@ imMatch.engine = {
 
         var self = this;
         jQuery.each(imMatch.scenes, function(i, scene) {
+            self.debugPanel.append("<b>Scene </b>(" + scene.id + ") : (" + scene.x.toFixed(5) + ", " + scene.y.toFixed(5) + " )<br>");
             jQuery.each(scene.sprites, function(j, sprite) {
                 self.debugPanel.append("<b>Sprite </b>(" + sprite.id + ") : (" + sprite.x.toFixed(5) + ", " + sprite.y.toFixed(5) + " )<br>");
             });
@@ -238,14 +239,19 @@ imMatch.engine = {
             margin = affineTransform.transform(stitchingInfo.margin),
             point = affineTransform.transform(stitchingInfo.point),
             translationFactor = {
-                x: point.x + margin.x,
-                y: point.y + margin.y
+                x: point.x - margin.x,
+                y: point.y - margin.y
             };
 
         imMatch.viewport.rotate(rad);
         imMatch.viewport.translate(translationFactor);
 
         jQuery.each(imMatch.scenes, function(i, scene) {
+            // The stitched and updated scenes have been added before this function invoked
+            if (scene.viewportID !== imMatch.viewport.id) {
+                return;
+            }
+
             scene.rotate(rad);
             scene.translate(translationFactor);
         });
