@@ -262,8 +262,8 @@ imMatch.CursorGroup.prototype = {
             globalStartEndCenters = this.computeStartEndCenters(), localStartEndCenters = {},
             globalVector, localVector;
 
-        localStartEndCenters.start = imMatch.viewport.transformWithCoordinate(globalStartEndCenters.start);
-        localStartEndCenters.end = imMatch.viewport.transformWithCoordinate(globalStartEndCenters.end);
+        localStartEndCenters.start = imMatch.viewport.transformWithCoordinate(globalStartEndCenters.start, true);
+        localStartEndCenters.end = imMatch.viewport.transformWithCoordinate(globalStartEndCenters.end, true);
 
         globalVector = {
             x: globalStartEndCenters.end.x - globalStartEndCenters.start.x,
@@ -308,6 +308,7 @@ imMatch.CursorGroup.prototype = {
         }
 
         rad = imMatch.rad({x: 1, y: 0}, stitchingInfo.orientation);
+        stitchingInfo.radBetweenUnitAndOri = rad;
         stitchingInfo.margin = imMatch.rotate(stitchingInfo.margin, rad);
         stitchingInfo.point = imMatch.viewport.transformWithCoordinate(localStartEndCenters.end);
 

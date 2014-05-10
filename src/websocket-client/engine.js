@@ -53,7 +53,7 @@ imMatch.engine = {
 
         var self = this;
         jQuery.each(imMatch.scenes, function(i, scene) {
-            self.debugPanel.append("<b>Scene </b>(" + scene.id + ") : (" + scene.x.toFixed(5) + ", " + scene.y.toFixed(5) + " )<br>");
+            self.debugPanel.append("<b>Scene </b>(" + scene.id + ") : (" + scene.x.toFixed(5) + ", " + scene.y.toFixed(5) + " ) " + scene.rad.toFixed(5) + "<br>");
             jQuery.each(scene.sprites, function(j, sprite) {
                 self.debugPanel.append("<b>Sprite </b>(" + sprite.id + ") : (" + sprite.x.toFixed(5) + ", " + sprite.y.toFixed(5) + " )<br>");
             });
@@ -234,13 +234,10 @@ imMatch.engine = {
     },
 
     updateViewportAffineTransform: function(stitchingInfo) {
-        var rad = imMatch.rad(stitchingInfo.orientation, {x: 1, y: 0}) - imMatch.viewport.rad,
-            affineTransform = imMatch.AffineTransform.getRotateInstance(rad),
-            margin = affineTransform.transform(stitchingInfo.margin),
-            point = affineTransform.transform(stitchingInfo.point),
+        var rad = stitchingInfo.radBetweenUnitAndOri - imMatch.viewport.rad,
             translationFactor = {
-                x: point.x - margin.x,
-                y: point.y - margin.y
+                x: stitchingInfo.point.x + stitchingInfo.margin.x,
+                y: stitchingInfo.point.y + stitchingInfo.margin.y
             };
 
         imMatch.viewport.rotate(rad);
