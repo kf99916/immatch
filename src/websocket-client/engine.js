@@ -62,17 +62,18 @@ imMatch.engine = {
     },
 
     run: function(timeStamp) {
-        var stamp = {
+        try {
+            this.updateMode();
+
+            var stamp = {
                 time: timeStamp,
                 frame: this.frame,
                 chunk: Math.floor(this.frame / imMatch.chunkSize) * imMatch.chunkSize};
 
-        if (this.isShowDebugInfo()) {
-            this.updateDebugPanel();
-        }
+            if (this.isShowDebugInfo()) {
+                this.updateDebugPanel();
+            }
 
-        try {
-            this.updateMode(stamp);
             this.updateReady(stamp);
             this.runWithMode(stamp);
             this.updateIntervalWithMode(stamp);
@@ -116,8 +117,7 @@ imMatch.engine = {
 
                     imMatch.device.numExchangedDevices = 0;
                     this.frame = 0;
-                  //  this.mode = imMatch.mode.stitched;
-                    this.mode = imMatch.mode.alone;
+                    this.mode = imMatch.mode.stitched;
                 }
             break;
             case imMatch.mode.stitched:
@@ -129,6 +129,7 @@ imMatch.engine = {
     },
 
     updateReady: function(stamp) {
+        var synchronizeDoneInfo = -1;
         switch(imMatch.getMainMode(this.mode)) {
             case imMatch.mainMode.alone:
                 this.isReady = returnTrue;
@@ -138,11 +139,15 @@ imMatch.engine = {
             break;
             case imMatch.mainMode.stitched:
                 this.isReady = returnFalse;
-                var synchronizeDoneInfo = this.caches.get("synchronizeDoneInfo")[0];
-                if (this.frames % imMatch.chunkSize !== imMatch.chunkSize - 1 ||
-                    synchronizeDoneInfo === stamp.chunk + imMatch.chunkSize) {
-                    this.caches.remove("synchronizeDoneInfo");
+                if (this.frame % imMatch.chunkSize !== imMatch.chunkSize - 1) {
                     this.isReady = returnTrue;
+                }
+                else {
+                    synchronizeDoneInfo = this.caches.get("synchronizeDoneInfo")[0];
+                    if (synchronizeDoneInfo === stamp.chunk + imMatch.chunkSize) {
+                        this.caches.remove("synchronizeDoneInfo");
+                        this.isReady = returnTrue;
+                    }
                 }
             break;
             default:
