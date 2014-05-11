@@ -256,6 +256,10 @@ imMatch.engine = {
 
             scene.rotate(rad);
             scene.translate(translationFactor);
+
+            jQuery.each(scene.sprites, function(j, sprite) {
+                sprite.rotate(rad);
+            });
         });
 
         return this;

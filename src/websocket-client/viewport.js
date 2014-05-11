@@ -14,8 +14,8 @@ imMatch.Viewport = function() {
     this.global2LocalTransform = imMatch.AffineTransform.getTranslationInstance({
         x: this.width / 2, y: this.height / 2});
 
+    // Viewport is only movable
     this.movable = true;
-    this.rotatable = true;
 
     this.frame = imMatch.AffineTransform.getScaleInstance({
                             x: imMatch.device.ppi,
