@@ -111,6 +111,7 @@ imMatch.transformable.prototype = {
         }
 
         scalingFactor = scalingFactor || 1;
+        anchorPoint = anchorPoint || {x: 0, y: 0};
 
         var newScalingFactor = this.scalingFactor * scalingFactor;
         if (newScalingFactor < this.minScalingFactor) {
