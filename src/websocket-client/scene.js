@@ -62,9 +62,8 @@ jQuery.extend(imMatch.Scene.prototype, imMatch.transformable.prototype, {
     },
 
     computeAffineTransform2Local: function() {
-        return imMatch.viewport.computeAppliedTransform().inverse().
-                    preConcatenate(this.computeAppliedTransform()).
-                    preConcatenate(imMatch.viewport.global2LocalTransform);
+        return this.computeAppliedTransform().
+                    preConcatenate(imMatch.viewport.computeAffineTransform2Local());
     },
 
     deserialize: function(data) {

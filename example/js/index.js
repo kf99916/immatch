@@ -1,10 +1,11 @@
 $im.ready(function() {
     $im.logLevel = $im.debugLevel;
+/*
     $im.logError("1 " + $im.rad({x: 1, y:1}, {x:1, y:0}) * 180 / Math.PI);
     $im.logError("2 " + $im.rad({x: 1, y:0}, {x:1, y:1}) * 180 / Math.PI);
     $im.logError("3 " + $im.rad({x: 1, y:1}, {x:1, y:1}) * 180 / Math.PI);
     $im.logError("4 " + $im.rad({x: 1, y:1}, {x:-1, y:-1}) * 180 / Math.PI);
-
+*/
 
     var sprite = new imMatch.Sprite(),
         scene = new imMatch.Scene();
@@ -17,9 +18,12 @@ $im.ready(function() {
 
     $im.addScene(scene);
 
-    //imMatch.viewport.translate({x: 1, y: 1});
-    //imMatch.viewport.rotate(Math.PI);
-    //scene.rotate(Math.PI);
+    imMatch.viewport.rotate(Math.PI);
+    imMatch.viewport.translate({x: 1, y: 0});
+
+    scene.rotate(Math.PI);
+    scene.translate({x: 3.52, y: 2.1});
+
 
     //sprite.tween(1.5, {x: 5});
 

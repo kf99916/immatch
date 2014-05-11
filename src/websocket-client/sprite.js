@@ -37,8 +37,6 @@ jQuery.extend(imMatch.Sprite.prototype, imMatch.transformable.prototype, {
             // Global -> Scene -> Sprite
             case imMatch.coordinate.global:
                 target.coordinate = imMatch.coordinate.sprite;
-           //     result = this.inverseTransform(this.scene.inverseTransform(
-           //                 imMatch.viewport.computeAppliedTransform().inverse().transform(target)));
                 result = this.scene.inverseTransform(this.inverseTransform(target));
             break;
             // Scene -> Sprite
@@ -60,10 +58,8 @@ jQuery.extend(imMatch.Sprite.prototype, imMatch.transformable.prototype, {
     },
 
     computeAffineTransform2Local: function() {
-        return imMatch.viewport.computeAppliedTransform().inverse().
-                    preConcatenate(this.scene.computeAppliedTransform()).
-                    preConcatenate(this.computeAppliedTransform()).
-                    preConcatenate(imMatch.viewport.global2LocalTransform);
+        return this.computeAppliedTransform().
+                    preConcatenate(this.scene.computeAffineTransform2Local());
     },
 
     // Reference for ease: http://www.greensock.com/get-started-js/#easing
