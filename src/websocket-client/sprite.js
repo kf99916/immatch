@@ -98,6 +98,7 @@ jQuery.extend(imMatch.Sprite.prototype, imMatch.transformable.prototype, {
         serializedSprite.imageID = serializedSprite.image.id;
         delete serializedSprite.scene;
         delete serializedSprite.image;
+        delete serializedSprite.cursorGroup;
 
         return serializedSprite;
     },

@@ -80,8 +80,8 @@ imMatch.engine = {
             this.setTimerWithMode(stamp);
         }
         catch(error) {
-            imMatch.logError("Crash! Error Message: ", error);
-            window.alert("Crash! Error Message: " + error);
+            imMatch.logError("Exception! Error Message: ", error);
+            window.alert("Exception! Error Message: " + error);
             window.stop();
         }
     },
