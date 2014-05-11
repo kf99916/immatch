@@ -273,15 +273,11 @@ imMatch.engine = {
 
         this.request.exchange.call(imMatch.socketClient, {
             toGroupID: stitchingInfo[1].groupID,
-            viewport: imMatch.viewport,
             scenes: exchangeScenes
         });
     },
 
     addTransformableObjects: function(jsonObject) {
-        var viewport = new imMatch.Viewport();
-        viewport.deserialize(jsonObject.viewport);
-
         jQuery.each(jsonObject.scenes, function(i, serializedScene) {
             var scene = new imMatch.Scene(false);
             scene.deserialize(serializedScene);
