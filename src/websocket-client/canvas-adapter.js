@@ -64,9 +64,9 @@ imMatch.CanvasAdapter.prototype = {
 
         this.drawTransformableObject(imMatch.viewport);
 
-        jQuery.each(imMatch.scenes.reverse(), function(i, scene) {
+        jQuery.each(imMatch.scenes, function(i, scene) {
             self.drawTransformableObject(scene, {lineWidth: 2, color: "red", alpha: 1});
-            jQuery.each(scene.sprites.reverse(), function(i, sprite) {
+            jQuery.each(scene.sprites, function(i, sprite) {
                 // Optimization 2: Skip those sprites which is not in the viewport
                 if (!sprite.isInViewport()) {
                     return;

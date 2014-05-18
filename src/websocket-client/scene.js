@@ -76,7 +76,7 @@ jQuery.extend(imMatch.Scene.prototype, imMatch.transformable.prototype, {
             var sprite = new imMatch.Sprite();
             sprite.scene = self;
             sprite.deserialize(serializedSprite);
-            self.addSprite(sprite);
+            self.addSprite(sprite, serializedSprite.z);
         });
 
         delete data.sprites;
@@ -98,7 +98,7 @@ jQuery.extend(imMatch.Scene.prototype, imMatch.transformable.prototype, {
         return false;
     },
 
-    addSprite: function(sprite) {
+    addSprite: function(sprite, defaultSpriteZ) {
         if (jQuery.isEmptyObject(sprite)) {
             return this;
         }
@@ -108,12 +108,17 @@ jQuery.extend(imMatch.Scene.prototype, imMatch.transformable.prototype, {
             return this;
         }
 
-        sprite.setContainedScene(this);
+        sprite.setContainedScene(this, defaultSpriteZ);
         ++this.spriteZ;
 
         push.call(this.sprites, sprite);
         this.sprites.sort(function(a, b) {
-            return b.z - a.z;
+            var diff = a.z - b.z;
+            if (0 !== diff) {
+                return diff;
+            }
+
+            return (a.id > b.id)? 1 : -1;
         });
 
         return this;
@@ -133,7 +138,12 @@ jQuery.extend(imMatch, {
 
         push.call(imMatch.scenes, scene);
         imMatch.scenes.sort(function(a, b) {
-            return b.z - a.z;
+            var diff = a.z - b.z;
+            if (0 !== diff) {
+                return diff;
+            }
+
+            return (a.id > b.id)? 1 : -1;
         });
 
         return this;

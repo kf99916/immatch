@@ -114,13 +114,15 @@ jQuery.extend(imMatch.Sprite.prototype, imMatch.transformable.prototype, {
         return jQuery.extend(this, data);
     },
 
-    setContainedScene: function(scene) {
+    setContainedScene: function(scene, defaultSpriteZ) {
         if (jQuery.isEmptyObject(scene)) {
             return this;
         }
 
+        defaultSpriteZ = defaultSpriteZ || scene.z * imMatch.maxNumSpritesInScene + scene.spriteZ;
+
         this.scene = scene;
-        this.z = scene.z * imMatch.maxNumSpritesInScene + scene.spriteZ;
+        this.z = defaultSpriteZ;
 
         return this;
     },

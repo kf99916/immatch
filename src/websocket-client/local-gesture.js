@@ -53,12 +53,12 @@ imMatch.localGesture = {
     },
 
     searchTouchedSprite: function(touchMouseEvent) {
-        var result;
+        var result, scenes = slice.call(imMatch.scenes);
 
         imMatch.logDebug("TouchMouseEvent @ Global: ", touchMouseEvent.x, touchMouseEvent.y, touchMouseEvent.coordinate);
 
-        jQuery.each(imMatch.scenes, function(i, scene) {
-            var touchMouseEventInScene = scene.transformWithCoordinate(touchMouseEvent, true);
+        jQuery.each(scenes.reverse(), function(i, scene) {
+            var touchMouseEventInScene = scene.transformWithCoordinate(touchMouseEvent, true), sprites;
 
             imMatch.logDebug("TouchMouseEvent @ Scene: ",
                 touchMouseEventInScene.x, touchMouseEventInScene.y, touchMouseEventInScene.coordinate);
@@ -67,7 +67,8 @@ imMatch.localGesture = {
                 return;
             }
 
-            jQuery.each(scene.sprites, function(i, sprite) {
+            sprites = slice.call(scene.sprites);
+            jQuery.each(sprites.reverse(), function(i, sprite) {
                 var touchMouseEventInSprite = sprite.transformWithCoordinate(touchMouseEventInScene, true);
 
                 imMatch.logDebug("TouchMouseEvent @ Sprite: ",

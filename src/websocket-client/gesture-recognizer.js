@@ -32,7 +32,7 @@ imMatch.gestureRecognizer = {
             });
 
             if (!inTouchedSprites) {
-                push.call(touchedSprites,currentTouchedSprite);
+                push.call(touchedSprites, currentTouchedSprite);
             }
         });
 
