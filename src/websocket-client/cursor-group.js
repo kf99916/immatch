@@ -258,7 +258,7 @@ imMatch.CursorGroup.prototype = {
     },
 
     computeStitchingInfo: function() {
-        var stitchingInfo = {}, rad,
+        var stitchingInfo = {},
             globalStartEndCenters = this.computeStartEndCenters(), localStartEndCenters = {},
             globalVector, localVector;
 
@@ -289,7 +289,7 @@ imMatch.CursorGroup.prototype = {
         if (localVector.y === 0 || Math.abs(localVector.x / localVector.y) > 1) {
             if (localVector.x > 0) {
                 localStartEndCenters.end.x = imMatch.viewport.width;
-                stitchingInfo.margin.x = imMatch.device.margin.right;
+                stitchingInfo.margin.x = -imMatch.device.margin.right;
             }
             else {
                 localStartEndCenters.end.x = 0;
@@ -299,7 +299,7 @@ imMatch.CursorGroup.prototype = {
         else if (localVector.x === 0 || Math.abs(localVector.y / localVector.x) > 1) {
             if (localVector.y > 0) {
                 localStartEndCenters.end.y = imMatch.viewport.height;
-                stitchingInfo.margin.y = imMatch.device.margin.bottom;
+                stitchingInfo.margin.y = -imMatch.device.margin.bottom;
             }
             else {
                 localStartEndCenters.end.y = 0;
@@ -307,9 +307,6 @@ imMatch.CursorGroup.prototype = {
             }
         }
 
-        rad = imMatch.rad({x: 1, y: 0}, stitchingInfo.orientation);
-        stitchingInfo.radBetweenUnitAndOri = rad;
-        stitchingInfo.margin = imMatch.rotate(stitchingInfo.margin, rad);
         stitchingInfo.point = imMatch.viewport.transformWithCoordinate(localStartEndCenters.end);
 
         return stitchingInfo;
