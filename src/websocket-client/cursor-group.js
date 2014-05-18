@@ -395,14 +395,15 @@ jQuery.extend(imMatch, {
             return false;
         }
 
-        var normalRegion = imMatch.viewport.transformWithCoordinate({x: 0, y: 0, coordinate: imMatch.coordinate.global}),
+        var stitchingRegionSize = imMatch.device.stitchingRegionSize,
+            normalRegion = {x: stitchingRegionSize, y: stitchingRegionSize,
+                width: imMatch.viewport.width - 2 * stitchingRegionSize,
+                height: imMatch.viewport.height - 2 * stitchingRegionSize},
             localPoint = (point.coordinate === imMatch.coordinate.local)? point :
                                 imMatch.viewport.transformWithCoordinate(point, true);
-        normalRegion.width = imMatch.viewport.width - 2 * imMatch.device.stitchingRegionSize;
-        normalRegion.height = imMatch.viewport.height - 2 * imMatch.device.stitchingRegionSize;
 
-        if (normalRegion.x - normalRegion.width/2 <= localPoint.x && localPoint.x <= normalRegion.x + normalRegion.width/2 &&
-            normalRegion.y - normalRegion.height/2 <= localPoint.y && localPoint.y <= normalRegion.y + normalRegion.height/2) {
+        if (normalRegion.x <= localPoint.x && localPoint.x <= normalRegion.x + normalRegion.width &&
+            normalRegion.y <= localPoint.y && localPoint.y <= normalRegion.y + normalRegion.height) {
             return false;
         }
 
