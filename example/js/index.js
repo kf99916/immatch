@@ -18,13 +18,13 @@ $im.ready(function() {
 
     $im.addScene(scene);
 
-   /* imMatch.viewport.rotate(Math.PI);
-    imMatch.viewport.translate({x: 1, y: 0});
+  //  imMatch.viewport.rotate(Math.PI);
+//    imMatch.viewport.translate({x: 1, y: 0});
 
-    scene.rotate(Math.PI);
-    scene.translate({x: 3.52, y: 2.1});
+//    scene.rotate(Math.PI);
+  //  scene.translate({x: 1, y: 0});
 
-*/
+
     //sprite.tween(1.5, {x: 5});
 
     $im.run();

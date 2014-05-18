@@ -58,6 +58,7 @@ imMatch.localGesture = {
         imMatch.logDebug("TouchMouseEvent @ Global: ", touchMouseEvent.x, touchMouseEvent.y, touchMouseEvent.coordinate);
 
         jQuery.each(scenes.reverse(), function(i, scene) {
+            imMatch.logError(scene);
             var touchMouseEventInScene = scene.transformWithCoordinate(touchMouseEvent, true), sprites;
 
             imMatch.logDebug("TouchMouseEvent @ Scene: ",
@@ -79,6 +80,10 @@ imMatch.localGesture = {
                     return false;
                 }
             });
+
+            if (!imMatch.isEmpty(result)) {
+                return false;
+            }
         });
 
         return result;
