@@ -142,10 +142,8 @@ jQuery.extend(ws.Server.prototype, {
             match.numExchangedDevices = numDevicesInGroup;
 
             this.caches.queue("stitchingInfo", [jsonObject, match]);
-            if (numDevicesInGroup === 1 && numDevicesInMatchGroup === 1) {
-                group.stitch();
-                matchGroup.stitch();
-            }
+            group.stitch();
+            matchGroup.stitch();
         },
 
         synchronize: function(jsonObject) {

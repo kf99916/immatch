@@ -123,6 +123,10 @@ imMatch.engine = {
                 }
             break;
             case imMatch.mode.stitched:
+                stitchingInfo = this.caches.get("stitchingInfo")[0];
+                if (!jQuery.isEmptyObject(stitchingInfo)) {
+                    this.mode = imMatch.mode.stitching.exchange;
+                }
             break;
             default:
             break;
