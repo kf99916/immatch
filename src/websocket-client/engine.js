@@ -100,7 +100,7 @@ imMatch.engine = {
             case imMatch.mode.stitching.exchange:
                 stitchingInfo = this.caches.get("stitchingInfo")[0];
                 this.updateViewportAffineTransform(stitchingInfo[0]);
-                this.exchange(stitchingInfo);
+                this.exchange(stitchingInfo[1]);
                 this.mode = imMatch.mode.stitching.done;
             break;
             case imMatch.mode.stitching.done:
@@ -241,20 +241,8 @@ imMatch.engine = {
     },
 
     updateViewportAffineTransform: function(stitchingInfo) {
-        var rad = imMatch.rad({x: 1, y: 0}, stitchingInfo.orientation),
-            rotateTransform = imMatch.AffineTransform.getRotateInstance(rad),
-            translationFactor;
-
-        stitchingInfo.margin = rotateTransform.transform(stitchingInfo.margin);
-        stitchingInfo.point = rotateTransform.transform(stitchingInfo.point);
-
-        translationFactor = {
-            x: stitchingInfo.margin.x - stitchingInfo.point.x,
-            y: stitchingInfo.margin.y - stitchingInfo.point.y
-        };
-
-        imMatch.viewport.rotate(rad);
-        imMatch.viewport.translate(translationFactor);
+        imMatch.viewport.rotate(stitchingInfo.rad);
+        imMatch.viewport.translate(stitchingInfo.translationFactor);
 
         jQuery.each(imMatch.scenes, function(i, scene) {
             // The stitched and updated scenes have been added before this function invoked
@@ -262,12 +250,12 @@ imMatch.engine = {
                 return;
             }
 
-            scene.rotate(rad);
-            scene.translate(translationFactor);
-
+            scene.rotate(stitchingInfo.rad);
+            scene.translate(stitchingInfo.translationFactor);
+/*
             jQuery.each(scene.sprites, function(j, sprite) {
                 sprite.rotate(rad);
-            });
+            });*/
         });
 
         return this;
@@ -284,7 +272,7 @@ imMatch.engine = {
         });
 
         this.request.exchange.call(imMatch.socketClient, {
-            toGroupID: stitchingInfo[1].groupID,
+            toGroupID: stitchingInfo.groupID,
             scenes: exchangeScenes
         });
     },

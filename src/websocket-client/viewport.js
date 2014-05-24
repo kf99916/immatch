@@ -16,6 +16,7 @@ imMatch.Viewport = function() {
 
     // Viewport is only movable
     this.movable = true;
+    this.rotatable = true;
 
     this.frame = imMatch.AffineTransform.getScaleInstance({
                             x: imMatch.device.ppi,

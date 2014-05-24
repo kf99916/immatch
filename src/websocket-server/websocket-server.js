@@ -67,6 +67,25 @@ jQuery.extend(ws.Server.prototype, {
         return match;
     },
 
+    computeAffineFactor: function(stitchingInfo) {
+        stitchingInfo.rad = imMatch.rad({x: 1, y: 0}, stitchingInfo.orientation);
+        var rotateTransform = imMatch.AffineTransform.getRotateInstance(stitchingInfo.rad);
+
+        stitchingInfo.margin = rotateTransform.transform(stitchingInfo.margin);
+        stitchingInfo.point = rotateTransform.transform(stitchingInfo.point);
+
+        stitchingInfo.translationFactor = {
+            x: stitchingInfo.margin.x - stitchingInfo.point.x,
+            y: stitchingInfo.margin.y - stitchingInfo.point.y
+        };
+
+        delete stitchingInfo.margin;
+        delete stitchingInfo.point;
+        delete stitchingInfo.orientation;
+
+        return this;
+    },
+
     // Response received messages
     response: {
         connection: function(webSocket) {
@@ -115,6 +134,9 @@ jQuery.extend(ws.Server.prototype, {
             // Reverse stitch orientation of the later device
             jsonObject.orientation.x = -jsonObject.orientation.x;
             jsonObject.orientation.y = -jsonObject.orientation.y;
+
+            this.computeAffineFactor(jsonObject);
+            this.computeAffineFactor(match);
 
             jsonObject.numExchangedDevices = numDevicesInMatchGroup;
             match.numExchangedDevices = numDevicesInGroup;
