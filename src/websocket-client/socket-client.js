@@ -1,7 +1,7 @@
-imMatch.SocketClient = function() {
+imMatch.SocketClient = function(webSocketServerURL) {
     // Allow instantiation without the 'new' keyword
     if ( !(this instanceof imMatch.SocketClient) ) {
-        return new imMatch.SocketClient();
+        return new imMatch.SocketClient(webSocketServerURL);
     }
     var self = this;
 
@@ -14,10 +14,12 @@ imMatch.SocketClient = function() {
         return;
     }
 
+    webSocketServerURL = webSocketServerURL || "ws://127.0.0.1:8080";
+
     this.caches = new imMatch.Cache();
-    this.webSocket = new window.WebSocket("@WEBSOCKET_URL");
+    this.webSocket = new window.WebSocket(webSocketServerURL);
     this.webSocket.onopen = function(event) {
-        imMatch.logInfo("[WebSocket.onopen] A websocket opened. URL: " + "@WEBSOCKET_URL ", event);
+        imMatch.logInfo("[WebSocket.onopen] A websocket opened. URL: " + webSocketServerURL, event);
     };
 
     this.webSocket.onmessage = function(event) {

@@ -293,13 +293,16 @@ imMatch.engine = {
 };
 
 jQuery.extend(imMatch, {
-    run: function(canvasID) {
-        var debugPanelID = "debugPanel";
+    run: function(canvasID, webSocketServerIP) {
+        var debugPanelID = "debugPanel", webSocketServerURL;
         if (!imMatch.isReady()) {
             jQuery.error("Please invoke $im.ready(fn).");
         }
 
-        imMatch.socketClient = new imMatch.SocketClient();
+        webSocketServerIP = webSocketServerIP || "127.0.0.1";
+        webSocketServerURL = "ws://" + webSocketServerIP + ":8080";
+
+        imMatch.socketClient = new imMatch.SocketClient(webSocketServerURL);
         imMatch.engine.request = imMatch.socketClient.request;
         imMatch.engine.caches = imMatch.socketClient.caches;
 

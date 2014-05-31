@@ -66,10 +66,7 @@ module.exports = function(grunt) {
             },
 			imMatchWebsocketClient: {
 				options: {
-					banner: "<%= meta.imMatchWebsocketClient.banner %>",
-                    process: function(src, filepath) {
-                      return src.replace(/@WEBSOCKET_URL/g, grunt.config.get("pkg.configurations.webSocketURL"));
-                    }
+					banner: "<%= meta.imMatchWebsocketClient.banner %>"
 				},
 				src:["src/common/intro/intro.js",
                     "src/common/3rd-party/*.js",

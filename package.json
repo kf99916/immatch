@@ -24,9 +24,6 @@
       "url": "https://bitbucket.org/kf99916/immatch/wiki/MIT%20LICENSE"
     }
   ],
-  "configurations": {
-    "webSocketURL": "ws://127.0.0.1:8080"
-  },
   "dependencies": {},
   "devDependencies": {
     "load-grunt-tasks": "0.3.0",
