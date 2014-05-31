@@ -15,6 +15,7 @@ imMatch.Scene = function(incrementSceneZ) {
         ++sceneZ;
     }
 
+    this.groupID = 0;
     this.viewportID = imMatch.viewport.id;
     this.width = imMatch.viewport.width;
     this.height = imMatch.viewport.height;

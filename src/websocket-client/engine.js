@@ -106,6 +106,7 @@ imMatch.engine = {
             break;
             case imMatch.mode.stitching.exchange:
                 this.caches.remove("synchronizeDoneInfo");
+                this.caches.remove("syncTouchMouseEvent");
 
                 stitchingInfo = this.caches.get("stitchingInfo")[0];
                 this.updateViewportAffineTransform(stitchingInfo[0]);
@@ -258,6 +259,11 @@ imMatch.engine = {
         imMatch.viewport.translate(stitchingInfo.translationFactor);
 
         jQuery.each(imMatch.scenes, function(i, scene) {
+            // The stitched and updated scenes have been added before this function invoked
+            if (scene.groupID !== imMatch.device.groupID) {
+                return;
+            }
+
             scene.rotate(stitchingInfo.rad);
             scene.translate(stitchingInfo.translationFactor);
         });

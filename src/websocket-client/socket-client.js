@@ -114,9 +114,10 @@ imMatch.SocketClient.prototype = {
     response: {
         connectionSuccess: function(jsonObject) {
             imMatch.device.id = jsonObject.deviceID;
-            imMatch.device.groupID = jsonObject.groupID;
             imMatch.device.numDevices = jsonObject.numDevices;
             imMatch.device.numExchangedDevices = 0;
+            imMatch.device.setGroupID(jsonObject.groupID);
+
             return this;
         },
 
@@ -151,7 +152,7 @@ imMatch.SocketClient.prototype = {
         },
 
         exchangeDone: function(jsonObject) {
-            imMatch.device.groupID = jsonObject.groupID;
+            imMatch.device.setGroupID(jsonObject.groupID);
             this.caches.queue("exchangeDoneInfo", jsonObject.numDevices);
             return this;
         }

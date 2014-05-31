@@ -51,5 +51,13 @@ else if (MobileEsp.DetectIpad()) {
 jQuery.extend(imMatch.device, {
     devicePixelRatio: window.devicePixelRatio || 1,
 
-    stitchingRegionSize: 0.3
+    stitchingRegionSize: 0.3,
+
+    setGroupID: function(groupID) {
+        var self = this;
+        this.groupID = groupID || 0;
+        jQuery.each(imMatch.scenes, function(i, scene) {
+            scene.groupID = self.groupID;
+        });
+    }
 });
