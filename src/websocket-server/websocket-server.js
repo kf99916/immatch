@@ -116,6 +116,12 @@ jQuery.extend(ws.Server.prototype, {
             group = this.groups[jsonObject.groupID];
             matchGroup = this.groups[match.groupID];
 
+            if (imMatch.isEmpty(group) || imMatch.isEmpty(matchGroup)) {
+                imMatch.logError("[ws.Server.tryToStitch] group or matchGroup are empty." +
+                        " group:", group, "matchGroup:", matchGroup);
+                return this;
+            }
+
             if (!jQuery.isEmptyObject(group.getStitchingInfo()) ||
                 !jQuery.isEmptyObject(matchGroup.getStitchingInfo())) {
                 imMatch.logDebug("[ws.Server.tryToStitch] Groups are stitching." +
@@ -127,6 +133,9 @@ jQuery.extend(ws.Server.prototype, {
             if (group.id === matchGroup.id) {
                 return this;
             }
+
+            group.numDevicesSynced = {};
+            matchGroup.numDevicesSynced = {};
 
             numDevicesInGroup = group.devices.length;
             numDevicesInMatchGroup = matchGroup.devices.length;

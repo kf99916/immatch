@@ -53,8 +53,15 @@ imMatch.engine = {
 
         var self = this;
         jQuery.each(imMatch.scenes, function(i, scene) {
-            self.debugPanel.append("<b>Scene </b>(" + scene.id + ") : (" + scene.x.toFixed(5) + ", " + scene.y.toFixed(5) +
-                ", " + scene.z.toFixed(5) + " ) " + scene.rad.toFixed(5) + "<br>");
+            if (scene.viewportID === imMatch.viewport.id) {
+                self.debugPanel.append("<u><b>Scene </b>(" + scene.id + ") : (" + scene.x.toFixed(5) + ", " + scene.y.toFixed(5) +
+                    ", " + scene.z.toFixed(5) + " ) " + scene.rad.toFixed(5) + "</u><br>");
+            }
+            else {
+                self.debugPanel.append("<b>Scene </b>(" + scene.id + ") : (" + scene.x.toFixed(5) + ", " + scene.y.toFixed(5) +
+                    ", " + scene.z.toFixed(5) + " ) " + scene.rad.toFixed(5) + "<br>");
+            }
+
             jQuery.each(scene.sprites, function(j, sprite) {
                 self.debugPanel.append("<b>Sprite </b>(" + sprite.id + ") : (" + sprite.x.toFixed(5) +
                     ", " + sprite.y.toFixed(5) + ", " + sprite.z.toFixed(5) + " )<br>");
@@ -98,6 +105,8 @@ imMatch.engine = {
                 }
             break;
             case imMatch.mode.stitching.exchange:
+                this.caches.remove("synchronizeDoneInfo");
+
                 stitchingInfo = this.caches.get("stitchingInfo")[0];
                 this.updateViewportAffineTransform(stitchingInfo[0]);
                 this.exchange(stitchingInfo[1]);
@@ -249,17 +258,8 @@ imMatch.engine = {
         imMatch.viewport.translate(stitchingInfo.translationFactor);
 
         jQuery.each(imMatch.scenes, function(i, scene) {
-            // The stitched and updated scenes have been added before this function invoked
-            if (scene.viewportID !== imMatch.viewport.id) {
-                return;
-            }
-
             scene.rotate(stitchingInfo.rad);
             scene.translate(stitchingInfo.translationFactor);
-/*
-            jQuery.each(scene.sprites, function(j, sprite) {
-                sprite.rotate(rad);
-            });*/
         });
 
         return this;

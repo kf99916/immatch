@@ -13,7 +13,7 @@ jQuery.extend(imMatch, {
 
             imMatch.viewport.transformWithCoordinate(touchMouseEvent);
 
-            imMatch.logDebug("[" + touchMouseEvent.type + "] " + touchMouseEvent.x + ", " +
+            imMatch.logInfo("[" + touchMouseEvent.type + "] " + touchMouseEvent.x + ", " +
                 touchMouseEvent.y + "(" + touchMouseEvent.id + ")");
 
             imMatch.socketClient.caches.queue("touchMouseEvent", touchMouseEvent, function(a, b) {
