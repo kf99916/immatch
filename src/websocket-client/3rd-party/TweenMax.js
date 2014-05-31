@@ -1,14 +1,14 @@
 /*!
- * VERSION: 1.11.6
- * DATE: 2014-03-26
+ * VERSION: 1.11.8
+ * DATE: 2014-05-13
  * UPDATES AND DOCS AT: http://www.greensock.com
- *
+ * 
  * Includes all of the following: TweenLite, TweenMax, TimelineLite, TimelineMax, EasePack, CSSPlugin, RoundPropsPlugin, BezierPlugin, AttrPlugin, DirectionalRotationPlugin
  *
  * @license Copyright (c) 2008-2014, GreenSock. All rights reserved.
  * This work is subject to the terms at http://www.greensock.com/terms_of_use.html or for
  * Club GreenSock members, the software agreement that was issued with your membership.
- *
+ * 
  * @author: Jack Doyle, jack@greensock.com
  **/
 
@@ -17,7 +17,7 @@
 	"use strict";
 
 	window._gsDefine("TweenMax", ["core.Animation","core.SimpleTimeline","TweenLite"], function(Animation, SimpleTimeline, TweenLite) {
-
+		
 		var _slice = [].slice,
 			TweenMax = function(target, duration, vars) {
 				TweenLite.call(this, target, duration, vars);
@@ -34,13 +34,13 @@
 			p = TweenMax.prototype = TweenLite.to({}, 0.1, {}),
 			_blankArray = [];
 
-		TweenMax.version = "1.11.6";
+		TweenMax.version = "1.11.8";
 		p.constructor = TweenMax;
 		p.kill()._gc = false;
 		TweenMax.killTweensOf = TweenMax.killDelayedCallsTo = TweenLite.killTweensOf;
 		TweenMax.getTweensOf = TweenLite.getTweensOf;
 		TweenMax.ticker = TweenLite.ticker;
-
+	
 		p.invalidate = function() {
 			this._yoyo = (this.vars.yoyo === true);
 			this._repeat = this.vars.repeat || 0;
@@ -48,7 +48,7 @@
 			this._uncache(true);
 			return TweenLite.prototype.invalidate.call(this);
 		};
-
+		
 		p.updateTo = function(vars, resetDuration) {
 			var curRatio = this.ratio, p;
 			if (resetDuration && this._startTime < this._timeline._time) {
@@ -73,7 +73,7 @@
 					if (this._notifyPluginsOfEnabled && this._firstPT) {
 						TweenLite._onPluginEvent("_onDisable", this); //in case a plugin like MotionBlur must perform some cleanup tasks
 					}
-					if (this._time / this._duration > 0.998) { //if the tween has finished (or come extremely close to finishing), we just need to rewind it to 0 and then render it again at the end which forces it to re-initialize (parsing the new vars). We allow tweens that are close to finishing (but haven't quite finished) to work this way too because otherwise, the values are so small when determining where to project the starting values that binary math issues creep in and can make the tween appear to render incorrectly when run backwards.
+					if (this._time / this._duration > 0.998) { //if the tween has finished (or come extremely close to finishing), we just need to rewind it to 0 and then render it again at the end which forces it to re-initialize (parsing the new vars). We allow tweens that are close to finishing (but haven't quite finished) to work this way too because otherwise, the values are so small when determining where to project the starting values that binary math issues creep in and can make the tween appear to render incorrectly when run backwards. 
 						var prevTime = this._time;
 						this.render(0, true, false);
 						this._initted = false;
@@ -84,7 +84,7 @@
 						var inv = 1 / (1 - curRatio),
 							pt = this._firstPT, endValue;
 						while (pt) {
-							endValue = pt.s + pt.c;
+							endValue = pt.s + pt.c; 
 							pt.c *= inv;
 							pt.s = endValue - pt.c;
 							pt = pt._next;
@@ -94,14 +94,14 @@
 			}
 			return this;
 		};
-
+				
 		p.render = function(time, suppressEvents, force) {
 			if (!this._initted) if (this._duration === 0 && this.vars.repeat) { //zero duration tweens that render immediately have render() called from TweenLite's constructor, before TweenMax's constructor has finished setting _repeat, _repeatDelay, and _yoyo which are critical in determining totalDuration() so we need to call invalidate() which is a low-kb way to get those set properly.
 				this.invalidate();
 			}
 			var totalDur = (!this._dirty) ? this._totalDuration : this.totalDuration(),
 				prevTime = this._time,
-				prevTotalTime = this._totalTime,
+				prevTotalTime = this._totalTime, 
 				prevCycle = this._cycle,
 				duration = this._duration,
 				isComplete, callback, pt, cycleDuration, r, type, pow, rawPrevTime;
@@ -132,7 +132,7 @@
 					}
 					this._rawPrevTime = rawPrevTime = (!suppressEvents || time || this._rawPrevTime === time) ? time : _tinyNum; //when the playhead arrives at EXACTLY time 0 (right on top) of a zero-duration tween, we need to discern if events are suppressed so that when the playhead moves again (next time), it'll trigger the callback. If events are NOT suppressed, obviously the callback would be triggered in this render. Basically, the callback should fire either when the playhead ARRIVES or LEAVES this exact spot, not both. Imagine doing a timeline.seek(0) and there's a callback that sits at 0. Since events are suppressed on that seek() by default, nothing will fire, but when the playhead moves off of that position, the callback should fire. This behavior is what people intuitively expect. We set the _rawPrevTime to be a precise tiny number to indicate this scenario rather than using another property/variable which would increase memory usage. This technique is less readable, but more efficient.
 				}
-
+				
 			} else if (time < 0.0000001) { //to work around occasional floating point math artifacts, round super small values to 0.
 				this._totalTime = this._time = this._cycle = 0;
 				this.ratio = this._ease._calcEnd ? this._ease.getRatio(0) : 0;
@@ -153,7 +153,7 @@
 				}
 			} else {
 				this._totalTime = this._time = time;
-
+				
 				if (this._repeat !== 0) {
 					cycleDuration = duration + this._repeatDelay;
 					this._cycle = (this._totalTime / cycleDuration) >> 0; //originally _totalTime % cycleDuration but floating point errors caused problems, so I normalized it. (4 % 0.8 should be 0 but Flash reports it as 0.79999999!)
@@ -170,7 +170,7 @@
 						this._time = 0;
 					}
 				}
-
+				
 				if (this._easeType) {
 					r = this._time / duration;
 					type = this._easeType;
@@ -190,7 +190,7 @@
 					} else if (pow === 4) {
 						r *= r * r * r * r;
 					}
-
+					
 					if (type === 1) {
 						this.ratio = 1 - r;
 					} else if (type === 2) {
@@ -200,13 +200,13 @@
 					} else {
 						this.ratio = 1 - (r / 2);
 					}
-
+					
 				} else {
 					this.ratio = this._ease.getRatio(this._time / duration);
 				}
-
+				
 			}
-
+				
 			if (prevTime === this._time && !force && prevCycle === this._cycle) {
 				if (prevTotalTime !== this._totalTime) if (this._onUpdate) if (!suppressEvents) { //so that onUpdate fires even during the repeatDelay - as long as the totalTime changed, we should trigger onUpdate.
 					this._onUpdate.apply(this.vars.onUpdateScope || this, this.vars.onUpdateParams || _blankArray);
@@ -224,7 +224,7 @@
 					this.ratio = this._ease.getRatio((this._time === 0) ? 0 : 1);
 				}
 			}
-
+			
 			if (!this._active) if (!this._paused && this._time !== prevTime && time >= 0) {
 				this._active = true; //so that if the user renders a tween (as opposed to the timeline rendering it), the timeline is forced to re-render and align it with the proper time/frame on the next rendering cycle. Maybe the tween already finished but the user manually re-renders it as halfway done.
 			}
@@ -240,7 +240,7 @@
 					this.vars.onStart.apply(this.vars.onStartScope || this, this.vars.onStartParams || _blankArray);
 				}
 			}
-
+			
 			pt = this._firstPT;
 			while (pt) {
 				if (pt.f) {
@@ -250,7 +250,7 @@
 				}
 				pt = pt._next;
 			}
-
+			
 			if (this._onUpdate) {
 				if (time < 0) if (this._startAt && this._startTime) { //if the tween is positioned at the VERY beginning (_startTime 0) of its parent timeline, it's illegal for the playhead to go back further, so we should not render the recorded startAt values.
 					this._startAt.render(time, suppressEvents, force); //note: for performance reasons, we tuck this conditional logic inside less traveled areas (most tweens don't have an onUpdate). We'd just have it at the end before the onComplete, but the values should be updated before any onUpdate is called, so we ALSO put it here and then if it's not called, we do so later near the onComplete.
@@ -280,25 +280,25 @@
 				}
 			}
 		};
-
+		
 //---- STATIC FUNCTIONS -----------------------------------------------------------------------------------------------------------
-
+		
 		TweenMax.to = function(target, duration, vars) {
 			return new TweenMax(target, duration, vars);
 		};
-
+		
 		TweenMax.from = function(target, duration, vars) {
 			vars.runBackwards = true;
 			vars.immediateRender = (vars.immediateRender != false);
 			return new TweenMax(target, duration, vars);
 		};
-
+		
 		TweenMax.fromTo = function(target, duration, fromVars, toVars) {
 			toVars.startAt = fromVars;
 			toVars.immediateRender = (toVars.immediateRender != false && fromVars.immediateRender != false);
 			return new TweenMax(target, duration, toVars);
 		};
-
+		
 		TweenMax.staggerTo = TweenMax.allTo = function(targets, duration, vars, stagger, onCompleteAll, onCompleteAllParams, onCompleteAllScope) {
 			stagger = stagger || 0;
 			var delay = vars.delay || 0,
@@ -333,31 +333,31 @@
 			}
 			return a;
 		};
-
+		
 		TweenMax.staggerFrom = TweenMax.allFrom = function(targets, duration, vars, stagger, onCompleteAll, onCompleteAllParams, onCompleteAllScope) {
 			vars.runBackwards = true;
 			vars.immediateRender = (vars.immediateRender != false);
 			return TweenMax.staggerTo(targets, duration, vars, stagger, onCompleteAll, onCompleteAllParams, onCompleteAllScope);
 		};
-
+		
 		TweenMax.staggerFromTo = TweenMax.allFromTo = function(targets, duration, fromVars, toVars, stagger, onCompleteAll, onCompleteAllParams, onCompleteAllScope) {
 			toVars.startAt = fromVars;
 			toVars.immediateRender = (toVars.immediateRender != false && fromVars.immediateRender != false);
 			return TweenMax.staggerTo(targets, duration, toVars, stagger, onCompleteAll, onCompleteAllParams, onCompleteAllScope);
 		};
-
+				
 		TweenMax.delayedCall = function(delay, callback, params, scope, useFrames) {
 			return new TweenMax(callback, 0, {delay:delay, onComplete:callback, onCompleteParams:params, onCompleteScope:scope, onReverseComplete:callback, onReverseCompleteParams:params, onReverseCompleteScope:scope, immediateRender:false, useFrames:useFrames, overwrite:0});
 		};
-
+		
 		TweenMax.set = function(target, vars) {
 			return new TweenMax(target, 0, vars);
 		};
-
+		
 		TweenMax.isTweening = function(target) {
 			return (TweenLite.getTweensOf(target, true).length > 0);
 		};
-
+		
 		var _getChildrenOf = function(timeline, includeTimelines) {
 				var a = [],
 					cnt = 0,
@@ -375,11 +375,11 @@
 					tween = tween._next;
 				}
 				return a;
-			},
+			}, 
 			getAllTweens = TweenMax.getAllTweens = function(includeTimelines) {
 				return _getChildrenOf(Animation._rootTimeline, includeTimelines).concat( _getChildrenOf(Animation._rootFramesTimeline, includeTimelines) );
 			};
-
+		
 		TweenMax.killAll = function(complete, tweens, delayedCalls, timelines) {
 			if (tweens == null) {
 				tweens = true;
@@ -402,7 +402,7 @@
 				}
 			}
 		};
-
+		
 		TweenMax.killChildTweensOf = function(parent, complete) {
 			if (parent == null) {
 				return;
@@ -456,11 +456,11 @@
 				}
 			}
 		};
-
+		
 		TweenMax.pauseAll = function(tweens, delayedCalls, timelines) {
 			_changePause(true, tweens, delayedCalls, timelines);
 		};
-
+		
 		TweenMax.resumeAll = function(tweens, delayedCalls, timelines) {
 			_changePause(false, tweens, delayedCalls, timelines);
 		};
@@ -479,18 +479,18 @@
 			tl._timeScale = Animation._rootTimeline._timeScale = value;
 			return value;
 		};
-
-
+		
+	
 //---- GETTERS / SETTERS ----------------------------------------------------------------------------------------------------------
-
+		
 		p.progress = function(value) {
 			return (!arguments.length) ? this._time / this.duration() : this.totalTime( this.duration() * ((this._yoyo && (this._cycle & 1) !== 0) ? 1 - value : value) + (this._cycle * (this._duration + this._repeatDelay)), false);
 		};
-
+		
 		p.totalProgress = function(value) {
 			return (!arguments.length) ? this._totalTime / this.totalDuration() : this.totalTime( this.totalDuration() * value, false);
 		};
-
+		
 		p.time = function(value, suppressEvents) {
 			if (!arguments.length) {
 				return this._time;
@@ -527,7 +527,7 @@
 			}
 			return (this._repeat === -1) ? this : this.duration( (value - (this._repeat * this._repeatDelay)) / (this._repeat + 1) );
 		};
-
+		
 		p.repeat = function(value) {
 			if (!arguments.length) {
 				return this._repeat;
@@ -535,7 +535,7 @@
 			this._repeat = value;
 			return this._uncache(true);
 		};
-
+		
 		p.repeatDelay = function(value) {
 			if (!arguments.length) {
 				return this._repeatDelay;
@@ -543,7 +543,7 @@
 			this._repeatDelay = value;
 			return this._uncache(true);
 		};
-
+		
 		p.yoyo = function(value) {
 			if (!arguments.length) {
 				return this._yoyo;
@@ -551,10 +551,10 @@
 			this._yoyo = value;
 			return this;
 		};
-
-
+		
+		
 		return TweenMax;
-
+		
 	}, true);
 
 
@@ -594,6 +594,7 @@
 			_isSelector = TweenLite._internals.isSelector,
 			_isArray = TweenLite._internals.isArray,
 			_blankArray = [],
+			_globals = window._gsDefine.globals,
 			_copy = function(vars) {
 				var copy = {}, p;
 				for (p in vars) {
@@ -610,20 +611,22 @@
 			_slice = _blankArray.slice,
 			p = TimelineLite.prototype = new SimpleTimeline();
 
-		TimelineLite.version = "1.11.6";
+		TimelineLite.version = "1.11.8";
 		p.constructor = TimelineLite;
 		p.kill()._gc = false;
 
 		p.to = function(target, duration, vars, position) {
-			return duration ? this.add( new TweenLite(target, duration, vars), position) : this.set(target, vars, position);
+			var Engine = (vars.repeat && _globals.TweenMax) || TweenLite;
+			return duration ? this.add( new Engine(target, duration, vars), position) : this.set(target, vars, position);
 		};
 
 		p.from = function(target, duration, vars, position) {
-			return this.add( TweenLite.from(target, duration, vars), position);
+			return this.add( ((vars.repeat && _globals.TweenMax) || TweenLite).from(target, duration, vars), position);
 		};
 
 		p.fromTo = function(target, duration, fromVars, toVars, position) {
-			return duration ? this.add( TweenLite.fromTo(target, duration, fromVars, toVars), position) : this.set(target, toVars, position);
+			var Engine = (toVars.repeat && _globals.TweenMax) || TweenLite;
+			return duration ? this.add( Engine.fromTo(target, duration, fromVars, toVars), position) : this.set(target, toVars, position);
 		};
 
 		p.staggerTo = function(targets, duration, vars, stagger, position, onCompleteAll, onCompleteAllParams, onCompleteAllScope) {
@@ -1172,6 +1175,7 @@
 		return TimelineLite;
 
 	}, true);
+	
 
 
 
@@ -1179,12 +1183,11 @@
 
 
 
-
-
-
-
-
-
+	
+	
+	
+	
+	
 /*
  * ----------------------------------------------------------------
  * TimelineMax
@@ -1207,7 +1210,7 @@
 
 		p.constructor = TimelineMax;
 		p.kill()._gc = false;
-		TimelineMax.version = "1.11.6";
+		TimelineMax.version = "1.11.8";
 
 		p.invalidate = function() {
 			this._yoyo = (this.vars.yoyo === true);
@@ -1241,7 +1244,7 @@
 
 		p.tweenTo = function(position, vars) {
 			vars = vars || {};
-			var copy = {ease:_easeNone, overwrite:2, useFrames:this.usesFrames(), immediateRender:false},
+			var copy = {ease:_easeNone, overwrite:(vars.delay ? 2 : 1), useFrames:this.usesFrames(), immediateRender:false},//note: set overwrite to 1 (true/all) by default unless there's a delay so that we avoid a racing situation that could happen if, for example, an onmousemove creates the same tweenTo() over and over again.
 				duration, p, t;
 			for (p in vars) {
 				copy[p] = vars[p];
@@ -1616,18 +1619,18 @@
 		return TimelineMax;
 
 	}, true);
+	
 
 
 
 
-
-
-
-
-
-
-
-
+	
+	
+	
+	
+	
+	
+	
 /*
  * ----------------------------------------------------------------
  * BezierPlugin
@@ -1928,7 +1931,7 @@
 			BezierPlugin = window._gsDefine.plugin({
 					propName: "bezier",
 					priority: -1,
-					version: "1.3.1",
+					version: "1.3.2",
 					API: 2,
 					global:true,
 
@@ -2063,7 +2066,7 @@
 							b = this._beziers[p][curIndex];
 							val = (t * t * b.da + 3 * inv * (t * b.ca + inv * b.ba)) * t + b.a;
 							if (this._round[p]) {
-								val = (val + ((val > 0) ? 0.5 : -0.5)) >> 0;
+								val = Math.round(val);
 							}
 							if (func[p]) {
 								target[p](val);
@@ -2206,14 +2209,14 @@
 
 
 
-
-
-
-
-
-
-
-
+	
+	
+	
+	
+	
+	
+	
+	
 /*
  * ----------------------------------------------------------------
  * CSSPlugin
@@ -2235,7 +2238,7 @@
 			p = CSSPlugin.prototype = new TweenPlugin("css");
 
 		p.constructor = CSSPlugin;
-		CSSPlugin.version = "1.11.6";
+		CSSPlugin.version = "1.11.8";
 		CSSPlugin.API = 2;
 		CSSPlugin.defaultTransformPerspective = 0;
 		CSSPlugin.defaultSkewType = "compensated";
@@ -2263,7 +2266,7 @@
 			_DEG2RAD = Math.PI / 180,
 			_RAD2DEG = 180 / Math.PI,
 			_forcePT = {},
-			_doc = window.document,
+			_doc = document,
 			_tempDiv = _doc.createElement("div"),
 			_tempImg = _doc.createElement("img"),
 			_internals = CSSPlugin._internals = {_specialProps:_specialProps}, //provides a hook to a few internal methods that we need to access from inside other plugins
@@ -2343,8 +2346,7 @@
 				if (!calc && t.style[p]) {
 					rv = t.style[p];
 				} else if ((cs = cs || _getComputedStyle(t, null))) {
-					t = cs.getPropertyValue(p.replace(_capsExp, "-$1").toLowerCase());
-					rv = (t || cs.length) ? t : cs[p]; //Opera behaves VERY strangely - length is usually 0 and cs[p] is the only way to get accurate results EXCEPT when checking for -o-transform which only works with cs.getPropertyValue()!
+					rv = cs[p] || cs.getPropertyValue(p) || cs.getPropertyValue(p.replace(_capsExp, "-$1").toLowerCase());
 				} else if (t.currentStyle) {
 					rv = t.currentStyle[p];
 				}
@@ -2367,7 +2369,7 @@
 					node = t,
 					style = _tempDiv.style,
 					neg = (v < 0),
-					pix;
+					pix, cache, time;
 				if (neg) {
 					v = -v;
 				}
@@ -2377,6 +2379,11 @@
 					style.cssText = "border:0 solid red;position:" + _getStyle(t, "position") + ";line-height:0;";
 					if (sfx === "%" || !node.appendChild) {
 						node = t.parentNode || _doc.body;
+						cache = node._gsCache;
+						time = TweenLite.ticker.frame;
+						if (cache && horiz && cache.time === time) { //performance optimization: we record the width of elements along with the ticker frame so that we can quickly get it again on the same tick (seems relatively safe to assume it wouldn't change on the same tick)
+							return cache.width * v / 100;
+						}
 						style[(horiz ? "width" : "height")] = v + sfx;
 					} else {
 						style[(horiz ? "borderLeftWidth" : "borderTopWidth")] = v + sfx;
@@ -2384,6 +2391,11 @@
 					node.appendChild(_tempDiv);
 					pix = parseFloat(_tempDiv[(horiz ? "offsetWidth" : "offsetHeight")]);
 					node.removeChild(_tempDiv);
+					if (horiz && sfx === "%" && CSSPlugin.cacheWidths !== false) {
+						cache = node._gsCache = node._gsCache || {};
+						cache.time = time;
+						cache.width = pix / v * 100;
+					}
 					if (pix === 0 && !recurse) {
 						pix = _convertToPixels(t, p, v, sfx, true);
 					}
@@ -2759,7 +2771,7 @@
 				while (mpt) {
 					val = proxy[mpt.v];
 					if (mpt.r) {
-						val = (val > 0) ? (val + 0.5) | 0 : (val - 0.5) | 0;
+						val = Math.round(val);
 					} else if (val < min && val > -min) {
 						val = 0;
 					}
@@ -3244,7 +3256,7 @@
 
 
 		//transform-related methods and properties
-		var _transformProps = ("scaleX,scaleY,scaleZ,x,y,z,skewX,rotation,rotationX,rotationY,perspective").split(","),
+		var _transformProps = ("scaleX,scaleY,scaleZ,x,y,z,skewX,skewY,rotation,rotationX,rotationY,perspective").split(","),
 			_transformProp = _checkPropPrefix("transform"), //the Javascript (camelCase) transform property, like msTransform, WebkitTransform, MozTransform, or OTransform.
 			_transformPropCSS = _prefixCSS + "transform",
 			_transformOriginProp = _checkPropPrefix("transformOrigin"),
@@ -3653,7 +3665,6 @@
 				v = vars,
 				endRotations = {},
 				m2, skewY, copy, orig, has3D, hasChange, dr;
-
 			if (typeof(v.transform) === "string" && _transformProp) { //for values like transform:"rotate(60deg) scale(0.5, 0.8)"
 				copy = style.cssText;
 				style[_transformProp] = v.transform;
@@ -3938,6 +3949,9 @@
 		var _removeProp = function(s, p) {
 				if (p) {
 					if (s.removeProperty) {
+						if (p.substr(0,2) === "ms") { //Microsoft browsers don't conform to the standard of capping the first prefix character, so we adjust so that when we prefix the caps with a dash, it's correct (otherwise it'd be "ms-transform" instead of "-ms-transform" for IE9, for example)
+							p = "M" + p.substr(1);
+						}
 						s.removeProperty(p.replace(_capsExp, "-$1").toLowerCase());
 					} else { //note: old versions of IE use "removeAttribute()" instead of "removeProperty()"
 						s.removeAttribute(p);
@@ -4210,7 +4224,7 @@
 						es = (en || en === 0) ? (rel ? en + bn : en) + esfx : vars[p]; //ensures that any += or -= prefixes are taken care of. Record the end value before normalizing the suffix because we always want to end the tween on exactly what they intended even if it doesn't match the beginning value's suffix.
 
 						//if the beginning/ending suffixes don't match, normalize them...
-						if (bsfx !== esfx) if (esfx !== "") if (en || en === 0) if (bn || bn === 0) {
+						if (bsfx !== esfx) if (esfx !== "") if (en || en === 0) if (bn) { //note: if the beginning value (bn) is 0, we don't need to convert units!
 							bn = _convertToPixels(target, p, bn, bsfx);
 							if (esfx === "%") {
 								bn /= _convertToPixels(target, p, 100, "%") / 100;
@@ -4222,7 +4236,7 @@
 								bn /= _convertToPixels(target, p, 1, "em");
 
 							//otherwise convert to pixels.
-							} else {
+							} else if (esfx !== "px") {
 								en = _convertToPixels(target, p, en, esfx);
 								esfx = "px"; //we don't use bsfx after this, so we don't need to set it to px too.
 							}
@@ -4277,7 +4291,7 @@
 				while (pt) {
 					val = pt.c * v + pt.s;
 					if (pt.r) {
-						val = (val > 0) ? (val + 0.5) | 0 : (val - 0.5) | 0;
+						val = Math.round(val);
 					} else if (val < min) if (val > -min) {
 						val = 0;
 					}
@@ -4476,16 +4490,16 @@
 
 	}, true);
 
-
-
-
-
-
-
-
-
-
-
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 /*
  * ----------------------------------------------------------------
  * RoundPropsPlugin
@@ -4569,20 +4583,24 @@
 	window._gsDefine.plugin({
 		propName: "attr",
 		API: 2,
-		version: "0.2.0",
+		version: "0.3.0",
 
 		//called when the tween renders for the first time. This is where initial values should be recorded and any setup routines should run.
 		init: function(target, value, tween) {
-			var p;
+			var p, start, end;
 			if (typeof(target.setAttribute) !== "function") {
 				return false;
 			}
 			this._target = target;
 			this._proxy = {};
+			this._start = {}; // we record start and end values exactly as they are in case they're strings (not numbers) - we need to be able to revert to them cleanly.
+			this._end = {};
+			this._endRatio = tween.vars.runBackwards ? 0 : 1;
 			for (p in value) {
-				if ( this._addTween(this._proxy, p, parseFloat(target.getAttribute(p)), value[p], p) ) {
-					this._overwriteProps.push(p);
-				}
+				this._start[p] = this._proxy[p] = start = target.getAttribute(p);
+				this._end[p] = end = value[p];
+				this._addTween(this._proxy, p, parseFloat(start), end, p);
+				this._overwriteProps.push(p);
 			}
 			return true;
 		},
@@ -4592,14 +4610,15 @@
 			this._super.setRatio.call(this, ratio);
 			var props = this._overwriteProps,
 				i = props.length,
+				lookup = (ratio !== 0 && ratio !== 1) ? this._proxy : (ratio === this._endRatio) ? this._end : this._start,
 				p;
 			while (--i > -1) {
 				p = props[i];
-				this._target.setAttribute(p, this._proxy[p] + "");
+				this._target.setAttribute(p, lookup[p] + "");
 			}
 		}
 
-	});
+	})
 
 
 
@@ -4685,17 +4704,17 @@
 
 
 
-
-
-
-
+	
+	
+	
+	
 /*
  * ----------------------------------------------------------------
  * EasePack
  * ----------------------------------------------------------------
  */
 	window._gsDefine("easing.Back", ["easing.Ease"], function(Ease) {
-
+		
 		var w = (window.GreenSockGlobals || window),
 			gs = w.com.greensock,
 			_2PI = Math.PI * 2,
@@ -5018,11 +5037,11 @@
 		_easeReg(SteppedEase, "SteppedEase", "ease,");
 
 		return Back;
-
+		
 	}, true);
 
 
-});
+}); 
 
 
 
@@ -5902,7 +5921,7 @@
 		p._firstPT = p._targets = p._overwrittenProps = p._startAt = null;
 		p._notifyPluginsOfEnabled = false;
 
-		TweenLite.version = "1.11.6";
+		TweenLite.version = "1.11.8";
 		TweenLite.defaultEase = p._ease = new Ease(null, null, 1, 1);
 		TweenLite.defaultOverwrite = "auto";
 		TweenLite.ticker = _ticker;
@@ -6126,7 +6145,7 @@
 		};
 
 		p._initProps = function(target, propLookup, siblings, overwrittenProps) {
-			var p, i, initPlugins, plugin, a, pt, v;
+			var p, i, initPlugins, plugin, pt, v;
 			if (target == null) {
 				return false;
 			}
@@ -6544,7 +6563,7 @@
 			while (pt) {
 				val = pt.c * v + pt.s;
 				if (pt.r) {
-					val = (val + ((val > 0) ? 0.5 : -0.5)) | 0; //about 4x faster than Math.round()
+					val = Math.round(val);
 				} else if (val < min) if (val > -min) { //prevents issues with converting very small numbers to strings in the browser
 					val = 0;
 				}

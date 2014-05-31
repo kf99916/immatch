@@ -184,7 +184,15 @@ module.exports = function(grunt) {
 					{expand: true, cwd:"example/", src: ["**"], dest: "<%= pkg.webServerDocuments %>/immatch-new/"}
 				]
 			}
-		}
+		},
+        jsdoc : {
+            dist : {
+                src: ['src/*.js'],
+                options: {
+                    destination: 'doc'
+                }
+            }
+        }
 	});
 
 	// Load grunt tasks from NPM packages
