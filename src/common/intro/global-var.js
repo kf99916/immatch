@@ -28,13 +28,20 @@ var document = window.document,
     stringify = JSON.stringify,
 
 /**
- * imMatch namespace is a JQuery object.
+ * imMatch is a JQuery object.
  * @namespace imMatch
  */
     imMatch = jQuery({});
 
 jQuery.extend(imMatch, {
+    /**
+     * @readonly
+     * @constant
+     * @default
+     * @memberof! imMatch#
+     */
     coordinate: {
+        /** The coordinate type */
         local: 0,
         global: 1,
         scene: 2,

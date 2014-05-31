@@ -1,3 +1,12 @@
+/**
+ * Cache
+ * @class
+ */
+
+/**
+ * Creates a cache to store data from the WebSocket server.
+ * @constructor
+ */
 imMatch.Cache = function() {
     // Allow instantiation without the 'new' keyword
     if ( !(this instanceof imMatch.Cache) ) {
@@ -6,6 +15,13 @@ imMatch.Cache = function() {
 };
 
 imMatch.Cache.prototype = {
+    /**
+     * Queues data into the cache assigned type. the cache can be sorted by the compare function.
+     * @param {String} type The category data is stored
+     * @param {Object} data Stored data
+     * @param {Function} cmp A compare function (Optional).
+     * @returns {Cache} The cache
+     */
     queue: function(type, data, cmp) {
         if (imMatch.isEmpty(type) || imMatch.isEmpty(data)) {
             return this;
@@ -22,6 +38,11 @@ imMatch.Cache.prototype = {
         return this;
     },
 
+    /**
+     * Dequeues data from the cache assigned type. data is removed from the cache.
+     * @param {String} type The category data is dequeued
+     * @returns {Object} Data
+     */
     dequeue: function(type) {
         var result = {};
         if (imMatch.isEmpty(type) || jQuery.isEmptyObject(this[type])) {
@@ -36,6 +57,13 @@ imMatch.Cache.prototype = {
         return result;
     },
 
+    /**
+     * Gets data which fit the compare function from the cache assigned type.
+     * If no compare function, then get all of data in the cache assigned type.
+     * @param {String} type The category data is got
+     * @param {Function} cmp A compare function (Optional).
+     * @returns {Array} Matched data
+     */
     get: function(type, cmp) {
         if (imMatch.isEmpty(type) || jQuery.isEmptyObject(this[type])) {
             return [];
@@ -48,6 +76,13 @@ imMatch.Cache.prototype = {
         return jQuery.grep(this[type], cmp);
     },
 
+    /**
+     * Gets data which fit the compare function from the cache assigned type and remove them.
+     * If no compare function, then gets all of data in the cache assigned type.
+     * @param {String} type The category data is got
+     * @param {Function} cmp A compare function (Optional).
+     * @returns {Array} Matched data
+     */
     getNRemove: function(type, cmp) {
         if (imMatch.isEmpty(type) || jQuery.isEmptyObject(this[type])) {
             return [];
@@ -56,6 +91,13 @@ imMatch.Cache.prototype = {
         return this.remove(type, cmp);
     },
 
+    /**
+     * Removes data which fit the compare function from the cache assigned type.
+     * If no compare function, then removes all of data in the cache assigned type.
+     * @param {String} type The category data is removed
+     * @param {Function} cmp A compare function (Optional).
+     * @returns {Array} Matched data
+     */
     remove: function(type, cmp) {
         var removeItems = [];
         if (imMatch.isEmpty(type) || jQuery.isEmptyObject(this[type])) {

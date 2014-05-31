@@ -1,6 +1,11 @@
 jQuery.extend(imMatch, {
     isReady: returnFalse,
 
+    /**
+     * Document is loaded and all of need imgas are also loaded. Then invoke the function.
+     * @param {Function} fn The invoked function
+     * @memberof! imMatch#
+     */
     ready: function(fn) {
         if (imMatch.isReady()) {
             return this;
@@ -13,21 +18,12 @@ jQuery.extend(imMatch, {
         return this;
     },
 
-    inherit: function(object) {
-        if (imMatch.isEmpty(object)) {
-            jQuery.error("[imMatch.inherit] Cannot inherit a null object");
-        }
-
-        if (Object.create) {
-            return Object.create(object);
-        }
-
-        function F() {}
-        F.prototype = object;
-        return new F();
-    },
-
-    // Determine if object is a 2D vector
+    /**
+     * Determines whether the test object is a 2D vector or not.
+     * @param {Object} object Test object
+     * @returns {Bool} True if the object is a 2D vector; otherwise, false.
+     * @memberof! imMatch#
+     */
     is2DVector: function(object) {
         if (jQuery.isEmptyObject(object)) {
             return false;
@@ -36,12 +32,23 @@ jQuery.extend(imMatch, {
         return (jQuery.isNumeric(object.x) && jQuery.isNumeric(object.y));
     },
 
-    // Determine if object is undefined or null
+    /**
+     * Determines whether the test object is undefined or null or not.
+     * @param {Object} object Test object
+     * @returns {Bool} True if the object is undefined or null; otherwise, false.
+     * @memberof! imMatch#
+     */
     isEmpty: function(object) {
         return (object === undefined || object === null);
     },
 
-    // Remove a element from a plaint object or an array-like object
+    /**
+     * Removes a element from a plaint object or an array-like object.
+     * @param {Object} object A plaint object or an array-like object
+     * @param {String} name Removed property name
+     * @returns {Object} Object which the property is removed
+     * @memberof! imMatch#
+     */
     remove: function(object, name) {
         if (jQuery.isEmptyObject(name)) {
             return object;
