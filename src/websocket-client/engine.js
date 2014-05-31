@@ -74,7 +74,8 @@ imMatch.engine = {
         try {
             this.updateMode();
 
-            var stamp = {
+            var self = this,
+                stamp = {
                 time: timeStamp,
                 frame: this.frame,
                 chunk: Math.floor(this.frame / imMatch.chunkSize) * imMatch.chunkSize};
@@ -85,8 +86,11 @@ imMatch.engine = {
 
             this.updateReady(stamp);
             this.runWithMode(stamp);
+
             this.updateIntervalWithMode(stamp);
-            this.setTimerWithMode(stamp);
+            window.requestAnimationFrame(function() {
+                self.run(Date.now());
+            });
         }
         catch(error) {
             imMatch.logError("Exception! Error Message: ", error);
@@ -201,48 +205,8 @@ imMatch.engine = {
     },
 
     updateIntervalWithMode: function(stamp) {
-        switch(imMatch.getMainMode(this.mode)) {
-            case imMatch.mainMode.alone:
-            case imMatch.mainMode.stitching:
-                this.interval = stamp.time - this.lastRunTimeStamp;
-            break;
-            case imMatch.mainMode.stitched:
-            // TODO
-                this.interval = stamp.time - this.lastRunTimeStamp;
-            break;
-            default:
-                this.interval = stamp.time - this.lastRunTimeStamp;
-            break;
-        }
-
+        this.interval = stamp.time - this.lastRunTimeStamp;
         this.lastRunTimestamp = stamp.time;
-        return this;
-    },
-
-    setTimerWithMode: function() {
-        var self = this;
-        switch(imMatch.getMainMode(this.mode)) {
-            case imMatch.mainMode.alone:
-            case imMatch.mainMode.stitching:
-                window.requestAnimationFrame(function() {
-                    self.run(Date.now());
-                });
-            break;
-            case imMatch.mainMode.stitched:
-              /*  setTimeout(function() {
-                    self.run();
-                }, this.interval, Date.now() + this.interval);*/
-                window.requestAnimationFrame(function() {
-                    self.run(Date.now());
-                });
-            break;
-            default:
-                window.requestAnimationFrame(function() {
-                    self.run(Date.now());
-                });
-            break;
-        }
-
         return this;
     },
 
