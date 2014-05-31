@@ -192,12 +192,15 @@ module.exports = function(grunt) {
         jsdoc : {
             dist : {
                 src: [
+                    "src/common/intro/global-var.js",
                     "src/common/*.js",
                     "src/websocket-client/*.js",
                     "src/websocket-server*.js"
                 ],
                 options: {
-                    destination: "doc"
+                    destination: "doc",
+                    // Template comes from: https://github.com/davidshimjs/jaguarjs-jsdoc
+                    template: "templates/jaguarjs-jsdoc"
                 }
             }
         }
@@ -208,6 +211,9 @@ module.exports = function(grunt) {
 
 	// Watch task
 	grunt.registerTask( "watch", ["jsonlint", "concat", "jshint", "clean", "uglify", "copy"]);
+
+    // Watch task
+    grunt.registerTask( "doc", ["jsdoc"]);
 
 	// Default grunt.
 	grunt.registerTask("default", ["jsonlint", "concat", "jshint", "clean", "uglify", "jsdoc"]);

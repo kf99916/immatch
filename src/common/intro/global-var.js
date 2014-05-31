@@ -27,6 +27,10 @@ var document = window.document,
 
     stringify = JSON.stringify,
 
+/**
+ * imMatch namespace is a JQuery object.
+ * @namespace imMatch
+ */
     imMatch = jQuery({});
 
 jQuery.extend(imMatch, {

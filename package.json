@@ -41,6 +41,7 @@
   },
   "scripts": {
     "build": "npm install && grunt",
-    "start": "npm install && grunt watch"
+    "start": "npm install && grunt watch",
+    "doc": "npm install && grunt doc"
   }
 }
