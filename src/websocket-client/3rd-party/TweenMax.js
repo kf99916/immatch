@@ -2,13 +2,13 @@
  * VERSION: 1.11.8
  * DATE: 2014-05-13
  * UPDATES AND DOCS AT: http://www.greensock.com
- * 
+ *
  * Includes all of the following: TweenLite, TweenMax, TimelineLite, TimelineMax, EasePack, CSSPlugin, RoundPropsPlugin, BezierPlugin, AttrPlugin, DirectionalRotationPlugin
  *
  * @license Copyright (c) 2008-2014, GreenSock. All rights reserved.
  * This work is subject to the terms at http://www.greensock.com/terms_of_use.html or for
  * Club GreenSock members, the software agreement that was issued with your membership.
- * 
+ *
  * @author: Jack Doyle, jack@greensock.com
  **/
 
@@ -17,7 +17,7 @@
 	"use strict";
 
 	window._gsDefine("TweenMax", ["core.Animation","core.SimpleTimeline","TweenLite"], function(Animation, SimpleTimeline, TweenLite) {
-		
+
 		var _slice = [].slice,
 			TweenMax = function(target, duration, vars) {
 				TweenLite.call(this, target, duration, vars);
@@ -40,7 +40,7 @@
 		TweenMax.killTweensOf = TweenMax.killDelayedCallsTo = TweenLite.killTweensOf;
 		TweenMax.getTweensOf = TweenLite.getTweensOf;
 		TweenMax.ticker = TweenLite.ticker;
-	
+
 		p.invalidate = function() {
 			this._yoyo = (this.vars.yoyo === true);
 			this._repeat = this.vars.repeat || 0;
@@ -48,7 +48,7 @@
 			this._uncache(true);
 			return TweenLite.prototype.invalidate.call(this);
 		};
-		
+
 		p.updateTo = function(vars, resetDuration) {
 			var curRatio = this.ratio, p;
 			if (resetDuration && this._startTime < this._timeline._time) {
@@ -73,7 +73,7 @@
 					if (this._notifyPluginsOfEnabled && this._firstPT) {
 						TweenLite._onPluginEvent("_onDisable", this); //in case a plugin like MotionBlur must perform some cleanup tasks
 					}
-					if (this._time / this._duration > 0.998) { //if the tween has finished (or come extremely close to finishing), we just need to rewind it to 0 and then render it again at the end which forces it to re-initialize (parsing the new vars). We allow tweens that are close to finishing (but haven't quite finished) to work this way too because otherwise, the values are so small when determining where to project the starting values that binary math issues creep in and can make the tween appear to render incorrectly when run backwards. 
+					if (this._time / this._duration > 0.998) { //if the tween has finished (or come extremely close to finishing), we just need to rewind it to 0 and then render it again at the end which forces it to re-initialize (parsing the new vars). We allow tweens that are close to finishing (but haven't quite finished) to work this way too because otherwise, the values are so small when determining where to project the starting values that binary math issues creep in and can make the tween appear to render incorrectly when run backwards.
 						var prevTime = this._time;
 						this.render(0, true, false);
 						this._initted = false;
@@ -84,7 +84,7 @@
 						var inv = 1 / (1 - curRatio),
 							pt = this._firstPT, endValue;
 						while (pt) {
-							endValue = pt.s + pt.c; 
+							endValue = pt.s + pt.c;
 							pt.c *= inv;
 							pt.s = endValue - pt.c;
 							pt = pt._next;
@@ -94,14 +94,14 @@
 			}
 			return this;
 		};
-				
+
 		p.render = function(time, suppressEvents, force) {
 			if (!this._initted) if (this._duration === 0 && this.vars.repeat) { //zero duration tweens that render immediately have render() called from TweenLite's constructor, before TweenMax's constructor has finished setting _repeat, _repeatDelay, and _yoyo which are critical in determining totalDuration() so we need to call invalidate() which is a low-kb way to get those set properly.
 				this.invalidate();
 			}
 			var totalDur = (!this._dirty) ? this._totalDuration : this.totalDuration(),
 				prevTime = this._time,
-				prevTotalTime = this._totalTime, 
+				prevTotalTime = this._totalTime,
 				prevCycle = this._cycle,
 				duration = this._duration,
 				isComplete, callback, pt, cycleDuration, r, type, pow, rawPrevTime;
@@ -132,7 +132,7 @@
 					}
 					this._rawPrevTime = rawPrevTime = (!suppressEvents || time || this._rawPrevTime === time) ? time : _tinyNum; //when the playhead arrives at EXACTLY time 0 (right on top) of a zero-duration tween, we need to discern if events are suppressed so that when the playhead moves again (next time), it'll trigger the callback. If events are NOT suppressed, obviously the callback would be triggered in this render. Basically, the callback should fire either when the playhead ARRIVES or LEAVES this exact spot, not both. Imagine doing a timeline.seek(0) and there's a callback that sits at 0. Since events are suppressed on that seek() by default, nothing will fire, but when the playhead moves off of that position, the callback should fire. This behavior is what people intuitively expect. We set the _rawPrevTime to be a precise tiny number to indicate this scenario rather than using another property/variable which would increase memory usage. This technique is less readable, but more efficient.
 				}
-				
+
 			} else if (time < 0.0000001) { //to work around occasional floating point math artifacts, round super small values to 0.
 				this._totalTime = this._time = this._cycle = 0;
 				this.ratio = this._ease._calcEnd ? this._ease.getRatio(0) : 0;
@@ -153,7 +153,7 @@
 				}
 			} else {
 				this._totalTime = this._time = time;
-				
+
 				if (this._repeat !== 0) {
 					cycleDuration = duration + this._repeatDelay;
 					this._cycle = (this._totalTime / cycleDuration) >> 0; //originally _totalTime % cycleDuration but floating point errors caused problems, so I normalized it. (4 % 0.8 should be 0 but Flash reports it as 0.79999999!)
@@ -170,7 +170,7 @@
 						this._time = 0;
 					}
 				}
-				
+
 				if (this._easeType) {
 					r = this._time / duration;
 					type = this._easeType;
@@ -190,7 +190,7 @@
 					} else if (pow === 4) {
 						r *= r * r * r * r;
 					}
-					
+
 					if (type === 1) {
 						this.ratio = 1 - r;
 					} else if (type === 2) {
@@ -200,13 +200,13 @@
 					} else {
 						this.ratio = 1 - (r / 2);
 					}
-					
+
 				} else {
 					this.ratio = this._ease.getRatio(this._time / duration);
 				}
-				
+
 			}
-				
+
 			if (prevTime === this._time && !force && prevCycle === this._cycle) {
 				if (prevTotalTime !== this._totalTime) if (this._onUpdate) if (!suppressEvents) { //so that onUpdate fires even during the repeatDelay - as long as the totalTime changed, we should trigger onUpdate.
 					this._onUpdate.apply(this.vars.onUpdateScope || this, this.vars.onUpdateParams || _blankArray);
@@ -224,7 +224,7 @@
 					this.ratio = this._ease.getRatio((this._time === 0) ? 0 : 1);
 				}
 			}
-			
+
 			if (!this._active) if (!this._paused && this._time !== prevTime && time >= 0) {
 				this._active = true; //so that if the user renders a tween (as opposed to the timeline rendering it), the timeline is forced to re-render and align it with the proper time/frame on the next rendering cycle. Maybe the tween already finished but the user manually re-renders it as halfway done.
 			}
@@ -240,7 +240,7 @@
 					this.vars.onStart.apply(this.vars.onStartScope || this, this.vars.onStartParams || _blankArray);
 				}
 			}
-			
+
 			pt = this._firstPT;
 			while (pt) {
 				if (pt.f) {
@@ -250,7 +250,7 @@
 				}
 				pt = pt._next;
 			}
-			
+
 			if (this._onUpdate) {
 				if (time < 0) if (this._startAt && this._startTime) { //if the tween is positioned at the VERY beginning (_startTime 0) of its parent timeline, it's illegal for the playhead to go back further, so we should not render the recorded startAt values.
 					this._startAt.render(time, suppressEvents, force); //note: for performance reasons, we tuck this conditional logic inside less traveled areas (most tweens don't have an onUpdate). We'd just have it at the end before the onComplete, but the values should be updated before any onUpdate is called, so we ALSO put it here and then if it's not called, we do so later near the onComplete.
@@ -280,25 +280,25 @@
 				}
 			}
 		};
-		
+
 //---- STATIC FUNCTIONS -----------------------------------------------------------------------------------------------------------
-		
+
 		TweenMax.to = function(target, duration, vars) {
 			return new TweenMax(target, duration, vars);
 		};
-		
+
 		TweenMax.from = function(target, duration, vars) {
 			vars.runBackwards = true;
 			vars.immediateRender = (vars.immediateRender != false);
 			return new TweenMax(target, duration, vars);
 		};
-		
+
 		TweenMax.fromTo = function(target, duration, fromVars, toVars) {
 			toVars.startAt = fromVars;
 			toVars.immediateRender = (toVars.immediateRender != false && fromVars.immediateRender != false);
 			return new TweenMax(target, duration, toVars);
 		};
-		
+
 		TweenMax.staggerTo = TweenMax.allTo = function(targets, duration, vars, stagger, onCompleteAll, onCompleteAllParams, onCompleteAllScope) {
 			stagger = stagger || 0;
 			var delay = vars.delay || 0,
@@ -333,31 +333,31 @@
 			}
 			return a;
 		};
-		
+
 		TweenMax.staggerFrom = TweenMax.allFrom = function(targets, duration, vars, stagger, onCompleteAll, onCompleteAllParams, onCompleteAllScope) {
 			vars.runBackwards = true;
 			vars.immediateRender = (vars.immediateRender != false);
 			return TweenMax.staggerTo(targets, duration, vars, stagger, onCompleteAll, onCompleteAllParams, onCompleteAllScope);
 		};
-		
+
 		TweenMax.staggerFromTo = TweenMax.allFromTo = function(targets, duration, fromVars, toVars, stagger, onCompleteAll, onCompleteAllParams, onCompleteAllScope) {
 			toVars.startAt = fromVars;
 			toVars.immediateRender = (toVars.immediateRender != false && fromVars.immediateRender != false);
 			return TweenMax.staggerTo(targets, duration, toVars, stagger, onCompleteAll, onCompleteAllParams, onCompleteAllScope);
 		};
-				
+
 		TweenMax.delayedCall = function(delay, callback, params, scope, useFrames) {
 			return new TweenMax(callback, 0, {delay:delay, onComplete:callback, onCompleteParams:params, onCompleteScope:scope, onReverseComplete:callback, onReverseCompleteParams:params, onReverseCompleteScope:scope, immediateRender:false, useFrames:useFrames, overwrite:0});
 		};
-		
+
 		TweenMax.set = function(target, vars) {
 			return new TweenMax(target, 0, vars);
 		};
-		
+
 		TweenMax.isTweening = function(target) {
 			return (TweenLite.getTweensOf(target, true).length > 0);
 		};
-		
+
 		var _getChildrenOf = function(timeline, includeTimelines) {
 				var a = [],
 					cnt = 0,
@@ -375,11 +375,11 @@
 					tween = tween._next;
 				}
 				return a;
-			}, 
+			},
 			getAllTweens = TweenMax.getAllTweens = function(includeTimelines) {
 				return _getChildrenOf(Animation._rootTimeline, includeTimelines).concat( _getChildrenOf(Animation._rootFramesTimeline, includeTimelines) );
 			};
-		
+
 		TweenMax.killAll = function(complete, tweens, delayedCalls, timelines) {
 			if (tweens == null) {
 				tweens = true;
@@ -402,7 +402,7 @@
 				}
 			}
 		};
-		
+
 		TweenMax.killChildTweensOf = function(parent, complete) {
 			if (parent == null) {
 				return;
@@ -456,11 +456,11 @@
 				}
 			}
 		};
-		
+
 		TweenMax.pauseAll = function(tweens, delayedCalls, timelines) {
 			_changePause(true, tweens, delayedCalls, timelines);
 		};
-		
+
 		TweenMax.resumeAll = function(tweens, delayedCalls, timelines) {
 			_changePause(false, tweens, delayedCalls, timelines);
 		};
@@ -479,18 +479,18 @@
 			tl._timeScale = Animation._rootTimeline._timeScale = value;
 			return value;
 		};
-		
-	
+
+
 //---- GETTERS / SETTERS ----------------------------------------------------------------------------------------------------------
-		
+
 		p.progress = function(value) {
 			return (!arguments.length) ? this._time / this.duration() : this.totalTime( this.duration() * ((this._yoyo && (this._cycle & 1) !== 0) ? 1 - value : value) + (this._cycle * (this._duration + this._repeatDelay)), false);
 		};
-		
+
 		p.totalProgress = function(value) {
 			return (!arguments.length) ? this._totalTime / this.totalDuration() : this.totalTime( this.totalDuration() * value, false);
 		};
-		
+
 		p.time = function(value, suppressEvents) {
 			if (!arguments.length) {
 				return this._time;
@@ -527,7 +527,7 @@
 			}
 			return (this._repeat === -1) ? this : this.duration( (value - (this._repeat * this._repeatDelay)) / (this._repeat + 1) );
 		};
-		
+
 		p.repeat = function(value) {
 			if (!arguments.length) {
 				return this._repeat;
@@ -535,7 +535,7 @@
 			this._repeat = value;
 			return this._uncache(true);
 		};
-		
+
 		p.repeatDelay = function(value) {
 			if (!arguments.length) {
 				return this._repeatDelay;
@@ -543,7 +543,7 @@
 			this._repeatDelay = value;
 			return this._uncache(true);
 		};
-		
+
 		p.yoyo = function(value) {
 			if (!arguments.length) {
 				return this._yoyo;
@@ -551,10 +551,10 @@
 			this._yoyo = value;
 			return this;
 		};
-		
-		
+
+
 		return TweenMax;
-		
+
 	}, true);
 
 
@@ -1175,7 +1175,6 @@
 		return TimelineLite;
 
 	}, true);
-	
 
 
 
@@ -1183,11 +1182,12 @@
 
 
 
-	
-	
-	
-	
-	
+
+
+
+
+
+
 /*
  * ----------------------------------------------------------------
  * TimelineMax
@@ -1619,18 +1619,18 @@
 		return TimelineMax;
 
 	}, true);
-	
 
 
 
 
-	
-	
-	
-	
-	
-	
-	
+
+
+
+
+
+
+
+
 /*
  * ----------------------------------------------------------------
  * BezierPlugin
@@ -2209,14 +2209,14 @@
 
 
 
-	
-	
-	
-	
-	
-	
-	
-	
+
+
+
+
+
+
+
+
 /*
  * ----------------------------------------------------------------
  * CSSPlugin
@@ -2266,7 +2266,7 @@
 			_DEG2RAD = Math.PI / 180,
 			_RAD2DEG = 180 / Math.PI,
 			_forcePT = {},
-			_doc = document,
+			_doc = window.document,
 			_tempDiv = _doc.createElement("div"),
 			_tempImg = _doc.createElement("img"),
 			_internals = CSSPlugin._internals = {_specialProps:_specialProps}, //provides a hook to a few internal methods that we need to access from inside other plugins
@@ -4490,16 +4490,16 @@
 
 	}, true);
 
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
+
+
+
+
+
+
+
+
+
 /*
  * ----------------------------------------------------------------
  * RoundPropsPlugin
@@ -4704,17 +4704,17 @@
 
 
 
-	
-	
-	
-	
+
+
+
+
 /*
  * ----------------------------------------------------------------
  * EasePack
  * ----------------------------------------------------------------
  */
 	window._gsDefine("easing.Back", ["easing.Ease"], function(Ease) {
-		
+
 		var w = (window.GreenSockGlobals || window),
 			gs = w.com.greensock,
 			_2PI = Math.PI * 2,
@@ -5037,11 +5037,11 @@
 		_easeReg(SteppedEase, "SteppedEase", "ease,");
 
 		return Back;
-		
+
 	}, true);
 
 
-}); 
+});
 
 
 

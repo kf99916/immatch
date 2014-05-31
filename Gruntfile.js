@@ -50,7 +50,8 @@ module.exports = function(grunt) {
                 stripBanners: true
             },
             imMatchWebsocketClientForJshint: {
-                src:["src/common/intro/intro.js",
+                src:[
+                    "src/common/intro/intro.js",
                     "src/websocket-client/check-libraries.js",
                     "src/common/intro/global-var.js",
                     "src/common/*.js",
@@ -68,7 +69,8 @@ module.exports = function(grunt) {
 				options: {
 					banner: "<%= meta.imMatchWebsocketClient.banner %>"
 				},
-				src:["src/common/intro/intro.js",
+				src:[
+                    "src/common/intro/intro.js",
                     "src/common/3rd-party/*.js",
                     "src/websocket-client/3rd-party/*.js",
                     "src/websocket-client/check-libraries.js",
@@ -85,7 +87,8 @@ module.exports = function(grunt) {
 				dest: "dist/immatch.js"
 			},
             imMatchWebsocketServerForJshint: {
-                src: ["src/common/intro/intro.js",
+                src: [
+                    "src/common/intro/intro.js",
                     "src/websocket-server/import.js",
                     "src/common/intro/global-var.js",
                     "src/common/*.js",
@@ -98,7 +101,8 @@ module.exports = function(grunt) {
                 options: {
                     banner: "<%= meta.imMatchWebsocketServer.banner %>"
                 },
-                src: ["src/common/intro/intro.js",
+                src: [
+                    "src/common/intro/intro.js",
                     "src/common/3rd-party/*.js",
                     "src/websocket-server/import.js",
                     "src/common/intro/global-var.js",
@@ -187,9 +191,13 @@ module.exports = function(grunt) {
 		},
         jsdoc : {
             dist : {
-                src: ['src/*.js'],
+                src: [
+                    "src/common/*.js",
+                    "src/websocket-client/*.js",
+                    "src/websocket-server*.js"
+                ],
                 options: {
-                    destination: 'doc'
+                    destination: "doc"
                 }
             }
         }
@@ -202,5 +210,5 @@ module.exports = function(grunt) {
 	grunt.registerTask( "watch", ["jsonlint", "concat", "jshint", "clean", "uglify", "copy"]);
 
 	// Default grunt.
-	grunt.registerTask("default", ["jsonlint", "concat", "jshint", "clean", "uglify"]);
+	grunt.registerTask("default", ["jsonlint", "concat", "jshint", "clean", "uglify", "jsdoc"]);
 };
