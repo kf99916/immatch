@@ -22,12 +22,12 @@ jQuery.extend(imMatch, {
 });
 
 // Alias
-jQuery.each(("touchstart touchmove touchend touchcancel").split(" "), function(i, name) {
+jQuery.each(("touchmousechange trytostitch modechange stitching").split(" "), function(i, name) {
 
     // Handle event binding
-    jQuery.fn[name] = function(data, fn) {
+    imMatch[name] = function(data, fn) {
         return arguments.length > 0 ?
-            this.on(name, null, data, fn) :
-            this.trigger(name);
+            imMatch.on(name, null, data, fn) :
+            imMatch.trigger(name);
     };
 });

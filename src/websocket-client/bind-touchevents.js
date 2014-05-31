@@ -19,6 +19,8 @@ jQuery.extend(imMatch, {
             imMatch.socketClient.caches.queue("touchMouseEvent", touchMouseEvent, function(a, b) {
                 return a.order - b.order;
             });
+
+            imMatch.trigger("touchmousechange", touchMouseEvent);
         });
     },
 

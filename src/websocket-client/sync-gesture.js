@@ -111,6 +111,7 @@ imMatch.syncGesture = {
     },
 
     tryToStitch: function(group) {
+        var stitchingInfo;
         // Pinch Gesture
         // Criteria 0: Only one cursor is in the cursor group
         if (group.numCursors !== 1) {
@@ -138,7 +139,10 @@ imMatch.syncGesture = {
 
         imMatch.logInfo("[syncGesture.tryToStitch] Try to stitch!");
 
-        imMatch.socketClient.request.tryToStitch.call(imMatch.socketClient, group.computeStitchingInfo());
+        stitchingInfo = group.computeStitchingInfo();
+        imMatch.socketClient.request.tryToStitch.call(imMatch.socketClient, stitchingInfo);
+
+        imMatch.trigger("trytostitch", stitchingInfo);
 
         return this;
     }
