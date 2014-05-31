@@ -68,7 +68,7 @@ jQuery.extend(ws.Server.prototype, {
     },
 
     computeAffineFactor: function(stitchingInfo) {
-        stitchingInfo.rad = imMatch.rad({x: 1, y: 0}, stitchingInfo.orientation);
+        stitchingInfo.rad = imMatch.rad(stitchingInfo.orientation, {x: 1, y: 0});
         var rotateTransform = imMatch.AffineTransform.getRotateInstance(stitchingInfo.rad);
 
         stitchingInfo.margin = rotateTransform.transform(stitchingInfo.margin);
