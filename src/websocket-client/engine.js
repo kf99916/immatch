@@ -45,7 +45,7 @@ imMatch.engine = {
 
     /**
      * Determines whether the debug panel is showed or not.
-     * @returns {Bool} Result True if imMatch.logLevel is equal or smaller than infoLevel; otherwise, false
+     * @returns {Boolean} Result True if imMatch.logLevel is equal or smaller than infoLevel; otherwise, false
      */
     isShowDebugInfo: function() {
         return (imMatch.logLevel <= imMatch.infoLevel);
@@ -261,7 +261,7 @@ imMatch.engine = {
 
     /**
      * Determines whether the client needs to be synced with the WebSocket server.
-     * @returns {Bool} Result True if the client needs to be synced with the WebSocket server; otherwise, false
+     * @returns {Boolean} Result True if the client needs to be synced with the WebSocket server; otherwise, false
      */
     synced: function() {
         return (imMatch.getMainMode(this.mode) === imMatch.mainMode.stitched && this.frame % imMatch.chunkSize === 0);
@@ -269,7 +269,7 @@ imMatch.engine = {
 
     /**
      * Determines whether the client needs to be redrawn.
-     * @returns {Bool} Result True if the client needs to be redrawn; otherwise, false
+     * @returns {Boolean} Result True if the client needs to be redrawn; otherwise, false
      */
     reDrawn: function() {
         return (this.frame === 0 || this.touched() || this.tweened());

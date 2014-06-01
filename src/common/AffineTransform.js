@@ -283,7 +283,7 @@ imMatch.AffineTransform.prototype = {
 
     /**
      * Invertible or not
-     * @returns {Bool} Result True if the affine transform is invertible; otherwise, false
+     * @returns {Boolean} Result True if the affine transform is invertible; otherwise, false
      */
     isInvertible: function() {
         var det = this.getDeterminant();

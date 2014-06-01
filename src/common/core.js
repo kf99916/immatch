@@ -25,7 +25,7 @@ jQuery.extend(imMatch, {
     /**
      * Determines whether the test object is a 2D vector or not.
      * @param {Object} object Test object
-     * @returns {Bool} Result True if the object is a 2D vector; otherwise, false.
+     * @returns {Boolean} Result True if the object is a 2D vector; otherwise, false.
      * @memberof! imMatch#
      */
     is2DVector: function(object) {
@@ -39,7 +39,7 @@ jQuery.extend(imMatch, {
     /**
      * Determines whether the test object is undefined or null or not.
      * @param {Object} object Test object
-     * @returns {Bool} Result True if the object is undefined or null; otherwise, false.
+     * @returns {Boolean} Result True if the object is undefined or null; otherwise, false.
      * @memberof! imMatch#
      */
     isEmpty: function(object) {

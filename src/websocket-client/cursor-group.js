@@ -67,7 +67,7 @@ imMatch.Cursor.prototype = {
 
     /**
      * Determins whether the cursor is enogh straight or not.
-     * @returns {Bool} Result True if the cursor is enogh straight; otherwise, false.
+     * @returns {Boolean} Result True if the cursor is enogh straight; otherwise, false.
      */
     isStraight: function() {
         var result = true, lastPoint = this.points[0], lastVelocity;
@@ -98,7 +98,7 @@ imMatch.Cursor.prototype = {
     /**
      * Determins whether the cursor fits some stitching region criteria.
      * The criteria: The start point is out of the region, but the end point is in the region.
-     * @returns {Bool} Result True if the cursor fits the criteria; otherwise, false.
+     * @returns {Boolean} Result True if the cursor fits the criteria; otherwise, false.
      */
     isFitStitchingRegionCriteria: function() {
         var startPoint = this.points[0], endPoint = this.points[this.numPoints-1];
@@ -116,7 +116,7 @@ imMatch.Cursor.prototype = {
 
     /**
      * Determins whether the cursor is perpendicular to the boundary of the device.
-     * @returns {Bool} Result True if the cursor is perpendicular to the boundary of the device; otherwise, false.
+     * @returns {Boolean} Result True if the cursor is perpendicular to the boundary of the device; otherwise, false.
      */
     isPerpendicularToBoundary: function() {
         var perpendicularRadDiff = imMatch.threadsholdAboutSyncGesture.perpendicularRadDiff,
@@ -382,7 +382,7 @@ imMatch.CursorGroup.prototype = {
     /**
      * Determins whether the cursor group owns a given point.
      * @param {Object} point The point
-     * @returns {Bool} True if the cursor group owns a given point; otherwise, false;
+     * @returns {Boolean} True if the cursor group owns a given point; otherwise, false;
      */
     hasOwnPoint: function(point) {
         return (this.cursors[point.id])? true : false;
@@ -405,7 +405,7 @@ imMatch.CursorGroup.prototype = {
 
     /**
      * Determins whether all the cursors in the cursor group are up or not.
-     * @returns {Bool} True if all the cursors in the cursor group are up; otherwise, false;
+     * @returns {Boolean} True if all the cursors in the cursor group are up; otherwise, false;
      */
     isAllCursorsUp: function() {
         var numUpCursors = 0;
@@ -424,7 +424,7 @@ imMatch.CursorGroup.prototype = {
 
     /**
      * Determins whether all the cursors in the cursor group are enough straight or not.
-     * @returns {Bool} True if all the cursors in the cursor group are enough straight; otherwise, false;
+     * @returns {Boolean} True if all the cursors in the cursor group are enough straight; otherwise, false;
      */
     isAllCursorsStraight: function() {
         var result = true;
@@ -440,7 +440,7 @@ imMatch.CursorGroup.prototype = {
 
     /**
      * Determins whether all the cursors in the cursor group fit stitching region criteria or not.
-     * @returns {Bool} True if all the cursors in the cursor group fit stitching region criteria; otherwise, false;
+     * @returns {Boolean} True if all the cursors in the cursor group fit stitching region criteria; otherwise, false;
      */
     isAllCurosrsFitStitchingRegionCriteria: function() {
         var result = true;
@@ -456,7 +456,7 @@ imMatch.CursorGroup.prototype = {
 
     /**
      * Determins whether all the cursors in the cursor group are perpendicular to the boundary of the device or not.
-     * @returns {Bool} True if all the cursors in the cursor group are perpendicular to the boundary of the device; otherwise, false;
+     * @returns {Boolean} True if all the cursors in the cursor group are perpendicular to the boundary of the device; otherwise, false;
      */
     isAllCursorsPerpendicularToBoundary: function() {
         var result = true;
@@ -480,7 +480,7 @@ jQuery.extend(imMatch, {
 
     /**
      * Determins whether a given point is in the stitching region or not.
-     * @returns {Bool} True if a given point is in the stitching region; otherwise, false;
+     * @returns {Boolean} True if a given point is in the stitching region; otherwise, false;
      */
     isInStitchingRegion: function(point) {
         if (!imMatch.is2DVector(point)) {
