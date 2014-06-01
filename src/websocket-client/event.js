@@ -1,3 +1,8 @@
+/**
+ * Event
+ * @module Event
+ */
+
 jQuery.extend(imMatch, {
     fixTouchMouseEvent: function(event, touchMouse) {
         var jQueryEvent;
@@ -21,7 +26,7 @@ jQuery.extend(imMatch, {
     }
 });
 
-// Alias for jQuery
+// Alias functions of touch events for jQuery
 jQuery.each(("touchstart touchmove touchend touchcancel").split(" "), function(i, name) {
 
     // Handle event binding
@@ -32,7 +37,29 @@ jQuery.each(("touchstart touchmove touchend touchcancel").split(" "), function(i
     };
 });
 
-// Alias
+/**
+ * Alias functions of registering "touchmousechange" event or triggering "touchmousechange" event
+ * @function
+ * @name imMatch#touchmousechange
+ */
+
+/**
+ * Alias functions of registering "trytostitch" event or triggering "trytostitch" event
+ * @function
+ * @name imMatch#trytostitch
+ */
+
+/**
+ * Alias functions of registering "modechange" event or triggering "modechange" event
+ * @function
+ * @name imMatch#modechange
+ */
+
+/**
+ * Alias functions of registering "stitching" event or triggering "stitching" event
+ * @function
+ * @name imMatch#stitching
+ */
 jQuery.each(("touchmousechange trytostitch modechange stitching").split(" "), function(i, name) {
 
     // Handle event binding

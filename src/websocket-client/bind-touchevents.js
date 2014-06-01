@@ -20,6 +20,7 @@ jQuery.extend(imMatch, {
     /**
      * The handler to handle all of touch or mouse event.
      * It helps transform the touch or mouse point from the local coordinate to the global coordinate.
+     * "touchmousechange" event is triggered.
      * @param {Object} event A normalized touch or mouse event
      * @memberof! imMatch#
      */
@@ -37,6 +38,11 @@ jQuery.extend(imMatch, {
                 return a.order - b.order;
             });
 
+            /**
+             * @name imMatch#touchmousechange
+             * @event
+             * @param {Object} touchMouseEvent A changed touchMouseEvent which is located at the global coordinate
+             */
             imMatch.trigger("touchmousechange", touchMouseEvent);
         });
     },

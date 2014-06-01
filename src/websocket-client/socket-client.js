@@ -143,6 +143,12 @@ imMatch.SocketClient.prototype = {
             }
 
             this.caches.queue("stitchingInfo", jsonObject.stitchingInfo);
+
+            /**
+             * @name imMatch#stitching
+             * @event
+             * @param {Object} stitchingInfo Stitching Information
+             */
             imMatch.trigger("stitching", jsonObject.stitchingInfo);
             return this;
         },

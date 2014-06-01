@@ -146,6 +146,11 @@ imMatch.engine = {
         }
 
         this.mode = newMode;
+        /**
+         * @name imMatch#modechange
+         * @event
+         * @param {Int} mode A new mode
+         */
         imMatch.trigger("modechange", newMode);
         return this;
     },
