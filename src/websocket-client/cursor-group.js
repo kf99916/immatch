@@ -1,3 +1,14 @@
+/**
+ * Cursor
+ * @class
+ * @classdesc A cursor constists of all touchMouseEvent which is the same ID.
+ */
+
+/**
+ * Creates a cursor object.
+ * @constructor
+ * @param {Object} touchMouseEvent A touchMouseEvent
+ */
 imMatch.Cursor = function(touchMouseEvent) {
     // Allow instantiation without the 'new' keyword
     if ( !(this instanceof imMatch.Cursor) ) {
@@ -10,6 +21,10 @@ imMatch.Cursor = function(touchMouseEvent) {
 };
 
 imMatch.Cursor.prototype = {
+    /**
+     * AAdds all points into the cursor
+     * @param {Array} points A point array contained touchMouseEvents
+     */
     add: function(points) {
         var self = this;
         if (jQuery.isEmptyObject(points)) {
@@ -36,6 +51,10 @@ imMatch.Cursor.prototype = {
         this.id = this.points[this.numPoints-1].id;
     },
 
+    /**
+     * Computes a vector of the cursor
+     * @returns {Object}
+     */
     getVector: function() {
         var startPoint = this.points[0], endPoint = this.points[this.numPoints-1];
 
@@ -46,6 +65,10 @@ imMatch.Cursor.prototype = {
         };
     },
 
+    /**
+     * Determins whether the cursor is enogh straight or not.
+     * @returns {Bool} Result True if the cursor is enogh straight; otherwise, false.
+     */
     isStraight: function() {
         var result = true, lastPoint = this.points[0], lastVelocity;
         jQuery.each(this.points, function(i, point) {
@@ -72,6 +95,11 @@ imMatch.Cursor.prototype = {
         return result;
     },
 
+    /**
+     * Determins whether the cursor fits some stitching region criteria.
+     * The criteria: The start point is out of the region, but the end point is in the region.
+     * @returns {Bool} Result True if the cursor fits the criteria; otherwise, false.
+     */
     isFitStitchingRegionCriteria: function() {
         var startPoint = this.points[0], endPoint = this.points[this.numPoints-1];
         if (startPoint.type !== imMatch.touchMouseEventType.down ||
@@ -86,6 +114,10 @@ imMatch.Cursor.prototype = {
         return false;
     },
 
+    /**
+     * Determins whether the cursor is perpendicular to the boundary of the device.
+     * @returns {Bool} Result True if the cursor is perpendicular to the boundary of the device; otherwise, false.
+     */
     isPerpendicularToBoundary: function() {
         var perpendicularRadDiff = imMatch.threadsholdAboutSyncGesture.perpendicularRadDiff,
             vec = this.getVector(),
@@ -102,6 +134,17 @@ imMatch.Cursor.prototype = {
     }
 };
 
+/**
+ * CursorGroup
+ * @class
+ * @classdesc A cursor group constists of all cursors which is closed with each other.
+ */
+
+ /**
+ * Creates a cursor group object.
+ * @constructor
+ * @param {Array} cursors A cursor array contained cursors
+ */
 imMatch.CursorGroup = function(cursors) {
     // Allow instantiation without the 'new' keyword
     if ( !(this instanceof imMatch.CursorGroup) ) {
@@ -115,6 +158,10 @@ imMatch.CursorGroup = function(cursors) {
 };
 
 imMatch.CursorGroup.prototype = {
+    /**
+     * Adds all curosrs into the cursor group
+     * @param {Array} cursors A cursor array contained cursors
+     */
     add: function(cursors) {
         var self = this;
         if (jQuery.isEmptyObject(cursors)) {
@@ -138,6 +185,10 @@ imMatch.CursorGroup.prototype = {
         return this;
     },
 
+    /**
+     * Removes a given cursor from the group
+     * @param {Object} cursors A removed cursor
+     */
     removeCursor: function(cursor) {
         if (jQuery.isEmptyObject(cursor)) {
             return null;
@@ -149,6 +200,10 @@ imMatch.CursorGroup.prototype = {
         return this;
     },
 
+    /**
+     * Computes the start and end centers in the cursor group.
+     * @returns {Object} Result The start and end centers. {start: {x: float, y: float}, end: {x: float, y: float}}
+     */
     computeStartEndCenters: function() {
         var startCenter = {x: 0, y: 0},
             endCenter = {x: 0, y: 0},
@@ -189,10 +244,14 @@ imMatch.CursorGroup.prototype = {
         };
     },
 
-    computeDistances: function() {
+    /**
+     * Computes the start and end distances in the cursor group.
+     * @returns {Object} Result The start and end distances. {start: float, end: float}
+     */
+    computeStartEndDistances: function() {
         var startEndPoints = [], coordinate;
-        if (this.numCursors > 2) {
-            return {};
+        if (this.numCursors < 2) {
+            return {start: 0, end: 0};
         }
 
         jQuery.each(this.cursors, function(id, cursor) {
@@ -211,23 +270,27 @@ imMatch.CursorGroup.prototype = {
         });
 
         if (imMatch.isEmpty(coordinate)) {
-            return null;
+            return {start: 0, end: 0};
         }
 
         return {
             start: imMatch.norm({
-                        x: startEndPoints[1].start.x - startEndPoints[0].start.x,
-                        y: startEndPoints[1].start.y - startEndPoints[0].start.y}),
+                        x: startEndPoints[this.numCursors-1].start.x - startEndPoints[0].start.x,
+                        y: startEndPoints[this.numCursors-1].start.y - startEndPoints[0].start.y}),
             end: imMatch.norm({
-                        x: startEndPoints[1].end.x - startEndPoints[0].end.x,
-                        y: startEndPoints[1].end.y - startEndPoints[0].end.y})
+                        x: startEndPoints[this.numCursors-1].end.x - startEndPoints[0].end.x,
+                        y: startEndPoints[this.numCursors-1].end.y - startEndPoints[0].end.y})
         };
     },
 
+    /**
+     * Computes the start and end vectors in the cursor group.
+     * @returns {Object} Result The start and end vectors. {start: {x: float, y: float}, end: {x: float, y: float}}
+     */
     computeStartEndVectors: function() {
         var startEndPoints = [], coordinate;
-        if (this.numCursors > 2) {
-            return {};
+        if (this.numCursors < 2) {
+            return {start: {x: 0, y: 0}, end: {x: 0, y: 0}};
         }
 
         jQuery.each(this.cursors, function(id, cursor) {
@@ -246,7 +309,7 @@ imMatch.CursorGroup.prototype = {
         });
 
         if (imMatch.isEmpty(coordinate)) {
-            return null;
+            return {start: {x: 0, y: 0}, end: {x: 0, y: 0}};
         }
 
         return {
@@ -257,6 +320,10 @@ imMatch.CursorGroup.prototype = {
         };
     },
 
+    /**
+     * Computes the stitching information according to cursors.
+     * @returns {Object} Result The stitching information
+     */
     computeStitchingInfo: function() {
         var stitchingInfo = {},
             globalStartEndCenters = this.computeStartEndCenters(), localStartEndCenters = {},
@@ -312,6 +379,11 @@ imMatch.CursorGroup.prototype = {
         return stitchingInfo;
     },
 
+    /**
+     * Determins whether the cursor group owns a given point.
+     * @param {Object} point The point
+     * @returns {Bool} True if the cursor group owns a given point; otherwise, false;
+     */
     hasOwnPoint: function(point) {
         return (this.cursors[point.id])? true : false;
     },
@@ -331,6 +403,10 @@ imMatch.CursorGroup.prototype = {
         return result;
     },
 
+    /**
+     * Determins whether all the cursors in the cursor group are up or not.
+     * @returns {Bool} True if all the cursors in the cursor group are up; otherwise, false;
+     */
     isAllCursorsUp: function() {
         var numUpCursors = 0;
         jQuery.each(this.cursors, function(cursorID, cursor) {
@@ -346,6 +422,10 @@ imMatch.CursorGroup.prototype = {
         return false;
     },
 
+    /**
+     * Determins whether all the cursors in the cursor group are enough straight or not.
+     * @returns {Bool} True if all the cursors in the cursor group are enough straight; otherwise, false;
+     */
     isAllCursorsStraight: function() {
         var result = true;
         jQuery.each(this.cursors, function(cursorID, cursor) {
@@ -358,7 +438,10 @@ imMatch.CursorGroup.prototype = {
         return result;
     },
 
-    // All of DOWN points is out of the stitching area and UP or CANCEL points is in the stitching area
+    /**
+     * Determins whether all the cursors in the cursor group fit stitching region criteria or not.
+     * @returns {Bool} True if all the cursors in the cursor group fit stitching region criteria; otherwise, false;
+     */
     isAllCurosrsFitStitchingRegionCriteria: function() {
         var result = true;
         jQuery.each(this.cursors, function(cursorID, cursor) {
@@ -371,6 +454,10 @@ imMatch.CursorGroup.prototype = {
         return result;
     },
 
+    /**
+     * Determins whether all the cursors in the cursor group are perpendicular to the boundary of the device or not.
+     * @returns {Bool} True if all the cursors in the cursor group are perpendicular to the boundary of the device; otherwise, false;
+     */
     isAllCursorsPerpendicularToBoundary: function() {
         var result = true;
         jQuery.each(this.cursors, function(cursorID, cursor) {
@@ -385,8 +472,16 @@ imMatch.CursorGroup.prototype = {
 };
 
 jQuery.extend(imMatch, {
+    /**
+     * The current cursor groups
+     * @memberof! imMatch#
+     */
     cursorGroups: {},
 
+    /**
+     * Determins whether a given point is in the stitching region or not.
+     * @returns {Bool} True if a given point is in the stitching region; otherwise, false;
+     */
     isInStitchingRegion: function(point) {
         if (!imMatch.is2DVector(point)) {
             return false;

@@ -191,8 +191,8 @@ jQuery.extend(imMatch.Sprite.prototype, imMatch.transformable.prototype, {
             rad = imMatch.rad(vector.start, vector.end);
             this.rotate(rad, center.start);
 
-            distance = this.cursorGroup.computeDistances();
-            scalingFactor = distance.end / distance.start || 1;
+            distance = this.cursorGroup.computeStartEndDistances();
+            scalingFactor = (distance.start !== 0)? distance.end / distance.start : 1;
 
             this.scale(scalingFactor, center.start);
         }
