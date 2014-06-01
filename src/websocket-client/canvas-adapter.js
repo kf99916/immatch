@@ -2,9 +2,6 @@
  * CanvasAdapter
  * @class
  * @classdesc It helps draw all elements which are located in the global coordinate.
- */
-
-/**
  * Creates a CanvasAdapter object.
  * @constructor
  * @param {String} canvasID The default vaule is "canvas".

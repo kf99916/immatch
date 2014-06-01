@@ -1,30 +1,61 @@
+/**
+ * Manages imMatch SDK client.
+ * @namespace
+ */
 imMatch.engine = {
+    /**
+     * Returns true if the engine is ready to run; otherwise, false.
+     */
     isReady: returnFalse,
 
-    interval: 0,
-
+    /**
+     * The current mode. It could be alone, stitching.exchange, stitching.donw, stitching.wait, or stitched.
+     */
     mode: imMatch.mode.alone,
 
-    lastRunTimeStamp: 0,
+    frame: 0,
 
-    frame: 0, // TODO: Reset
-
+    /**
+     * Returns true if there is a sprite wants to tween; otherwise, false.
+     */
     tweened: returnFalse,
 
+    /**
+     * Returns true if there is a touch or mouse event; otherwise, false.
+     */
     touched: returnFalse,
 
-    // imMatch.socketClient.request
+    /**
+     * imMatch.socketClient.request
+     * @readonly
+     * @constant
+     * @default
+     */
     request: null,
 
-    // imMatch.socketClient.caches
+    /**
+     * imMatch.socketClient.caches
+     * @readonly
+     * @constant
+     * @default
+     */
     caches: null,
 
     debugPanel: null,
 
+    /**
+     * Determines whether the debug panel is showed or not.
+     * @returns {Bool} Result True if imMatch.logLevel is equal or smaller than infoLevel; otherwise, false
+     */
     isShowDebugInfo: function() {
         return (imMatch.logLevel <= imMatch.infoLevel);
     },
 
+    /**
+     * Creates a debug panel with debugPanelID
+     * @param {String} debugPanelID A ID for a debug panel
+     * @returns {Object} Result A debug panel with debugOanelID
+     */
     createDebugPanel: function(debugPanelID) {
         this.debugPanel = jQuery("<div>", {id: debugPanelID}).appendTo("body");
         this.debugPanel.offset({top: 10, left: 10});
@@ -35,6 +66,9 @@ imMatch.engine = {
         return this.debugPanel;
     },
 
+    /**
+     * Updates inforamtion in the debug panel
+     */
     updateDebugPanel: function() {
         this.debugPanel.empty();
         this.debugPanel.append("<b>Device ID</b>: " + imMatch.device.id + "<br>");
@@ -70,6 +104,10 @@ imMatch.engine = {
         return this;
     },
 
+    /**
+     * Runloop which the timer is controlled by window.requestAnimationFrame. Stops if exceptions are catched.
+     * @param {float} timestamp Milliseconds elapsed since 1 January 1970 00:00:00 UTC
+     */
     run: function(timeStamp) {
         try {
             this.updateMode();
@@ -87,7 +125,6 @@ imMatch.engine = {
             this.updateReady(stamp);
             this.runWithMode(stamp);
 
-            this.updateIntervalWithMode(stamp);
             window.requestAnimationFrame(function() {
                 self.run(Date.now());
             });
@@ -99,6 +136,10 @@ imMatch.engine = {
         }
     },
 
+    /**
+     * Sets the current mode. The engine triggers a "modechange" event if the current mode is successful to be set.
+     * @param {imMatch.mode} newMode The new mode is set
+     */
     setMode: function(newMode) {
         if (imMatch.isEmpty(newMode)) {
             return this;
@@ -109,6 +150,9 @@ imMatch.engine = {
         return this;
     },
 
+    /**
+     * Updates the current mode.
+     */
     updateMode: function() {
         var stitchingInfo;
         switch(this.mode) {
@@ -123,7 +167,7 @@ imMatch.engine = {
                 this.caches.remove("syncTouchMouseEvent");
 
                 stitchingInfo = this.caches.get("stitchingInfo")[0];
-                this.updateViewportAffineTransform(stitchingInfo[0]);
+                this.updateTransformableObjAffineTransform(stitchingInfo[0]);
                 this.exchange(stitchingInfo[1]);
                 this.setMode(imMatch.mode.stitching.done);
             break;
@@ -158,6 +202,9 @@ imMatch.engine = {
         return this;
     },
 
+    /**
+     * Updates imMatch.engine.isReady
+     */
     updateReady: function(stamp) {
         var synchronizeDoneInfo = -1;
         switch(imMatch.getMainMode(this.mode)) {
@@ -187,6 +234,9 @@ imMatch.engine = {
         return this;
     },
 
+    /**
+     * Runs according to the current mode.
+     */
     runWithMode: function(stamp) {
         var touchedSprites;
         if (!this.isReady()) {
@@ -209,21 +259,27 @@ imMatch.engine = {
         return this;
     },
 
-    updateIntervalWithMode: function(stamp) {
-        this.interval = stamp.time - this.lastRunTimeStamp;
-        this.lastRunTimestamp = stamp.time;
-        return this;
-    },
-
+    /**
+     * Determines whether the client needs to be synced with the WebSocket server.
+     * @returns {Bool} Result True if the client needs to be synced with the WebSocket server; otherwise, false
+     */
     synced: function() {
         return (imMatch.getMainMode(this.mode) === imMatch.mainMode.stitched && this.frame % imMatch.chunkSize === 0);
     },
 
+    /**
+     * Determines whether the client needs to be redrawn.
+     * @returns {Bool} Result True if the client needs to be redrawn; otherwise, false
+     */
     reDrawn: function() {
         return (this.frame === 0 || this.touched() || this.tweened());
     },
 
-    updateViewportAffineTransform: function(stitchingInfo) {
+    /**
+     * Updates affine transform of all the transformable objects in the device group according to the stitching information.
+     * @param {Object} stitchingInfo The stitching information
+     */
+    updateTransformableObjAffineTransform: function(stitchingInfo) {
         imMatch.viewport.rotate(stitchingInfo.rad);
         imMatch.viewport.translate(stitchingInfo.translationFactor);
 
@@ -240,6 +296,10 @@ imMatch.engine = {
         return this;
     },
 
+    /**
+     * Exchanges all the transformable objects in the current viewport with the stitching device group
+     * @param {Object} stitchingInfo The stitching information
+     */
     exchange: function(stitchingInfo) {
         var exchangeScenes = [];
         jQuery.each(imMatch.scenes, function(i, scene) {
@@ -256,6 +316,10 @@ imMatch.engine = {
         });
     },
 
+    /**
+     * Adds transformable objects from the exchanged data of the stitching device group
+     * @param {Object} jsonObject The exchanged data of the stitching device group
+     */
     addTransformableObjects: function(jsonObject) {
         jQuery.each(jsonObject.scenes, function(i, serializedScene) {
             var scene = new imMatch.Scene(false);
@@ -268,6 +332,12 @@ imMatch.engine = {
 };
 
 jQuery.extend(imMatch, {
+    /**
+     * Invokes the function and then imMatch.engine starts to execute its task.
+     * @param {String} canvasID The canvas ID. If the canvas does not exist, imMatch.CanvasAdapter will create it.
+     * @param {String} webSocketServerIP WebSocket server IP. The default value is "127.0.0.1".
+     * @memberof! imMatch#
+     */
     run: function(canvasID, webSocketServerIP) {
         var debugPanelID = "debugPanel", webSocketServerURL;
         if (!imMatch.isReady()) {
@@ -292,7 +362,6 @@ jQuery.extend(imMatch, {
             }
         }
 
-        imMatch.engine.lastRunTimeStamp = Date.now();
-        imMatch.engine.run(imMatch.engine.lastRunTimeStamp);
+        imMatch.engine.run(Date.now());
     }
 });

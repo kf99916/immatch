@@ -1,9 +1,7 @@
 /**
  * Cache
  * @class
- */
-
-/**
+ * @classdesc A cache which is easy to query and store data from the WebSocket server.
  * Creates a cache to store data from the WebSocket server.
  * @constructor
  */

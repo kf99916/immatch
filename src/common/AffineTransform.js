@@ -1,9 +1,7 @@
 /**
  * AffineTransform
  * @class
- */
-
-/**
+ * @classdesc AffineTransform helper.
  * Creates a affine transform object: <br>
  * [  m00  m01  m02  ] <br>
  * [  m10  m11  m12  ] <br>

@@ -1,3 +1,8 @@
+/**
+ * Bind window's touch or mouse events
+ * @module Bind Toch Event
+ */
+
 jQuery.extend(imMatch, {
     /**
      * @readonly
