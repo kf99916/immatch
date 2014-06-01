@@ -1,3 +1,8 @@
+/**
+ * Common global variables
+ * @module Common Global Variables
+ */
+
 function returnTrue() {
     return true;
 }

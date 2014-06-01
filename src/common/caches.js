@@ -20,7 +20,7 @@ imMatch.Cache.prototype = {
      * @param {String} type The category data is stored
      * @param {Object} data Stored data
      * @param {Function} cmp A compare function (Optional).
-     * @returns {Cache} The cache
+     * @returns {Cache} Result The cache
      */
     queue: function(type, data, cmp) {
         if (imMatch.isEmpty(type) || imMatch.isEmpty(data)) {
@@ -41,7 +41,7 @@ imMatch.Cache.prototype = {
     /**
      * Dequeues data from the cache assigned type. data is removed from the cache.
      * @param {String} type The category data is dequeued
-     * @returns {Object} Data
+     * @returns {Object} Result Data
      */
     dequeue: function(type) {
         var result = {};
@@ -62,7 +62,7 @@ imMatch.Cache.prototype = {
      * If no compare function, then get all of data in the cache assigned type.
      * @param {String} type The category data is got
      * @param {Function} cmp A compare function (Optional).
-     * @returns {Array} Matched data
+     * @returns {Array} Result Matched data
      */
     get: function(type, cmp) {
         if (imMatch.isEmpty(type) || jQuery.isEmptyObject(this[type])) {
@@ -81,7 +81,7 @@ imMatch.Cache.prototype = {
      * If no compare function, then gets all of data in the cache assigned type.
      * @param {String} type The category data is got
      * @param {Function} cmp A compare function (Optional).
-     * @returns {Array} Matched data
+     * @returns {Array} Result Matched data
      */
     getNRemove: function(type, cmp) {
         if (imMatch.isEmpty(type) || jQuery.isEmptyObject(this[type])) {
@@ -96,7 +96,7 @@ imMatch.Cache.prototype = {
      * If no compare function, then removes all of data in the cache assigned type.
      * @param {String} type The category data is removed
      * @param {Function} cmp A compare function (Optional).
-     * @returns {Array} Matched data
+     * @returns {Array} Result Matched data
      */
     remove: function(type, cmp) {
         var removeItems = [];

@@ -1,3 +1,7 @@
+/**
+ * Core module
+ * @module Core Module
+ */
 jQuery.extend(imMatch, {
     isReady: returnFalse,
 
@@ -21,7 +25,7 @@ jQuery.extend(imMatch, {
     /**
      * Determines whether the test object is a 2D vector or not.
      * @param {Object} object Test object
-     * @returns {Bool} True if the object is a 2D vector; otherwise, false.
+     * @returns {Bool} Result True if the object is a 2D vector; otherwise, false.
      * @memberof! imMatch#
      */
     is2DVector: function(object) {
@@ -35,7 +39,7 @@ jQuery.extend(imMatch, {
     /**
      * Determines whether the test object is undefined or null or not.
      * @param {Object} object Test object
-     * @returns {Bool} True if the object is undefined or null; otherwise, false.
+     * @returns {Bool} Result True if the object is undefined or null; otherwise, false.
      * @memberof! imMatch#
      */
     isEmpty: function(object) {
@@ -46,7 +50,7 @@ jQuery.extend(imMatch, {
      * Removes a element from a plaint object or an array-like object.
      * @param {Object} object A plaint object or an array-like object
      * @param {String} name Removed property name
-     * @returns {Object} Object which the property is removed
+     * @returns {Object} Result Object which the property is removed
      * @memberof! imMatch#
      */
     remove: function(object, name) {

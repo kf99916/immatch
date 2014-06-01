@@ -1,3 +1,7 @@
+/**
+ * Log module
+ * @module Log Module
+ */
 window.console = window.console || {};
 window.console.log = console.log || function() {return arguments;};
 window.console.debug = console.debug || function() {window.console.log.apply(window.console, arguments);};

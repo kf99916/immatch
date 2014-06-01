@@ -1,9 +1,14 @@
+/**
+ * Math module
+ * @module Math Module
+ */
 jQuery.extend(imMatch, {
     /**
      * Rotates the given point by rad with a specified point as the anchor point.
      * @param {Vector} point {x: float, y: float}
      * @param {Float} rad unit: Raidan
      * @param {Vector} center {x: float, y: float}. The defalut value is {x: 0, y: 0} (Optional)
+     * @returns {Vector} Result Rotated vector {x: float, y: float}
      * @memberof! imMatch#
      */
     rotate: function(point, rad, /* Optional */ center) {
@@ -26,7 +31,7 @@ jQuery.extend(imMatch, {
 
     /**
      * Returns the largest argument or element in array and index.
-     * @return {Object} The max element
+     * @returns {Object} Result The max element
      * @memberof! imMatch#
      */
     max: function() {
@@ -48,7 +53,7 @@ jQuery.extend(imMatch, {
 
     /**
      * Returns the smallest argument or element in array and index.
-     * @return {Object} The min element
+     * @returns {Object} Result The min element
      * @memberof! imMatch#
      */
     min: function() {
@@ -72,7 +77,7 @@ jQuery.extend(imMatch, {
      * Computes Remainder.
      * @param {Int} dividend The dividend
      * @param {Int} divisor The divisor
-     * @returns {Int} A positive number
+     * @returns {Int} Result A positive number
      * @memberof! imMatch#
      */
     mod: function(dividend, divisor) {
@@ -83,7 +88,7 @@ jQuery.extend(imMatch, {
      * Performs dot operation.
      * @param {Vector} vector1 {x: float, y: float}
      * @param {Vector} vector2 {x: float, y: float}
-     * @returns {Float} Dot
+     * @returns {Float} Result Dot
      * @memberof! imMatch#
      */
     dot: function(vector1, vector2) {
@@ -98,7 +103,7 @@ jQuery.extend(imMatch, {
      * Comptes a radian between two given vectors
      * @param {Vector} vector1 {x: float, y: float}
      * @param {Vector} vector2 {x: float, y: float}
-     * @returns {Float} Radian. -pi ~ pi
+     * @returns {Float} Result Radian. -pi ~ pi
      * @memberof! imMatch#
      */
     rad: function(vector1, vector2) {
@@ -112,7 +117,7 @@ jQuery.extend(imMatch, {
     /**
      * Performs norm operation
      * @param {Vector} vector {x: float, y: float}
-     * @returns {Float} Norm
+     * @returns {Float} Result Norm
      * @memberof! imMatch#
      */
     norm: function(vector) {
@@ -122,7 +127,7 @@ jQuery.extend(imMatch, {
     /**
      * Rounds off a number
      * @param {Float} number
-     * @returns {Int} round number
+     * @returns {Int} Result round number
      * @memberof! imMatch#
      */
     round: function(number) {

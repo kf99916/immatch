@@ -1,3 +1,15 @@
+/**
+ * CanvasAdapter
+ * @class
+ * @classdesc It helps draw all elements which are located in the global coordinate.
+ */
+
+/**
+ * Creates a CanvasAdapter object.
+ * @constructor
+ * @param {String} canvasID The default vaule is "canvas".
+ * CanvasAdapter trys to create a canvas element with canvasID if canvasID is not found (Optional).
+ */
 imMatch.CanvasAdapter = function CanvasAdapter(canvasID) {
     // Allow instantiation without the 'new' keyword
     if ( !(this instanceof imMatch.CanvasAdapter) ) {
@@ -25,6 +37,10 @@ imMatch.CanvasAdapter = function CanvasAdapter(canvasID) {
 };
 
 imMatch.CanvasAdapter.prototype = {
+    /**
+     * Creates a canvas element with canvasID.
+     * @param {String} canvasID The canvas ID.
+     */
     createCanvas: function(canvasID) {
         this.canvas = document.createElement("canvas");
         this.canvas.id = canvasID;
@@ -33,7 +49,10 @@ imMatch.CanvasAdapter.prototype = {
         return this;
     },
 
-    // Reference: http://www.html5rocks.com/en/tutorials/canvas/hidpi/
+    /**
+     * Adjusts the canvas's size according to devicePixelRatio and webkitBackingStorePixelRatio <br>
+     * {@link http://www.html5rocks.com/en/tutorials/canvas/hidpi/|Reference}
+     */
     adjustCanvasSize: function() {
         var backingStoreRatio = this.context.webkitBackingStorePixelRatio ||
                             this.context.mozBackingStorePixelRatio ||
@@ -50,11 +69,17 @@ imMatch.CanvasAdapter.prototype = {
         return this;
     },
 
+    /**
+     * Clears all elements in the canvas
+     */
     clear: function() {
         this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
         return this;
     },
 
+    /**
+     * Draws all elements in the canvas
+     */
     draw: function() {
         var self = this;
 
@@ -77,6 +102,11 @@ imMatch.CanvasAdapter.prototype = {
         });
     },
 
+    /**
+     * Draws a given transformable object in the canvas
+     * @param {Object} transformableObject A transformable object
+     * @param {Object} style The style of the border of a transformable object
+     */
     drawTransformableObject: function(transformableObject, style) {
         if (jQuery.isEmptyObject(transformableObject)) {
             return this;

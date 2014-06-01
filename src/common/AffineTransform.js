@@ -30,7 +30,7 @@ imMatch.AffineTransform = function(m00, m10, m01, m11, m02, m12) {
  * Creates a scaling affine transform object.
  * @static
  * @param {Vector} scalingFactor {x: factor, y: factor}
- * @returns {AffineTransform} A scaling affine transform object
+ * @returns {AffineTransform} Result A scaling affine transform object
  */
 imMatch.AffineTransform.getScaleInstance = function(scalingFactor) {
     return new imMatch.AffineTransform().setToScale(scalingFactor);
@@ -40,7 +40,7 @@ imMatch.AffineTransform.getScaleInstance = function(scalingFactor) {
  * Creates a translation affine transform object.
  * @static
  * @param {Vector} translationFactor {x: factor, y: factor}
- * @returns {AffineTransform} A translation affine transform object
+ * @returns {AffineTransform} Result A translation affine transform object
  */
 imMatch.AffineTransform.getTranslationInstance = function(translationFactor) {
     return new imMatch.AffineTransform().setToTranslation(translationFactor);
@@ -50,7 +50,7 @@ imMatch.AffineTransform.getTranslationInstance = function(translationFactor) {
  * Creates a shearing affine transform object.
  * @static
  * @param {Vector} shearFactor {x: factor, y: factor}
- * @returns {AffineTransform} A shearing affine transform object
+ * @returns {AffineTransform} Result A shearing affine transform object
  */
 imMatch.AffineTransform.getShearInstance = function(shearFactor) {
     return new imMatch.AffineTransform().setToShear(shearFactor);
@@ -61,7 +61,7 @@ imMatch.AffineTransform.getShearInstance = function(shearFactor) {
  * @static
  * @param {Float} rad unit: radian
  * @param {Vector} anchorPoint {x: float, y: float}
- * @returns {AffineTransform} A rotation affine transform object
+ * @returns {AffineTransform} Result A rotation affine transform object
  */
 imMatch.AffineTransform.getRotateInstance = function(rad, anchorPoint) {
     return new imMatch.AffineTransform().setToRotation(rad, anchorPoint);
@@ -76,7 +76,7 @@ imMatch.AffineTransform.prototype = {
      * @param {Float} m11
      * @param {Float} m02
      * @param {Float} m12
-     * @returns {AffineTransform} A affine transform object
+     * @returns {AffineTransform} Result A affine transform object
      */
     setTransform: function(m00, m10, m01, m11, m02, m12) {
         if (!jQuery.isNumeric(m00) || !jQuery.isNumeric(m01) || !jQuery.isNumeric(m02) ||
@@ -98,7 +98,7 @@ imMatch.AffineTransform.prototype = {
 
     /**
      * Clones itself
-     * @returns {AffineTransform} A affine transform object which values are the same.
+     * @returns {AffineTransform} Result A affine transform object which values are the same.
      */
     clone: function() {
         return new imMatch.AffineTransform(this.m00, this.m10, this.m01, this.m11, this.m02, this.m12);
@@ -110,7 +110,7 @@ imMatch.AffineTransform.prototype = {
      * [m10 m11 m12] [0 y 0] <br>
      * [  0   0   1] [0 0 1]
      * @param {Vector} scalingFactor {x: factor, y: factor}
-     * @returns {AffineTransform} Result after concatenation
+     * @returns {AffineTransform} Result Result after concatenation
      */
     scale: function(scalingFactor) {
         return this.concatenate(imMatch.AffineTransform.getScaleInstance(scalingFactor));
@@ -122,7 +122,7 @@ imMatch.AffineTransform.prototype = {
      * [0 y 0] [m10 m11 m12] <br>
      * [0 0 1] [  0   0   1]
      * @param {Vector} scalingFactor {x: factor, y: factor}
-     * @returns {AffineTransform} Result after pre-concatenation
+     * @returns {AffineTransform} Result Result after pre-concatenation
      */
     preScale: function(scalingFactor) {
         return this.preConcatenate(imMatch.AffineTransform.getScaleInstance(scalingFactor));
@@ -134,7 +134,7 @@ imMatch.AffineTransform.prototype = {
      * [m10 m11 m12] [0 1 y] <br>
      * [  0   0   1] [0 0 1]
      * @param {Vector} translationFactor {x: factor, y: factor}
-     * @return {AffineTransform} Result after concatenation
+     * @returns {AffineTransform} Result Result after concatenation
      */
     translate: function(translationFactor) {
         return this.concatenate(imMatch.AffineTransform.getTranslationInstance(translationFactor));
@@ -146,7 +146,7 @@ imMatch.AffineTransform.prototype = {
      * [0 1 y] [m10 m11 m12] <br>
      * [0 0 1] [  0   0   1]
      * @param {Vector} translationFactor {x: factor, y: factor}
-     * @returns {AffineTransform} Result after pre-concatenation
+     * @returns {AffineTransform} Result Result after pre-concatenation
      */
     preTranslate: function(translationFactor) {
         return this.preConcatenate(imMatch.AffineTransform.getTranslationInstance(translationFactor));
@@ -159,7 +159,7 @@ imMatch.AffineTransform.prototype = {
      * [  0   0   1] [   0   0                       1]
      * @param {Float} rad unit: radian
      * @param {Object} anchorPoint {x: float, y: float}
-     * @returns {AffineTransform} Result after concatenation
+     * @returns {AffineTransform} Result Result after concatenation
      */
     rotate: function(rad, anchorPoint) {
         return this.concatenate(imMatch.AffineTransform.getRotateInstance(rad, anchorPoint));
@@ -172,7 +172,7 @@ imMatch.AffineTransform.prototype = {
      * [   0   0                       1] [  0   0   1]
      * @param {Float} rad unit: radian
      * @param {Object} anchorPoint {x: float, y: float}
-     * @returns {AffineTransform} Result after pre-concatenation
+     * @returns {AffineTransform} Result Result after pre-concatenation
      */
     preRotate: function(rad, anchorPoint) {
         return this.preConcatenate(imMatch.AffineTransform.getRotateInstance(rad, anchorPoint));
@@ -184,7 +184,7 @@ imMatch.AffineTransform.prototype = {
      * [m10 m11 m12] [y 1 0] <br>
      * [  0   0   1] [0 0 1]
      * @param {Vector} shearFactor {x: float, y: float}
-     * @returns {AffineTransform} Result after concatenation
+     * @returns {AffineTransform} Result Result after concatenation
      */
     shear: function(shearFactor) {
         return this.concatenate(imMatch.AffineTransform.getShearInstance(shearFactor));
@@ -196,7 +196,7 @@ imMatch.AffineTransform.prototype = {
      * [y 1 0] [m10 m11 m12] <br>
      * [0 0 1] [  0   0   1]
      * @param {Vector} shearFactor {x: float, y: float}
-     * @returns {AffineTransform} Result after pre-concatenation
+     * @returns {AffineTransform} Result Result after pre-concatenation
     */
     preShear: function(shearFactor) {
         return this.preConcatenate(imMatch.AffineTransform.getShearInstance(shearFactor));
@@ -206,7 +206,7 @@ imMatch.AffineTransform.prototype = {
      * Concatenates a affine transform.
      * this * tx
      * @param {AffineTransform} tx
-     * @returns {AffineTransform} Result after concatenation
+     * @returns {AffineTransform} Result Result after concatenation
      */
     concatenate: function(tx) {
         if (imMatch.isEmpty(tx) ||
@@ -231,7 +231,7 @@ imMatch.AffineTransform.prototype = {
      * Pre-concatenates a affine transform.
      * tx * this
      * @param {AffineTransform} tx
-     * @returns {AffineTransform} Result after pre-concatenation
+     * @returns {AffineTransform} Result Result after pre-concatenation
      */
     preConcatenate: function(tx) {
         if (imMatch.isEmpty(tx) ||
@@ -262,7 +262,7 @@ imMatch.AffineTransform.prototype = {
      *      [ y'] = [  m10  m11  m12  ] [ y ] = [ m10x + m11y + m12 ]
      *      [ 1 ]   [   0    0    1   ] [ 1 ]   [         1         ]
      * @param {Vector} vec {x: float, y: float}
-     * @returns {Vector} Transformation result: {x: float, y: float}
+     * @returns {Vector} Result Transformation result: {x: float, y: float}
      */
     transform: function(vec) {
         if (!imMatch.is2DVector(vec)) {
@@ -277,7 +277,7 @@ imMatch.AffineTransform.prototype = {
 
     /**
      * Computes determinant
-     * @returns {Float} determinant
+     * @returns {Float} Result determinant
      */
     getDeterminant: function() {
         return this.m00 * this.m11 - this.m01 * this.m10;
@@ -285,7 +285,7 @@ imMatch.AffineTransform.prototype = {
 
     /**
      * Invertible or not
-     * @returns {Bool}
+     * @returns {Bool} Result True if the affine transform is invertible; otherwise, false
      */
     isInvertible: function() {
         var det = this.getDeterminant();
@@ -295,7 +295,7 @@ imMatch.AffineTransform.prototype = {
 
     /**
      * Computes the inversion affine transform. The result is stored by itself.
-     * @returns {AffineTransform}
+     * @returns {AffineTransform} Result Inversion affine transform
      */
     inverse: function() {
         if (!this.isInvertible) {
@@ -318,7 +318,7 @@ imMatch.AffineTransform.prototype = {
 
     /**
      * Computes the inversion affine transform. Do not modify inself.
-     * @returns {AffineTransform}
+     * @returns {AffineTransform} Result Inversion affine transform
      */
     createInverse: function() {
         if (!this.isInvertible) {
@@ -331,7 +331,7 @@ imMatch.AffineTransform.prototype = {
     /**
      * Setter to a scaling affine transform.
      * @param {Vector} scalingFactor {x: factor, y: factor}
-     * @returns {AffineTransform}
+     * @returns {AffineTransform} Result Ascaling affine transform
      */
     setToScale: function(scalingFactor) {
         if (jQuery.isEmptyObject(scalingFactor)) {
@@ -343,7 +343,7 @@ imMatch.AffineTransform.prototype = {
     /**
      * Setter to a translation affine transform.
      * @param {Vector} translationFactor {x: factor, y: factor}
-     * @returns {AffineTransform}
+     * @returns {AffineTransform} Result A translation affine transform
      */
     setToTranslation: function(translationFactor) {
         if (jQuery.isEmptyObject(translationFactor)) {
@@ -355,7 +355,7 @@ imMatch.AffineTransform.prototype = {
     /**
      * Setter to a shearing affine transform.
      * @param {Vector} shearingFactor {x: factor, y: factor}
-     * @returns {AffineTransform}
+     * @returns {AffineTransform} Result A shearing affine transform
      */
     setToShear: function(shearFactor) {
         if (jQuery.isEmptyObject(shearFactor)) {
@@ -368,7 +368,7 @@ imMatch.AffineTransform.prototype = {
      * Setter to a rotation affine transform.
      * @param {Float} rad unit: radian
      * @param {Vector} anchorPoint {x: float, y: float}
-     * @returns {AffineTransform}
+     * @returns {AffineTransform} Result A rotation affine transform
      */
     setToRotation: function(rad, anchorPoint) {
         if (jQuery.isEmptyObject(anchorPoint)) {
@@ -385,7 +385,7 @@ imMatch.AffineTransform.prototype = {
 
     /**
      * Serializes as a json.
-     * @returns {Array} [m00, m10, m01, m11, m02, m12]
+     * @returns {Array} Result [m00, m10, m01, m11, m02, m12]
      */
     toJSON: function() {
         return [this.m00, this.m10, this.m01, this.m11, this.m02, this.m12];

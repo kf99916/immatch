@@ -1,3 +1,8 @@
+/**
+ * Checks all the libraries imMatch SDK needs are ready or not.
+ * @module Check Libraries Module
+ */
+
 // 1. jQuery library
 if (jQuery === undefined) {
     window.alert("jQuery library is not found." +

@@ -1,4 +1,10 @@
 jQuery.extend(imMatch, {
+    /**
+     * @readonly
+     * @constant
+     * @default
+     * @memberof! imMatch#
+     */
     touchMouseEventType: {
         down: "touchmousedown",
         up: "touchmouseup",
@@ -6,6 +12,12 @@ jQuery.extend(imMatch, {
         cancel: "touchmousecancel"
     },
 
+    /**
+     * The handler to handle all of touch or mouse event.
+     * It helps transform the touch or mouse point from the local coordinate to the global coordinate.
+     * @param {Object} event A normalized touch or mouse event
+     * @memberof! imMatch#
+     */
     touchMouseHandler: function(event) {
         event.preventDefault();
         jQuery.each(event.originalEvent.changedTouches, function(i, touch) {
@@ -24,28 +36,51 @@ jQuery.extend(imMatch, {
         });
     },
 
-    // Touch Handlers
+    /**
+     * The handler to handle the touchstart event
+     * @param {Object} event A touch event
+     * @memberof! imMatch#
+     */
     touchstartHandler: function(event) {
         event.type = imMatch.touchMouseEventType.down;
         imMatch.touchMouseHandler(event);
     },
 
+    /**
+     * The handler to handle the touchmove event
+     * @param {Object} event A touch event
+     * @memberof! imMatch#
+     */
     touchmoveHandler: function(event) {
         event.type = imMatch.touchMouseEventType.move;
         imMatch.touchMouseHandler(event);
     },
 
+    /**
+     * The handler to handle the touchend event
+     * @param {Object} event A touch event
+     * @memberof! imMatch#
+     */
     touchendHandler: function(event) {
         event.type = imMatch.touchMouseEventType.up;
         imMatch.touchMouseHandler(event);
     },
 
+    /**
+     * The handler to handle the touchcancel event
+     * @param {Object} event A touch event
+     * @memberof! imMatch#
+     */
     touchcancelHandler: function(event) {
         event.type = imMatch.touchMouseEventType.cancel;
         imMatch.touchMouseHandler(event);
     },
 
-    // Mouse Handlers
+    /**
+     * The handler to handle all of mouse event
+     * @param {Object} event A mouse event
+     * @memberof! imMatch#
+     */
     mouseHandler: function(event) {
         event.originalEvent.changedTouches = [{
             identifier: mouseID,
@@ -55,6 +90,11 @@ jQuery.extend(imMatch, {
         imMatch.touchMouseHandler(event);
     },
 
+    /**
+     * The handler to handle the mousedown event
+     * @param {Object} event A mouse event
+     * @memberof! imMatch#
+     */
     mousedownHandler: function(event) {
         if (isMouseDragged()) {
             return;
@@ -68,6 +108,11 @@ jQuery.extend(imMatch, {
         imMatch.mouseHandler(event);
     },
 
+    /**
+     * The handler to handle the mousemove event
+     * @param {Object} event A mouse event
+     * @memberof! imMatch#
+     */
     mousemoveHandler: function(event) {
         if (!isMouseDragged()) {
             return;
@@ -77,6 +122,11 @@ jQuery.extend(imMatch, {
         imMatch.mouseHandler(event);
     },
 
+    /**
+     * The handler to handle the mouseup event
+     * @param {Object} event A mouse event
+     * @memberof! imMatch#
+     */
     mouseupHandler: function(event) {
         if (!isMouseDragged()) {
             return;
@@ -87,6 +137,11 @@ jQuery.extend(imMatch, {
         imMatch.mouseHandler(event);
     },
 
+    /**
+     * The handler to handle the mouseout event
+     * @param {Object} event A mouse event
+     * @memberof! imMatch#
+     */
     mouseoutHandler: function(event) {
         if (!isMouseDragged()) {
             return;
@@ -97,6 +152,10 @@ jQuery.extend(imMatch, {
         imMatch.mouseHandler(event);
     },
 
+    /**
+     * Adds handlers to handle touch event or mouse event to windows object.
+     * @memberof! imMatch#
+     */
     addTouchMouseHandlers: function() {
         if (isTouchSupported) {
             jQuery(window).touchstart(imMatch.touchstartHandler);
