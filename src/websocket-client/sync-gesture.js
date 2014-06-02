@@ -10,7 +10,7 @@ jQuery.extend(imMatch, {
         distance: 2,
         samplingTime: 50, // ms
         straight: Math.PI / 20,
-        perpendicularRadDiff: 0.15
+        perpendicularRadDiff: 0.2
     }
 });
 
