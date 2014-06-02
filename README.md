@@ -61,6 +61,25 @@ cd immatch && npm run build
 ```
 The built version of imMatch will be put in the ```dist/``` sub-directory, along with the minified copy and associated map file.
 
+## The other commands ##
+If you want to build imMatch and copy your build and example to the web document root, then run the build script:
+
+```
+#!sh
+
+cd immatch && npm run start
+```
+
+The destination is defined at "webServerDocuments" key in package.json.
+
+If you want to build imMatch documentation, then run the build script:
+```
+#!sh
+
+cd immatch && npm run docs
+```
+The built documentation will be put in the ```docs/``` sub-directory
+
 # Documentation #
 ---
 * [imMatch WebSocket Client](https://www.googledrive.com/host/0B5EDyG5SmMfOa3kzMWNrYzI2aEk)
