@@ -184,8 +184,8 @@ module.exports = function(grunt) {
 		copy: {
 			main: {
 				files: [
-					{expand: true, cwd:"dist/", src: ["immatch.js"], dest: "<%= pkg.webServerDocuments %>/immatch-new/js/"},
-					{expand: true, cwd:"example/", src: ["**"], dest: "<%= pkg.webServerDocuments %>/immatch-new/"}
+					{expand: true, cwd:"dist/", src: ["immatch.js"], dest: "<%= pkg.webServerDocuments %>/immatch/js/"},
+					{expand: true, cwd:"example/", src: ["**"], dest: "<%= pkg.webServerDocuments %>/immatch/"}
 				]
 			}
 		},
