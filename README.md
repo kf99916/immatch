@@ -19,6 +19,7 @@ If you don't know whether your browser support WebSocket, check the following we
 * [Can I use Web Sockets?](http://caniuse.com/websockets)
 
 # Demo #
+---
 ## Panorama Viewer ([Demo Video](http://www.youtube.com/watch?v=jUuohp6DaUU)) ##
 
 ![PanoramaViewer.png](https://bitbucket.org/repo/oRzpRo/images/4229571547-PanoramaViewer.png)
@@ -32,6 +33,7 @@ Panorama Viewer makes users see panoramas in a "big screen". Users don't be rest
 This is a multi-player tower defense game. One device, one tower. Players can use a easy gesture to connect these devices and fight. It is a new interaction game type.
 
 # What you need to build your own imMatch SDK #
+---
 * [Node.js](http://nodejs.org/)
 * [Grunt](http://gruntjs.com/)
 ```
@@ -42,6 +44,7 @@ npm install -g grunt-cli
 
 
 # How to build your own imMatch SDK #
+---
 Clone a copy of the main imMatch git repo by running:
 ```
 #!sh
