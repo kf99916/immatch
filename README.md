@@ -58,7 +58,7 @@ cd immatch && npm run build
 ```
 The built version of imMatch will be put in the ```dist/``` sub-directory, along with the minified copy and associated map file.
 
-# Documentation #
+# [Documentation](https://www.googledrive.com/host/0B5EDyG5SmMfOa3kzMWNrYzI2aEk) #
 # License #
 
 You use imMatch project under the terms of the MIT License.
