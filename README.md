@@ -63,4 +63,9 @@ The built version of imMatch will be put in the ```dist/``` sub-directory, along
 
 You use imMatch project under the terms of the MIT License.
 
-Please visit [[MIT LICENSE.wiki|MIT License]] to get more details.
+Please visit [MIT License](https://bitbucket.org/kf99916/immatch/src/d927b6694feed5b84c323bcd636fdbe14cf07d3a/MIT-LICENSE.txt?at=master) to get more details.
+
+# About #
+This project is my master thesis: [Development of SDK for Stitching Multiple Multi-touch Displays](http://ndltd.ncl.edu.tw/cgi-bin/gs32/gsweb.cgi?o=dnclcdr&s=id=%22100NTU05392017%22.&searchmode=basic). I hope imMatch SDK can improve the way users use their smart phones and make life better.
+
+If you have any question and suggestion, want to join me, or have a donation, welcome to contact me by [email](kf99916@gmail.com). Thanks :)
