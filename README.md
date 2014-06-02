@@ -4,8 +4,12 @@ imMatch makes screen stitching very easy and creates amazing and interesting int
 
 # News #
 ---
-* 2014.06.02: imMatch v1.0
-* 2012.10.26: imMatch 1.0 kicks off
+* 2014.06.02: imMatch v1.0.0
+* 2012.10.26: imMatch v1.0.0 kicks off
+
+# Version #
+---
+* [imMatcg v1.0.0](https://bitbucket.org/kf99916/immatch/downloads/)
 
 # Supported Platform #
 ---
