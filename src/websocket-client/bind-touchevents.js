@@ -5,6 +5,31 @@
 
 jQuery.extend(imMatch, {
     /**
+     * Determines whether touches are supported in the device.
+     * @readonly
+     * @constant
+     * @default
+     * @memberof! imMatch#
+     */
+    isTouchSupported: "ontouchstart" in window,
+
+    /**
+     * The current mouse ID.
+     * @private
+     * @default
+     * @memberof! imMatch#
+     */
+    mouseID: null,
+
+    /**
+     * Determines whether the mouse is dragged or not.
+     * @private
+     * @default
+     * @memberof! imMatch#
+     */
+    isMouseDragged: returnFalse,
+
+    /**
      * @readonly
      * @constant
      * @default
@@ -94,7 +119,7 @@ jQuery.extend(imMatch, {
      */
     mouseHandler: function(event) {
         event.originalEvent.changedTouches = [{
-            identifier: mouseID,
+            identifier: imMatch.mouseID,
             pageX: event.pageX,
             pageY: event.pageY
         }];
@@ -107,14 +132,14 @@ jQuery.extend(imMatch, {
      * @memberof! imMatch#
      */
     mousedownHandler: function(event) {
-        if (isMouseDragged()) {
+        if (imMatch.isMouseDragged()) {
             return;
         }
 
-        isMouseDragged = returnTrue;
+        imMatch.isMouseDragged = returnTrue;
         event.type = imMatch.touchMouseEventType.down;
 
-        mouseID = Math.uuidFast();
+        imMatch.mouseID = Math.uuidFast();
 
         imMatch.mouseHandler(event);
     },
@@ -125,7 +150,7 @@ jQuery.extend(imMatch, {
      * @memberof! imMatch#
      */
     mousemoveHandler: function(event) {
-        if (!isMouseDragged()) {
+        if (!imMatch.isMouseDragged()) {
             return;
         }
 
@@ -139,11 +164,11 @@ jQuery.extend(imMatch, {
      * @memberof! imMatch#
      */
     mouseupHandler: function(event) {
-        if (!isMouseDragged()) {
+        if (!imMatch.isMouseDragged()) {
             return;
         }
 
-        isMouseDragged = returnFalse;
+        imMatch.isMouseDragged = returnFalse;
         event.type = imMatch.touchMouseEventType.up;
         imMatch.mouseHandler(event);
     },
@@ -154,11 +179,11 @@ jQuery.extend(imMatch, {
      * @memberof! imMatch#
      */
     mouseoutHandler: function(event) {
-        if (!isMouseDragged()) {
+        if (!imMatch.isMouseDragged()) {
             return;
         }
 
-        isMouseDragged = returnFalse;
+        imMatch.isMouseDragged = returnFalse;
         event.type = imMatch.touchMouseEventType.cancel;
         imMatch.mouseHandler(event);
     },
@@ -168,7 +193,7 @@ jQuery.extend(imMatch, {
      * @memberof! imMatch#
      */
     addTouchMouseHandlers: function() {
-        if (isTouchSupported) {
+        if (this.isTouchSupported) {
             jQuery(window).touchstart(imMatch.touchstartHandler);
             jQuery(window).touchmove(imMatch.touchmoveHandler);
             jQuery(window).touchend(imMatch.touchendHandler);

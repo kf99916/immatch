@@ -1,4 +1,13 @@
+/**
+ * Takes responsibility for recognizing the synchrouous gestures and the local gestures
+ * @namespace
+ */
 imMatch.gestureRecognizer = {
+    /**
+     * Recognizes the synchrouous gestures and the local gestures
+     * @param {Object} stamp Timestamp information
+     * @memberof! imMatch.gestureRecognizer#
+     */
     recognize: function(stamp) {
         // 1. Get all touchMouseEvent in the frame
         var touchMouseEventCache = (imMatch.getMainMode(imMatch.engine.mode) === imMatch.mainMode.alone)?

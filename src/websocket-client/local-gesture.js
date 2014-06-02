@@ -1,7 +1,18 @@
+/**
+ * Recognizes which sprtie performs the local gesture.
+ * @namespace
+ */
 imMatch.localGesture = {
-    // {touchMouseEvent.id: sprite}
+    /**
+     * Stores sprite with touch ID key. {touchMouseEvent.id: sprite}
+     * @default
+     */
     spriteMap: {},
 
+    /**
+     * Recognize the touchMouseEvent.
+     * @param {Object} touchMouseEvent The touchMouseEvent
+     */
     recognize: function(touchMouseEvent) {
         var handler = touchMouseEvent.type + "Handler";
         if (!this[handler]) {
@@ -11,13 +22,18 @@ imMatch.localGesture = {
         return this[handler](touchMouseEvent);
     },
 
+    /**
+     * Recognize the touchMouseEvent which the toch or mouse is down.
+     * Searchs sprites which are touched and adds them into spriteMap.
+     * @param {Object} touchMouseEvent The touchMouseEvent
+     */
     touchmousedownHandler: function(touchMouseEvent) {
         var sprite = this.searchTouchedSprite(touchMouseEvent);
         if (jQuery.isEmptyObject(sprite)) {
             return null;
         }
 
-        if (sprite.cursorGroup.numCursors > maxNumTouchesInSprite) {
+        if (sprite.cursorGroup.numCursors >= sprite.maxNumCursors) {
             return null;
         }
 
@@ -27,6 +43,11 @@ imMatch.localGesture = {
         return sprite;
     },
 
+    /**
+     * Recognize the touchMouseEvent which the toch or mouse is moving.
+     * Sprites which are touched perform affine transforam by the touchMouseEvent.
+     * @param {Object} touchMouseEvent The touchMouseEvent
+     */
     touchmousemoveHandler: function(touchMouseEvent) {
         var sprite = this.spriteMap[touchMouseEvent.id], cursor;
         if (jQuery.isEmptyObject(sprite)) {
@@ -42,16 +63,31 @@ imMatch.localGesture = {
         return sprite;
     },
 
+    /**
+     * Recognize the touchMouseEvent which the toch or mouse is up.
+     * Sprites which are touched is removed from spriteMap.
+     * @param {Object} touchMouseEvent The touchMouseEvent
+     */
     touchmouseupHandler: function(touchMouseEvent) {
         var sprite = this.touchmousemoveHandler(touchMouseEvent);
         delete this.spriteMap[touchMouseEvent.id];
         return sprite;
     },
 
+    /**
+     * Recognize the touchMouseEvent which the toch or mouse is cancelled.
+     * Action is the same as touchmouseupHandler.
+     * @see imMatch.localGesture.touchmouseupHandler
+     * @param {Object} touchMouseEvent The touchMouseEvent
+     */
     touchmousecancelHandler:function(touchMouseEvent) {
         return this.touchmouseupHandler(touchMouseEvent);
     },
 
+    /**
+     * Searchs sprites which are touched.
+     * @param {Object} touchMouseEvent The touchMouseEvent
+     */
     searchTouchedSprite: function(touchMouseEvent) {
         var result, scenes = slice.call(imMatch.scenes);
 

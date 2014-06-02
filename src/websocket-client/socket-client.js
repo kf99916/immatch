@@ -1,3 +1,10 @@
+/**
+ * Creates a SocketClient object.
+ * @class
+ * @classdesc SocketClient is a client of the WebSocket.
+ * @constructor
+ * @param {String} webSocketServerURL URL of the WebSocket server. The default vaule is "ws://127.0.0.1:8080"
+ */
 imMatch.SocketClient = function(webSocketServerURL) {
     // Allow instantiation without the 'new' keyword
     if ( !(this instanceof imMatch.SocketClient) ) {
@@ -53,6 +60,10 @@ imMatch.SocketClient = function(webSocketServerURL) {
 };
 
 imMatch.SocketClient.prototype = {
+    /**
+     * Sends a given data to the WebSocket server.
+     * @param {Object} data The request data
+     */
     send: function(data) {
         if (jQuery.isEmptyObject(data) || imMatch.isEmpty(data.action)) {
             imMatch.logError("[SocketClient.send] The format of message is wrong! Message: ", data);
@@ -68,6 +79,12 @@ imMatch.SocketClient.prototype = {
         return this;
     },
 
+    /**
+     * Fixs the request data to unify them.
+     * @param {Object} data The request data
+     * @param {String} action The request action
+     * @returns {Object} Result The unified request data
+     */
     fixRequestData: function(data, action) {
         data.action = action;
         data.deviceID = imMatch.device.id;
@@ -76,7 +93,12 @@ imMatch.SocketClient.prototype = {
         return data;
     },
 
-    fixSynchronizData: function(data) {
+    /**
+     * Fixs the request data for synchronization action.
+     * @param {Object} data The request data
+     * @returns {Object} Result The unified request data
+     */
+    fixSynchronizedData: function(data) {
         // The data is received before the next chunk.
         data.chunk += imMatch.chunkSize;
         data.touchMouseEvents = this.caches.getNRemove("touchMouseEvent");
@@ -88,6 +110,10 @@ imMatch.SocketClient.prototype = {
         return data;
     },
 
+    /**
+     * Sends a request to the WebSocket server. Here are all the requests:
+     * "tryToStitch", "synchronize", "exchange", and "exchangeDone".
+     */
     request: {
         tryToStitch: function(data) {
             imMatch.logInfo("[SocketClient.request.tryToStitch] data:", data);
@@ -95,7 +121,7 @@ imMatch.SocketClient.prototype = {
         },
 
         synchronize: function(data) {
-            data = this.fixSynchronizData(data);
+            data = this.fixSynchronizedData(data);
             imMatch.logDebug("[SocketClient.request.synchronize] data:", data);
             this.send(this.fixRequestData(data, "synchronize"));
         },
@@ -111,6 +137,10 @@ imMatch.SocketClient.prototype = {
         }
     },
 
+    /**
+     * Receives a response from the WebSocket server. Here are all the responses:
+     * "connectionSuccess", "synchronize", "synchronizeDone", "stitching", "exchange", and "exchangeDone".
+     */
     response: {
         connectionSuccess: function(jsonObject) {
             imMatch.device.id = jsonObject.deviceID;

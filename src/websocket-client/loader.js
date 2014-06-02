@@ -1,4 +1,12 @@
+/**
+ * Takes responsibility for loading all the defined images.
+ * @namespace
+ */
 imMatch.loader = {
+    /**
+     * Loads load-list.json. It will start to load all the defined images if it succeeded to load the json; otherwise, throw a exception.
+     * @param {Function} fn The callback function
+     */
     load: function(fn) {
         var loadList = "load-list.json", self = this;
 
@@ -20,6 +28,9 @@ imMatch.loader = {
         });
     },
 
+    /**
+     * Create a progress bar
+     */
     createProgressBar: function() {
         var width = imMatch.viewport.width * imMatch.device.ppi * 3 / 4, height = width * 0.05;
         this.progressBar = document.createElement("progress");
@@ -35,6 +46,11 @@ imMatch.loader = {
         document.body.appendChild(this.progressBar);
     },
 
+    /**
+     * Loads all the defined images. Invokes the given callback function if it succeeded to load.
+     * @param {Object} data Data in load-list.json
+     * @param {Function} fn The callback function
+     */
     loadData: function(data, fn) {
         var self = this;
         this.progressBar.max = data.length;

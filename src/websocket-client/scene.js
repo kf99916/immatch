@@ -1,3 +1,11 @@
+/**
+ * Creates a Scene object.
+ * @class
+ * @classdesc Scene is a transformable object and owns sprites.
+ * @see imMatch.transformable
+ * @constructor
+ * @param {Boolean} incrementSceneZ Indicates whether sceneZ is incresed.
+ */
 imMatch.Scene = function(incrementSceneZ) {
     // Allow instantiation without the 'new' keyword
     if ( !(this instanceof imMatch.Scene) ) {
@@ -22,6 +30,7 @@ imMatch.Scene = function(incrementSceneZ) {
 
     this.sprites = [];
     this.spriteZ = 0;
+    this.maxNumSprites = 100;
 
     this.solid = false;
     this.movable = true;
@@ -34,6 +43,13 @@ imMatch.Scene = function(incrementSceneZ) {
 };
 
 jQuery.extend(imMatch.Scene.prototype, imMatch.transformable.prototype, {
+    /**
+     * Transforms a given vector with its coordinate.
+     * @param {Object} vec The given vector
+     * @param {Boolean} deep Indicates whether the given vector can be overwritten by the rsult
+     * @returns {Object} Result Result
+     * @memberof! imMatch.Scene#
+     */
     transformWithCoordinate: function(vec, /* Optional */ deep) {
         var target = {}, result;
         deep = deep || false;
@@ -62,11 +78,22 @@ jQuery.extend(imMatch.Scene.prototype, imMatch.transformable.prototype, {
         return jQuery.extend(target, result);
     },
 
+    /**
+     * Computes a affine transform to the local coordinate.
+     * @returns {Object} Result A affine transform can transform the vector in the global coordinate to the local coordinate
+     * @memberof! imMatch.Scene#
+     */
     computeAffineTransform2Local: function() {
         return this.computeAppliedTransform().
                     preConcatenate(imMatch.viewport.computeAffineTransform2Local());
     },
 
+    /**
+     * Deserializes data to a Scene object
+     * @param {Object} data Serialized data
+     * @returns {Object} Result A Scene object which including the serialized data
+     * @memberof! imMatch.Scene#
+     */
     deserialize: function(data) {
         var self = this;
         jQuery.each(data.sprites, function(i, serializedSprite) {
@@ -85,6 +112,12 @@ jQuery.extend(imMatch.Scene.prototype, imMatch.transformable.prototype, {
         return jQuery.extend(this, data);
     },
 
+    /**
+     * Determines whether the scene is touched.
+     * @param {Object} touchMouseEvent A touchMouseEvent
+     * @returns {Boolean} Result True if the scene is touched; otherwise, false
+     * @memberof! imMatch.Scene#
+     */
     isTouched: function(touchMouseEvent) {
         if (!imMatch.is2DVector(touchMouseEvent) || imMatch.isEmpty(touchMouseEvent.coordinate) ||
                 imMatch.coordinate.scene !== touchMouseEvent.coordinate) {
@@ -99,13 +132,19 @@ jQuery.extend(imMatch.Scene.prototype, imMatch.transformable.prototype, {
         return false;
     },
 
+    /**
+     * Adds a sprite assigned the z-order.
+     * @param {Sprite} sprite A Sprite object
+     * @param {Int} defaultSpriteZ The default z-order of the sprite
+     * @memberof! imMatch.Scene#
+     */
     addSprite: function(sprite, defaultSpriteZ) {
         if (jQuery.isEmptyObject(sprite)) {
             return this;
         }
 
-        if (imMatch.maxNumSpritesInScene < this.sprites.length) {
-            imMatch.logWarn("[imMatch.Scene.addSprite] The scene is full of sprites. max: " + imMatch.maxNumSpritesInScene);
+        if (this.maxNumSprites <= this.sprites.length) {
+            imMatch.logWarn("[imMatch.Scene.addSprite] The scene is full of sprites. max: " + this.maxNumSprites);
             return this;
         }
 
@@ -127,10 +166,19 @@ jQuery.extend(imMatch.Scene.prototype, imMatch.transformable.prototype, {
 });
 
 jQuery.extend(imMatch, {
+    /**
+     * All of the current scenes. It is sorted by the scene's z-roder and scene's ID.
+     * @default
+     * @memberof! imMatch#
+     */
     scenes: [],
 
-    maxNumSpritesInScene: 100,
-
+    /**
+     * Adds a scene into imMatch.scenes.
+     * @see imMatch#scenes
+     * @param {Scene} scene A scene
+     * @memberof! imMatch#
+     */
     addScene: function(scene) {
         if (jQuery.isEmptyObject(scene)) {
             imMatch.logError("[imMatch.engine.addScene] Scene is empty.");
@@ -150,6 +198,12 @@ jQuery.extend(imMatch, {
         return this;
     },
 
+    /**
+     * Removes a scene from imMatch.scenes.
+     * @see imMatch#scenes
+     * @param {Scene} removedScene A removed scene
+     * @memberof! imMatch#
+     */
     removeScene: function(removedScene) {
         imMatch.scenes = jQuery.grep(imMatch.scenes, function(scene) {
             return (removedScene.id !== scene.id);

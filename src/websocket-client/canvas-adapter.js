@@ -1,8 +1,7 @@
 /**
- * CanvasAdapter
+ * Creates a CanvasAdapter object.
  * @class
  * @classdesc It helps draw all elements which are located in the global coordinate.
- * Creates a CanvasAdapter object.
  * @constructor
  * @param {String} canvasID The default vaule is "canvas".
  * CanvasAdapter trys to create a canvas element with canvasID if canvasID is not found (Optional).

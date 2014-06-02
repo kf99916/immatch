@@ -37,18 +37,3 @@ var document = window.document,
      * @namespace imMatch
      */
     imMatch = jQuery({});
-
-jQuery.extend(imMatch, {
-    /**
-     * @readonly
-     * @constant
-     * @default
-     * @memberof! imMatch#
-     */
-    coordinate: {
-        local: 0,
-        global: 1,
-        scene: 2,
-        sprite: 3
-    }
-});

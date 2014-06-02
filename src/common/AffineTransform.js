@@ -1,12 +1,11 @@
 /**
- * AffineTransform
- * @class
- * @classdesc AffineTransform helper.
- * Creates a affine transform object: <br>
+ * Create a AffineTransform object: <br>
  * [  m00  m01  m02  ] <br>
  * [  m10  m11  m12  ] <br>
  * [   0    0    1   ] <br>
  * {@link https://github.com/google/closure-library/blob/master/closure/goog/math/affinetransform.js|Reference}
+ * @class
+ * @classdesc AffineTransform helper.
  * @constructor
  * @param {Float} m00
  * @param {Float} m10

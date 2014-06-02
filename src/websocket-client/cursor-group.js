@@ -1,11 +1,7 @@
 /**
- * Cursor
+ * Creates a cursor object.
  * @class
  * @classdesc A cursor constists of all touchMouseEvent which is the same ID.
- */
-
-/**
- * Creates a cursor object.
  * @constructor
  * @param {Object} touchMouseEvent A touchMouseEvent
  */
@@ -135,13 +131,9 @@ imMatch.Cursor.prototype = {
 };
 
 /**
- * CursorGroup
+ * Creates a cursor group object.
  * @class
  * @classdesc A cursor group constists of all cursors which is closed with each other.
- */
-
- /**
- * Creates a cursor group object.
  * @constructor
  * @param {Array} cursors A cursor array contained cursors
  */

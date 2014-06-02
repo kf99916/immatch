@@ -106,7 +106,7 @@ imMatch.engine = {
 
     /**
      * Runloop which the timer is controlled by window.requestAnimationFrame. Stops if exceptions are catched.
-     * @param {float} timestamp Milliseconds elapsed since 1 January 1970 00:00:00 UTC
+     * @param {Int} timestamp Milliseconds elapsed since 1 January 1970 00:00:00 UTC
      */
     run: function(timeStamp) {
         try {

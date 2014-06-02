@@ -12,6 +12,7 @@ imMatch.Sprite = function() {
     this.alpha = 1;
 
     this.cursorGroup = new imMatch.CursorGroup();
+    this.maxNumCursors = 2;
 
     this.scene = null;
     this.image = null;
@@ -119,7 +120,7 @@ jQuery.extend(imMatch.Sprite.prototype, imMatch.transformable.prototype, {
             return this;
         }
 
-        defaultSpriteZ = defaultSpriteZ || scene.z * imMatch.maxNumSpritesInScene + scene.spriteZ;
+        defaultSpriteZ = defaultSpriteZ || scene.z * scene.maxNumSpritesInScene + scene.spriteZ;
 
         this.scene = scene;
         this.z = defaultSpriteZ;

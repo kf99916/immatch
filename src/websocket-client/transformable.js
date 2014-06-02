@@ -1,21 +1,26 @@
-imMatch.transformable = {};
-
-imMatch.transformable.members = {
-    x: 0,
-    y: 0,
-    width: 0,
-    height: 0,
-    rad: 0,
-    scalingFactor: 1,
-    shearFactor: {x: 0, y: 0},
-    maxScalingFactor: Number.MAX_VALUE,
-    minScalingFactor: Number.MIN_VALUE,
-    frame: {x: 0, y: 0},
-    touchable: false,
-    movable: false,
-    rotatable: false,
-    scalable: false,
-    shearable: false
+/**
+ * Defines interface of a transformable object
+ * @default
+ * @namespace
+ */
+imMatch.transformable = {
+    members: {
+        x: 0,
+        y: 0,
+        width: 0,
+        height: 0,
+        rad: 0,
+        scalingFactor: 1,
+        shearFactor: {x: 0, y: 0},
+        maxScalingFactor: Number.MAX_VALUE,
+        minScalingFactor: Number.MIN_VALUE,
+        frame: {x: 0, y: 0},
+        touchable: false,
+        movable: false,
+        rotatable: false,
+        scalable: false,
+        shearable: false
+    }
 };
 
 imMatch.transformable.prototype = {
