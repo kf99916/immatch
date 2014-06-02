@@ -1,3 +1,15 @@
+$im.modechange(function(event, mode) {
+    if (mode !== $im.mode.stitched) {
+        return;
+    }
+
+    jQuery.each($im.scenes, function(i, scene) {
+        jQuery.each(scene.sprites, function(i, sprite) {
+            sprite.tween(3, {x: sprite.x + 3, y: sprite.y + 1});
+        });
+    });
+});
+
 $im.ready(function() {
     $im.logLevel = $im.infoLevel;
 
