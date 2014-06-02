@@ -1,9 +1,29 @@
+/**
+ *
+ * @class
+ * @classdesc The WebSocket server
+ * @name ws.Server
+ */
 jQuery.extend(ws.Server.prototype, {
-    // Stitching groups: each group shares the same virtual space
+    /**
+     * The stitching groups. Each group shares the sanme virtual space.
+     * @default
+     * @memberof! ws.Server#
+     */
     groups: {},
 
+    /**
+     * Caches
+     * @default
+     * @memberof! ws.Server#
+     */
     caches: new imMatch.Cache(),
 
+    /**
+     * Adds a new group. "connectionSuccess" message is sent if a new group succedded to be added.
+     * @param {Object} webSocket The WebSocket of the device
+     * @memberof! ws.Server#
+     */
     addGroup: function(webSocket) {
         var group, device;
         if (jQuery.isEmptyObject(webSocket)) {
@@ -25,6 +45,10 @@ jQuery.extend(ws.Server.prototype, {
         return group;
     },
 
+    /**
+     * Monitor the caches. Remove the dead candidates.
+     * @memberof! ws.Server#
+     */
     monitorCaches: function() {
         var now = Date.now();
         this.caches.remove("stitchingCandidate", function(candidate) {
@@ -36,6 +60,11 @@ jQuery.extend(ws.Server.prototype, {
         return this;
     },
 
+    /**
+     * Adds a new candidate into the cahes.
+     * @param {Object} newCandidate The new candidate
+     * @memberof! ws.Server#
+     */
     addCandidate: function(newCandidate) {
         if (jQuery.isEmptyObject(newCandidate)) {
             return this;
@@ -50,6 +79,11 @@ jQuery.extend(ws.Server.prototype, {
         return this;
     },
 
+    /**
+     * Searchs a matched candidate. These two devices will be stitched if found.
+     * @param {Object} jsonObject The sitching information
+     * @memberof! ws.Server#
+     */
     searchMatchCandidate: function(jsonObject) {
         var candidates = this.caches.get("stitchingCandidate"), now = Date.now(), match;
         if (jQuery.isEmptyObject(jsonObject)) {
@@ -67,6 +101,11 @@ jQuery.extend(ws.Server.prototype, {
         return match;
     },
 
+    /**
+     * Computes a affine transforma for stitching
+     * @param {Object} stitchingInfo The sitching information
+     * @memberof! ws.Server#
+     */
     computeAffineFactor: function(stitchingInfo) {
         stitchingInfo.rad = imMatch.rad(stitchingInfo.orientation, {x: 1, y: 0});
         var rotateTransform = imMatch.AffineTransform.getRotateInstance(stitchingInfo.rad);
@@ -86,7 +125,11 @@ jQuery.extend(ws.Server.prototype, {
         return this;
     },
 
-    // Response received messages
+    /**
+     * Responses the received message. Here are all the responses:
+     * "connection", "close", "error", "tryToStitch", "synchronize", "exchange", and "exchangeDone".
+     * @memberof! ws.Server#
+     */
     response: {
         connection: function(webSocket) {
             this.addGroup(webSocket);

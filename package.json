@@ -42,6 +42,6 @@
   "scripts": {
     "build": "npm install && grunt",
     "start": "npm install && grunt watch",
-    "doc": "npm install && grunt doc"
+    "docs": "npm install && grunt docs"
   }
 }

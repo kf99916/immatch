@@ -1,3 +1,10 @@
+/**
+ * Creates a Device object.
+ * @class
+ * @classdesc Device represents a device.
+ * @constructor
+ * @param {Object} webSocet The WebSocket of the device
+ */
 imMatch.Device = function(webSocket) {
     // Allow instantiation without the 'new' keyword
     if ( !(this instanceof imMatch.Device) ) {
@@ -9,6 +16,10 @@ imMatch.Device = function(webSocket) {
 };
 
 imMatch.Device.prototype = {
+    /**
+     * Sends a given data to the device.
+     * @param {Object} data The request data
+     */
     send: function(data) {
         if (jQuery.isEmptyObject(data) || imMatch.isEmpty(data.action)) {
             imMatch.logError("[imMatch.Device.send] The format of message is wrong! Message: ", data);
@@ -30,6 +41,13 @@ imMatch.Device.prototype = {
     }
 };
 
+/**
+ * Creates a Group object.
+ * @class
+ * @classdesc All the devices in the same group are synchronized with the touchMouseEvent.
+ * @constructor
+ * @param {Object} devices The devnces
+ */
 imMatch.Group = function(devices) {
     // Allow instantiation without the 'new' keyword
     if ( !(this instanceof imMatch.Group) ) {
@@ -44,6 +62,10 @@ imMatch.Group = function(devices) {
 };
 
 imMatch.Group.prototype = {
+    /**
+     * Adds devices into the group.
+     * @param {Object} devices The devnces
+     */
     addDevices: function(devices) {
         if (jQuery.isEmptyObject(devices)) {
             return this;
@@ -58,6 +80,11 @@ imMatch.Group.prototype = {
         return this;
     },
 
+    /**
+     * Synchronizes all the devices in the group.
+     * The group send "synchronizeDone" message if all the devices are synchronized in the chunk.
+     * @param {Object} jsonObject The data needs to be synchronized
+     */
     synchronize: function(jsonObject) {
         if (jQuery.isEmptyObject(jsonObject)) {
             return this;
@@ -86,7 +113,10 @@ imMatch.Group.prototype = {
         return this;
     },
 
-    // Send data to all devices in the group
+    /**
+     * Broadcasts messgaes to all the devices in the group.
+     * @param {Object} data The request data
+     */
     broadcast: function(data) {
         if (jQuery.isEmptyObject(data)) {
             return this;
@@ -99,6 +129,10 @@ imMatch.Group.prototype = {
         return this;
     },
 
+    /**
+     * Gets the group's stitching information.
+     * @returns {Object} Result The group's stitching information
+     */
     getStitchingInfo: function() {
         var self = this, stitchingInfos = imMatch.webSocketServer.caches.get("stitchingInfo"), result;
         jQuery.each(stitchingInfos, function(i, stitchingInfo) {
@@ -111,6 +145,10 @@ imMatch.Group.prototype = {
         return result;
     },
 
+    /**
+     * Sends the stitching information.
+     * @returns {Boolean} True if the stitching information succedded to be sent; otherwise, false
+     */
     stitch: function() {
         var stitchingInfo = this.getStitchingInfo();
         if (jQuery.isEmptyObject(stitchingInfo)) {

@@ -190,19 +190,30 @@ module.exports = function(grunt) {
 			}
 		},
         jsdoc : {
-            dist : {
+            imMatchWebsocketClient: {
                 src: [
                     "src/common/intro/global-var.js",
                     "src/common/*.js",
-                    "src/websocket-client/*.js",
-                    "src/websocket-server*.js"
+                    "src/websocket-client/*.js"
                 ],
                 options: {
-                    destination: "doc",
+                    destination: "docs/websocket-client",
                     // Template comes from: https://github.com/davidshimjs/jaguarjs-jsdoc
                     template: "templates/jaguarjs-jsdoc"
                 }
-            }
+            },
+            imMatchWebsocketServer: {
+                src: [
+                    "src/common/intro/global-var.js",
+                    "src/common/*.js",
+                    "src/websocket-server/*.js"
+                ],
+                options: {
+                    destination: "docs/websocket-server",
+                    // Template comes from: https://github.com/davidshimjs/jaguarjs-jsdoc
+                    template: "templates/jaguarjs-jsdoc"
+                }
+            },
         }
 	});
 
@@ -213,7 +224,7 @@ module.exports = function(grunt) {
 	grunt.registerTask( "watch", ["jsonlint", "concat", "jshint", "clean", "uglify", "copy"]);
 
     // Watch task
-    grunt.registerTask( "doc", ["jsdoc"]);
+    grunt.registerTask( "docs", ["jsdoc"]);
 
 	// Default grunt.
 	grunt.registerTask("default", ["jsonlint", "concat", "jshint", "clean", "uglify", "jsdoc"]);
