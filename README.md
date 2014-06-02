@@ -2,28 +2,18 @@
 
 imMatch makes screen stitching very easy and creates amazing and interesting interaction. It supports different multi-touch mobile devices, resolutions, and platforms.
 
-### What is this repository for? ###
+# News #
+---
+* 2014.06.02: imMatch v1.0
+* 2012.10.26: imMatch 1.0 kicks off
 
-* Quick summary
-* Version
-* [Learn Markdown](https://bitbucket.org/tutorials/markdowndemo)
+# Supported Platform #
+---
+Platforms that own a web browser supports HTML5 and WebSocket, including:
+* iOS
+* Android 4.0+ (need Google Chrome for Android)
+* BlackBerry OS
 
-### How do I get set up? ###
-
-* Summary of set up
-* Configuration
-* Dependencies
-* Database configuration
-* How to run tests
-* Deployment instructions
-
-### Contribution guidelines ###
-
-* Writing tests
-* Code review
-* Other guidelines
-
-### Who do I talk to? ###
-
-* Repo owner or admin
-* Other community or team contact
+If you don't know whether your browser supports WebSocket, check this:
+* [WebSocket.org Echo Test](http://www.websocket.org/echo.html)
+* [Can I use Web Sockets?](http://caniuse.com/websockets)
