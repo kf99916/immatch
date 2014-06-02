@@ -171,7 +171,7 @@ jQuery.extend(imMatch.Sprite.prototype, imMatch.transformable.prototype, {
             return this;
         }
 
-        defaultSpriteZ = defaultSpriteZ || scene.z * scene.maxNumSpritesInScene + scene.spriteZ;
+        defaultSpriteZ = defaultSpriteZ || scene.z * scene.maxNumSprites + scene.spriteZ;
 
         this.scene = scene;
         this.z = defaultSpriteZ;
