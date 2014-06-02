@@ -10,7 +10,7 @@ imMatch.localGesture = {
     spriteMap: {},
 
     /**
-     * Recognize the touchMouseEvent.
+     * Recognizes the touchMouseEvent.
      * @param {Object} touchMouseEvent The touchMouseEvent
      */
     recognize: function(touchMouseEvent) {
@@ -23,7 +23,7 @@ imMatch.localGesture = {
     },
 
     /**
-     * Recognize the touchMouseEvent which the toch or mouse is down.
+     * Recognizes the touchMouseEvent which the toch or mouse is down.
      * Searchs sprites which are touched and adds them into spriteMap.
      * @param {Object} touchMouseEvent The touchMouseEvent
      */
@@ -44,7 +44,7 @@ imMatch.localGesture = {
     },
 
     /**
-     * Recognize the touchMouseEvent which the toch or mouse is moving.
+     * Recognizes the touchMouseEvent which the toch or mouse is moving.
      * Sprites which are touched perform affine transforam by the touchMouseEvent.
      * @param {Object} touchMouseEvent The touchMouseEvent
      */
@@ -64,7 +64,7 @@ imMatch.localGesture = {
     },
 
     /**
-     * Recognize the touchMouseEvent which the toch or mouse is up.
+     * Recognizes the touchMouseEvent which the toch or mouse is up.
      * Sprites which are touched is removed from spriteMap.
      * @param {Object} touchMouseEvent The touchMouseEvent
      */
@@ -75,7 +75,7 @@ imMatch.localGesture = {
     },
 
     /**
-     * Recognize the touchMouseEvent which the toch or mouse is cancelled.
+     * Recognizes the touchMouseEvent which the toch or mouse is cancelled.
      * Action is the same as touchmouseupHandler.
      * @see imMatch.localGesture.touchmouseupHandler
      * @param {Object} touchMouseEvent The touchMouseEvent

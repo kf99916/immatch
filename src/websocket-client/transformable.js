@@ -24,10 +24,21 @@ imMatch.transformable = {
 };
 
 imMatch.transformable.prototype = {
+    /**
+     * Deserializes data to a transformable object.
+     * @param {Object} data Serialized data
+     * @returns {Object} Result A transformalbe object which including the serialized data
+     */
     deserialize: function(data) {
         return jQuery.extend(this, data);
     },
 
+    /**
+     * Transforms a given vector.
+     * @param {Object} vec The given vector
+     * @param {Boolean} deep Indicates whether the given vector can be overwritten by the rsult
+     * @returns {Object} Result Result
+     */
     transformWithCoordinate: function(vec, /* Optional */ deep) {
         var target, result;
         deep = deep || false;
@@ -36,19 +47,35 @@ imMatch.transformable.prototype = {
         return jQuery.extend(target, result);
     },
 
+    /**
+     * Copmutes a applied affine transform.
+     * @returns {AffineTransform} Result A applined affine transform
+     */
     computeAppliedTransform: function() {
        return imMatch.AffineTransform.getRotateInstance(this.rad).
                 preScale({x: this.scalingFactor, y: this.scalingFactor}).preShear(this.shearFactor).preTranslate(this);
     },
 
+    /**
+     * Computes a affine transform to the local coordinate.
+     * @returns {AffineTransform} Result A affine transform can transform the vector to the local coordinate
+     */
     computeAffineTransform2Local: function() {
         return this.computeAppliedTransform();
     },
 
+    /**
+     * Computes a affine transform for drawing the transformable object.
+     * @returns {AffineTransform} Result A affine transform for drawing the transformable object
+     */
     computeAffineTransformForDraw: function() {
         return this.computeAffineTransform2Local();
     },
 
+    /**
+     * Computes a bounding box of transformable object.
+     * @returns {Object} Result A bounding box
+     */
     getBoundingBox: function() {
         var affineTransformForDraw = this.computeAffineTransformForDraw(),
             diff = {x: this.width / 2, y: this.height / 2},
@@ -68,18 +95,36 @@ imMatch.transformable.prototype = {
         };
     },
 
+    /**
+     * Transforms a given vector through the applined affine transform.
+     * @param {Vector} vec A vector
+     * @returns {Vector} Result {x: float, y: float}
+     */
     transform: function(vec) {
         return this.computeAppliedTransform().transform(vec);
     },
 
+    /**
+     * Inversely Transforms a given vector through the inverse matrix of applined affine transform.
+     * @returns {Vector} Result {x: float, y: float}
+     */
     inverseTransform: function(vec) {
         return this.computeAppliedTransform().inverse().transform(vec);
     },
 
+    /**
+     * Computes the position of the transformable object.
+     * @param {Vector} vec A vector
+     * @returns {Vector} Result {x: float, y: float}
+     */
     computePosition: function() {
         return this.computeAppliedTransform().transform({x: 0, y: 0});
     },
 
+    /**
+     * Perfomrs translation of the transformable object.
+     * @param {Vector} translationFactor {x: float, y: float}
+     */
     translate: function(translationFactor) {
         if (!this.movable) {
             return this;
@@ -91,6 +136,11 @@ imMatch.transformable.prototype = {
         return this;
     },
 
+    /**
+     * Perfomrs rotation of the transformable object.
+     * @param {Float} rad Unit: radian
+     * @param {Vector} anchorPoint {x: float, y: float}
+     */
     rotate: function(rad, anchorPoint) {
         if (!this.rotatable) {
             return this;
@@ -110,6 +160,11 @@ imMatch.transformable.prototype = {
         return this;
     },
 
+    /**
+     * Perfomrs a scaling operation of the transformable object.
+     * @param {Vector} scalingFactor {x: float, y: float}
+     * @param {Vector} anchorPoint {x: float, y: float}
+     */
     scale: function(scalingFactor, anchorPoint) {
         if (!this.scalable) {
             return this;
@@ -133,6 +188,10 @@ imMatch.transformable.prototype = {
         return this;
     },
 
+    /**
+     * Perfomrs a shearing operation of the transformable object.
+     * @param {Vector} shearFactor {x: float, y: float}
+     */
     shear: function(shearFactor) {
         if (!this.shearable) {
             return;

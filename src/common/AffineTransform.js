@@ -381,7 +381,7 @@ imMatch.AffineTransform.prototype = {
     },
 
     /**
-     * Serializes as a json.
+     * Serializes all of the members as a json.
      * @returns {Array} Result [m00, m10, m01, m11, m02, m12]
      */
     toJSON: function() {

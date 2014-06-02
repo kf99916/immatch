@@ -465,12 +465,6 @@ imMatch.CursorGroup.prototype = {
 
 jQuery.extend(imMatch, {
     /**
-     * The current cursor groups
-     * @memberof! imMatch#
-     */
-    cursorGroups: {},
-
-    /**
      * Determins whether a given point is in the stitching region or not.
      * @returns {Boolean} True if a given point is in the stitching region; otherwise, false;
      */

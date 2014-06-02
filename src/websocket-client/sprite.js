@@ -1,3 +1,10 @@
+/**
+ * Creates a Sprite object.
+ * @class
+ * @classdesc Sprite is a transformable object and it is a basic element in imMatch SDK.
+ * @see imMatch.transformable
+ * @constructor
+ */
 imMatch.Sprite = function() {
     // Allow instantiation without the 'new' keyword
     if ( !(this instanceof imMatch.Sprite) ) {
@@ -25,6 +32,13 @@ imMatch.Sprite = function() {
 };
 
 jQuery.extend(imMatch.Sprite.prototype, imMatch.transformable.prototype, {
+    /**
+     * Transforms a given vector with its coordinate to the sprite coordinate.
+     * @param {Object} vec The given vector
+     * @param {Boolean} deep Indicates whether the given vector can be overwritten by the rsult
+     * @returns {Object} Result Result
+     * @memberof! imMatch.Sprite#
+     */
     transformWithCoordinate: function(vec, /* Optional */ deep) {
         var target = {}, result;
         deep = deep || false;
@@ -58,12 +72,24 @@ jQuery.extend(imMatch.Sprite.prototype, imMatch.transformable.prototype, {
         return jQuery.extend(target, result);
     },
 
+    /**
+     * Computes a affine transform to the local coordinate.
+     * @returns {AffineTransform} Result A affine transform can transform the vector in the sprite coordinate to the local coordinate
+     * @memberof! imMatch.Sprite#
+     */
     computeAffineTransform2Local: function() {
         return this.computeAppliedTransform().
                     preConcatenate(this.scene.computeAffineTransform2Local());
     },
 
-    // Reference for ease: http://www.greensock.com/get-started-js/#easing
+    /**
+     * Tweens a sprite.
+     * @param {Float} duration Performed duration
+     * @param {Object} vars The interpolated variables
+     * @param {String} ease The ease method. The default value is "Power1.easeOut" (Optional).
+     * {@link http://www.greensock.com/get-started-js/#easing|Reference}
+     * @memberof! imMatch.Sprite#
+     */
     tween: function(duration, vars, /* Optional */ ease) {
         if (!this.tweenable || !jQuery.isPlainObject(vars)) {
             return this;
@@ -79,6 +105,10 @@ jQuery.extend(imMatch.Sprite.prototype, imMatch.transformable.prototype, {
         return this;
     },
 
+    /**
+     * Callback function when tween is on start.
+     * @memberof! imMatch.Sprite#
+     */
     tweenStart: function() {
         this.touchable = false;
         imMatch.engine.tweened = returnTrue;
@@ -86,6 +116,10 @@ jQuery.extend(imMatch.Sprite.prototype, imMatch.transformable.prototype, {
         return this;
     },
 
+    /**
+     * Callback function when tween is completed.
+     * @memberof! imMatch.Sprite#
+     */
     tweenComplete: function() {
         this.touchable = true;
         imMatch.engine.tweened = returnFalse;
@@ -93,6 +127,11 @@ jQuery.extend(imMatch.Sprite.prototype, imMatch.transformable.prototype, {
         return this;
     },
 
+    /**
+     * Serializes all of the members, except for scene, image, and cursorGroup, as a json.
+     * @returns {Object} Result A serialized sprite.
+     * @memberof! imMatch.Sprite#
+     */
     toJSON: function() {
         var serializedSprite = jQuery.extend(true, serializedSprite, this);
         serializedSprite.sceneID = serializedSprite.scene.id;
@@ -104,6 +143,12 @@ jQuery.extend(imMatch.Sprite.prototype, imMatch.transformable.prototype, {
         return serializedSprite;
     },
 
+    /**
+     * Deserializes data to a Sprite object
+     * @param {Object} data Serialized data
+     * @returns {Object} Result A Sprite object which including the serialized data
+     * @memberof! imMatch.Sprite#
+     */
     deserialize: function(data) {
         if (!jQuery.isEmptyObject(data.imageID)) {
             this.setImage(data.imageID);
@@ -115,6 +160,12 @@ jQuery.extend(imMatch.Sprite.prototype, imMatch.transformable.prototype, {
         return jQuery.extend(this, data);
     },
 
+    /**
+     * Set a scene which contained the sprite.
+     * @param {Scene} scene A scene
+     * @returns {Int} defaultSpriteZ The default z-order for the sprite
+     * @memberof! imMatch.Sprite#
+     */
     setContainedScene: function(scene, defaultSpriteZ) {
         if (jQuery.isEmptyObject(scene)) {
             return this;
@@ -128,6 +179,11 @@ jQuery.extend(imMatch.Sprite.prototype, imMatch.transformable.prototype, {
         return this;
     },
 
+    /**
+     * Sets a image with the image ID.
+     * @param {String} id The image ID from "load-list.json".
+     * @memberof! imMatch.Sprite#
+     */
     setImage: function(id) {
         if (imMatch.isEmpty(id)) {
             return this;
@@ -141,6 +197,11 @@ jQuery.extend(imMatch.Sprite.prototype, imMatch.transformable.prototype, {
         return this;
     },
 
+    /**
+     * Determines whether the sprite is in the current viewport or not.
+     * @returns {Boolean} Result True if the sprite is in the current viewport; otherwise, false
+     * @memberof! imMatch.Sprite#
+     */
     isInViewport: function() {
         var viewportBoundingBox = imMatch.viewport.getBoundingBox(),
             selfBoundingBox = this.getBoundingBox(),
@@ -157,6 +218,11 @@ jQuery.extend(imMatch.Sprite.prototype, imMatch.transformable.prototype, {
         return false;
     },
 
+    /**
+     * Determines whether the sprite is touched or not.
+     * @returns {Boolean} Result True if the sprite is touched; otherwise, false
+     * @memberof! imMatch.Sprite#
+     */
     isTouched: function(touchMouseEvent) {
         if (!this.touchable) {
             return false;
@@ -181,6 +247,10 @@ jQuery.extend(imMatch.Sprite.prototype, imMatch.transformable.prototype, {
         return false;
     },
 
+    /**
+     * Updates the affine transform of the sprite.
+     * @memberof! imMatch.Sprite#
+     */
     updateAffineTransform: function() {
         var center = this.cursorGroup.computeStartEndCenters(),
             vector, rad, distance, scalingFactor;
@@ -201,6 +271,10 @@ jQuery.extend(imMatch.Sprite.prototype, imMatch.transformable.prototype, {
         return this;
     },
 
+    /**
+     * Updates the cursor group of the sprite.
+     * @memberof! imMatch.Sprite#
+     */
     updateCursorGroup: function() {
         var self = this;
         jQuery.each(this.cursorGroup.cursors, function(id, cursor) {

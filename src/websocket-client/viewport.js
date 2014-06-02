@@ -1,3 +1,10 @@
+/**
+ * Creates a Viewport object.
+ * @class
+ * @classdesc Viewport is a transformable object and it represents the region a user can see.
+ * @see imMatch.transformable
+ * @constructor
+ */
 imMatch.Viewport = function() {
     // Allow instantiation without the 'new' keyword
     if ( !(this instanceof imMatch.Viewport) ) {
@@ -25,6 +32,13 @@ imMatch.Viewport = function() {
 };
 
 jQuery.extend(imMatch.Viewport.prototype, imMatch.transformable.prototype, {
+    /**
+     * Transforms a given vector with its coordinate to the global coordinate.
+     * @param {Object} vec The given vector
+     * @param {Boolean} deep Indicates whether the given vector can be overwritten by the rsult
+     * @returns {Object} Result Result
+     * @memberof! imMatch.Viewport#
+     */
     transformWithCoordinate: function(vec, /* Optional */ deep) {
         var target, result;
         deep = deep || false;
@@ -49,22 +63,45 @@ jQuery.extend(imMatch.Viewport.prototype, imMatch.transformable.prototype, {
         return jQuery.extend(target, result);
     },
 
+    /**
+     * Computes a affine transform to the local coordinate.
+     * @returns {AffineTransform} Result A affine transform can transform the vector in the global coordinate to the local coordinate
+     * @memberof! imMatch.Viewport#
+     */
     computeAffineTransform2Local: function() {
         return this.computeAppliedTransform().inverse().preConcatenate(this.global2LocalTransform);
     },
 
+    /**
+     * Computes a affine transform for drawing the viewport object.
+     * @returns {AffineTransform} Result A affine transform for drawing the viewport object
+     */
     computeAffineTransformForDraw: function() {
         return this.global2LocalTransform;
     },
 
+    /**
+     * Transforms a given vector through the affine transform to the local coordinate.
+     * @param {Vector} vec A vector
+     * @returns {Vector} Result {x: float, y: float}
+     */
     transform: function(vec) {
         return this.computeAffineTransform2Local().transform(vec);
     },
 
+    /**
+     * Inversely Transforms a given vector through the inverse matrix of affine transform to thel ocal coordinate.
+     * @returns {Vector} Result {x: float, y: float}
+     */
     inverseTransform: function(vec) {
         return this.computeAffineTransform2Local().inverse().transform(vec);
     },
 
+    /**
+     * Deserializes data to a viewport object.
+     * @param {Object} data Serialized data
+     * @returns {Object} Result A viewport object which including the serialized data
+     */
     deserialize: function(data) {
         if (data.global2LocalTransform.length === 6) {
             this.global2LocalTransform = imMatch.AffineTransform.apply(this, data.global2LocalTransform);
@@ -75,4 +112,10 @@ jQuery.extend(imMatch.Viewport.prototype, imMatch.transformable.prototype, {
     },
 });
 
+/**
+ * The current viewport.
+ * @constant
+ * @default
+ * @memberof! imMatch#
+ */
 imMatch.viewport = new imMatch.Viewport();

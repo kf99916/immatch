@@ -44,7 +44,7 @@ imMatch.Scene = function(incrementSceneZ) {
 
 jQuery.extend(imMatch.Scene.prototype, imMatch.transformable.prototype, {
     /**
-     * Transforms a given vector with its coordinate.
+     * Transforms a given vector with its coordinate to the scene coordinate.
      * @param {Object} vec The given vector
      * @param {Boolean} deep Indicates whether the given vector can be overwritten by the rsult
      * @returns {Object} Result Result
@@ -80,7 +80,7 @@ jQuery.extend(imMatch.Scene.prototype, imMatch.transformable.prototype, {
 
     /**
      * Computes a affine transform to the local coordinate.
-     * @returns {Object} Result A affine transform can transform the vector in the global coordinate to the local coordinate
+     * @returns {AffineTransform} Result A affine transform can transform the vector in the scene coordinate to the local coordinate
      * @memberof! imMatch.Scene#
      */
     computeAffineTransform2Local: function() {
