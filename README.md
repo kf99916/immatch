@@ -68,4 +68,4 @@ Please visit [MIT License](https://bitbucket.org/kf99916/immatch/src/d927b6694fe
 # About #
 This project is my master thesis: [Development of SDK for Stitching Multiple Multi-touch Displays](http://ndltd.ncl.edu.tw/cgi-bin/gs32/gsweb.cgi?o=dnclcdr&s=id=%22100NTU05392017%22.&searchmode=basic). I hope imMatch SDK can improve the way users use their smart phones and make life better.
 
-If you have any question and suggestion, want to join me, or have a donation, welcome to contact me by [email](kf99916@gmail.com). Thanks :)
+If you have any question and suggestion, want to join me, or have a donation, welcome to contact me by ```kf99916@gmail.com```. Thanks :)
