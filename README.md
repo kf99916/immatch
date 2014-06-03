@@ -36,6 +36,24 @@ Panorama Viewer makes users see panoramas in a "big screen". Users don't be rest
 
 This is a multi-player tower defense game. One device, one tower. Players can use a easy gesture to connect these devices and fight. It is a new interaction game type.
 
+# What you need to run imMatch WebSocket Server #
+---
+* [Node.js](http://nodejs.org/)
+* [ws](https://github.com/einaros/ws)
+```
+#!sh
+
+npm install ws
+```
+
+# How to run imMatch WebSocket Server #
+---
+```
+#!sh
+
+node immatch-ws-server.min.js
+```
+
 # What you need to build your own imMatch SDK #
 ---
 * [Node.js](http://nodejs.org/)
@@ -66,7 +84,7 @@ cd immatch && npm run build
 The built version of imMatch will be put in the ```dist/``` sub-directory, along with the minified copy and associated map file.
 
 ## The other commands ##
-If you want to build imMatch and copy your build and example to the web document root, then run the build script:
+* If you want to build imMatch and copy your build and example to the web document root, then run the build script:
 
 ```
 #!sh
@@ -76,7 +94,12 @@ cd immatch && npm run start
 
 The destination is defined at "webServerDocuments" key in package.json.
 
-If you want to build imMatch documentation, then run the build script:
+* If you want to build imMatch documentation, then
+
+1. Download the JSDoc template for imMatch documentation: [jaguarjs-jsdoc
+](https://github.com/davidshimjs/jaguarjs-jsdoc) and put them in the```node_modules/grunt-jsdoc/node_modules/jsdoc/templates/jaguarjs-jsdoc``` sub-directory
+
+2. Run the build script:
 ```
 #!sh
 
