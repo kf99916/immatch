@@ -85,14 +85,14 @@ jQuery.extend(ws.Server.prototype, {
      * @memberof! ws.Server#
      */
     searchMatchCandidate: function(jsonObject) {
-        var candidates = this.caches.get("stitchingCandidate"), now = Date.now(), match;
+        var candidates = this.caches.get("stitchingCandidate"), match;
         if (jQuery.isEmptyObject(jsonObject)) {
             return null;
         }
 
         jQuery.each(candidates.reverse(), function(i, candidate) {
             if (jsonObject.deviceID !== candidate.deviceID &&
-                Math.abs(now - candidate.timeStamp) < imMatch.lifetimeCandidate) {
+                Math.abs(jsonObject.timeStamp - candidate.timeStamp) < imMatch.lifetimeCandidate) {
                 match = candidate;
                 return false;
             }
@@ -257,6 +257,8 @@ imMatch.webSocketServer.on("connection", function(webSocket) {
         }
 
         jsonObject = jQuery.parseJSON(event);
+        // Normalize timeStamp (Server time)
+        jsonObject.timeStamp = Date.now();
         imMatch.logDebug("[WebSocket.onmessage] Action Type: " + jsonObject.action, jsonObject);
 
         response = self.response[jsonObject.action];

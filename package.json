@@ -2,7 +2,7 @@
   "name": "immatch",
   "title": "imMatch",
   "description": "SDK for screen stitching in multi-touch mobile devices",
-  "version": "1.0.0",
+  "version": "1.0.1pre",
   "homepage": "https://bitbucket.org/kf99916/immatch",
   "webServerDocuments": "/Library/WebServer/Documents",
   "author": {

@@ -89,7 +89,6 @@ imMatch.SocketClient.prototype = {
         data.action = action;
         data.deviceID = imMatch.device.id;
         data.groupID = imMatch.device.groupID;
-        data.timeStamp = data.timeStamp || Date.now();
         return data;
     },
 
