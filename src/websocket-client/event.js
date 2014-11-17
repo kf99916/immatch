@@ -6,15 +6,15 @@
 jQuery.extend(imMatch, {
     fixTouchMouseEvent: function(event, touchMouse) {
         var jQueryEvent;
-        touchMouse.identifier = touchMouse.identifier || 0;
-        touchMouse.pageX = touchMouse.pageX || 0;
-        touchMouse.pageY = touchMouse.pageY || 0;
+        touchMouse.id = touchMouse.identifier || 0;
+        touchMouse.x = touchMouse.pageX || 0;
+        touchMouse.y = touchMouse.pageY || 0;
 
         // Local Coordinate: The origin is initialized as the upper left corner of imMatch.viewport
         jQueryEvent =  new jQuery.Event(event, {
-                        id: touchMouse.identifier,
-                        x: touchMouse.pageX / imMatch.device.ppi,
-                        y: touchMouse.pageY / imMatch.device.ppi,
+                        id: touchMouse.id,
+                        x: touchMouse.x / imMatch.device.ppi,
+                        y: touchMouse.y / imMatch.device.ppi,
                         order: touchOrder++,
                         coordinate: imMatch.coordinate.local,
                         deviceID: imMatch.device.id,
