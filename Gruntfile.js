@@ -227,5 +227,5 @@ module.exports = function(grunt) {
     grunt.registerTask( "docs", ["jsdoc"]);
 
 	// Default grunt.
-	grunt.registerTask("default", ["jsonlint", "concat", "jshint", "clean", "uglify", "jsdoc"]);
+	grunt.registerTask("default", ["jsonlint", "concat", "jshint", "clean", "uglify"]);
 };
