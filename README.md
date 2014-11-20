@@ -107,6 +107,14 @@ cd immatch && npm run docs
 ```
 The built documentation will be put in the ```docs/``` sub-directory
 
+# Examples #
+---
+## Panorama Viewer ##
+1. Copy all of resources in the example sub-directory to the web document root.
+2. Update the websocket server's IP address at ```example/js/index.js```.
+3. Run imMatch websocket server.
+4. Browse the example website.
+
 # Documentation #
 ---
 * [imMatch WebSocket Client](https://www.googledrive.com/host/0B5EDyG5SmMfOa3kzMWNrYzI2aEk)
