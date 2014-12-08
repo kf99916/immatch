@@ -368,5 +368,18 @@ jQuery.extend(imMatch, {
         }
 
         imMatch.engine.run(Date.now());
+    },
+
+    tryToStitch: function(stitchingInfo) {
+        imMatch.socketClient.request.tryToStitch.call(imMatch.socketClient, stitchingInfo);
+
+        /**
+         * @name imMatch#trytostitch
+         * @event
+         * @param {Object} stitchingInfo Stitching Information
+         */
+        imMatch.trigger("trytostitch", stitchingInfo);
+
+        return this;
     }
 });
