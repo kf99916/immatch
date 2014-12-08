@@ -128,6 +128,7 @@ module.exports = function(grunt) {
                     jshintrc: true
                 },
 				src: [
+                    "package.json", "example/**/*.json",
 					"src/common/intro/global-var.js", "src/common/*.js",
                     "src/websocket-client/*.js", "src/websocket-server/**/*.js",
                     "Gruntfile.js"
@@ -221,11 +222,11 @@ module.exports = function(grunt) {
 	require( "load-grunt-tasks" )( grunt );
 
 	// Watch task
-	grunt.registerTask( "watch", ["jsonlint", "concat", "jshint", "clean", "uglify", "copy"]);
+	grunt.registerTask( "watch", ["concat", "jshint", "clean", "uglify", "copy"]);
 
     // Watch task
     grunt.registerTask( "docs", ["jsdoc"]);
 
 	// Default grunt.
-	grunt.registerTask("default", ["jsonlint", "concat", "jshint", "clean", "uglify"]);
+	grunt.registerTask("default", ["concat", "jshint", "clean", "uglify"]);
 };
