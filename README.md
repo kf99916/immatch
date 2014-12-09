@@ -14,11 +14,16 @@ imMatch Framework makes screen stitching very easy and creates amazing and inter
 # Supported Platform #
 ---
 Platforms that own a web browser supports HTML5 and WebSocket, including:
-* iOS
-* Android
-* BlackBerry OS
+
 * Windows
+
 * Mac OS X
+
+* iOS
+
+* Android
+
+* BlackBerry OS
 
 If you don't know whether your browser support WebSocket, check the following websites:
 * [WebSocket.org Echo Test](http://www.websocket.org/echo.html)
@@ -40,33 +45,30 @@ This is a multi-player tower defense game. One device, one tower. Players can us
 
 # Build up a application and development environment #
 ---
-1. Download and install [Node.js](http://nodejs.org/).
-2. Clone a copy of the main imMatch git repo by running:
+Download and install [Node.js](http://nodejs.org/).
 
+Clone a copy of the main imMatch git repo by running:
 ```
-#!sh
-
+#!sh 
 git clone https://bitbucket.org/kf99916/immatch.git
 ```
 
-3. Enter the imMatch directory and install libraries:
-
+Enter the imMatch directory and install libraries:
 ```
 #!sh
-
 cd immatch && npm install
 ```
 
 # How to build your own imMatch Framework #
 ---
-1. Clone a copy of the main imMatch git repo by running:
+Clone a copy of the main imMatch git repo by running:
 ```
 #!sh
 
 git clone https://bitbucket.org/kf99916/immatch.git
 ```
 
-2. Enter the imMatch directory and run the build script:
+Enter the imMatch directory and run the build script:
 
 ```
 #!sh
@@ -78,14 +80,14 @@ The built version of imMatch will be put in the ```dist/``` sub-directory, along
 # Running the examples #
 ---
 ## Panorama Viewer ##
-1. Running the http server:
+ Running the http server:
 
 ```
 #!sh
 
 cd immatch && npm run start_http
 ```
-2. Running the websocket server:
+Running the websocket server:
 
 ```
 #!sh
@@ -93,7 +95,7 @@ cd immatch && npm run start_http
 cd immatch && npm run start_ws
 ```
 
-3. Browse [Panorama Viewer](http://localhost:8000/pano)
+Browse [Panorama Viewer](http://localhost:8000/pano).
 
 # Documentation #
 ---
