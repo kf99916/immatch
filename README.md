@@ -1,6 +1,6 @@
 ![icon.png](https://bitbucket.org/repo/oRzpRo/images/2891484701-icon.png)
 
-imMatch makes screen stitching very easy and creates amazing and interesting interaction. It supports different multi-touch mobile devices, resolutions, and platforms.
+imMatch Framework makes screen stitching very easy and creates amazing and interesting interaction. It supports different multi-touch mobile devices, resolutions, and platforms.
 
 # News #
 ---
@@ -15,8 +15,10 @@ imMatch makes screen stitching very easy and creates amazing and interesting int
 ---
 Platforms that own a web browser supports HTML5 and WebSocket, including:
 * iOS
-* Android 4.0+ (need Google Chrome for Android)
+* Android
 * BlackBerry OS
+* Windows
+* Mac OS X
 
 If you don't know whether your browser support WebSocket, check the following websites:
 * [WebSocket.org Echo Test](http://www.websocket.org/echo.html)
@@ -36,45 +38,35 @@ Panorama Viewer makes users see panoramas in a "big screen". Users don't be rest
 
 This is a multi-player tower defense game. One device, one tower. Players can use a easy gesture to connect these devices and fight. It is a new interaction game type.
 
-# What you need to run imMatch WebSocket Server #
+# Build up a application and development environment #
 ---
-* [Node.js](http://nodejs.org/)
-* [ws](https://github.com/einaros/ws)
-```
-#!sh
+1. Download and install [Node.js](http://nodejs.org/).
+2. Clone a copy of the main imMatch git repo by running:
 
-npm install ws
-```
-
-# How to run imMatch WebSocket Server #
----
-```
-#!sh
-
-node immatch-ws-server.min.js
-```
-
-# What you need to build your own imMatch SDK #
----
-* [Node.js](http://nodejs.org/)
-* [Grunt](http://gruntjs.com/)
-```
-#!sh
-
-npm install -g grunt-cli
-```
-
-
-# How to build your own imMatch SDK #
----
-Clone a copy of the main imMatch git repo by running:
 ```
 #!sh
 
 git clone https://bitbucket.org/kf99916/immatch.git
 ```
 
-Enter the imMatch directory and run the build script:
+3. Enter the imMatch directory and install libraries:
+
+```
+#!sh
+
+cd immatch && npm install
+```
+
+# How to build your own imMatch Framework #
+---
+1. Clone a copy of the main imMatch git repo by running:
+```
+#!sh
+
+git clone https://bitbucket.org/kf99916/immatch.git
+```
+
+2. Enter the imMatch directory and run the build script:
 
 ```
 #!sh
@@ -83,37 +75,25 @@ cd immatch && npm run build
 ```
 The built version of imMatch will be put in the ```dist/``` sub-directory, along with the minified copy and associated map file.
 
-## The other commands ##
-* If you want to build imMatch and copy your build and example to the web document root, then run the build script:
-
-```
-#!sh
-
-cd immatch && npm run start
-```
-
-The destination is defined at "webServerDocuments" key in package.json.
-
-* If you want to build imMatch documentation, then
-
-1. Download the JSDoc template for imMatch documentation: [jaguarjs-jsdoc
-](https://github.com/davidshimjs/jaguarjs-jsdoc) and put them in the```node_modules/grunt-jsdoc/node_modules/jsdoc/templates/jaguarjs-jsdoc``` sub-directory
-
-2. Run the build script:
-```
-#!sh
-
-cd immatch && npm run docs
-```
-The built documentation will be put in the ```docs/``` sub-directory
-
-# Examples #
+# Running the examples #
 ---
 ## Panorama Viewer ##
-1. Copy all of resources in the example sub-directory to the web document root.
-2. Update the websocket server's IP address at ```example/js/index.js```.
-3. Run imMatch websocket server.
-4. Browse the example website.
+1. Running the http server:
+
+```
+#!sh
+
+cd immatch && npm run start_http
+```
+2. Running the websocket server:
+
+```
+#!sh
+
+cd immatch && npm run start_ws
+```
+
+3. Browse [Panorama Viewer](http://localhost:8000/pano)
 
 # Documentation #
 ---
@@ -130,4 +110,4 @@ Please visit [MIT License](https://bitbucket.org/kf99916/immatch/src/d927b6694fe
 ---
 This project is my master thesis: [Development of SDK for Stitching Multiple Multi-touch Displays](http://ndltd.ncl.edu.tw/cgi-bin/gs32/gsweb.cgi?o=dnclcdr&s=id=%22100NTU05392017%22.&searchmode=basic). I hope imMatch SDK can improve the way users use their smart phones and make life better.
 
-If you have any question and suggestion, want to join me, or have a donation, welcome to contact me by ```kf99916@gmail.com```. Thanks :)
+If you have any questions and suggestions, want to join me, or have a donation, welcome to contact me by ```kf99916@gmail.com```. Thanks :)
