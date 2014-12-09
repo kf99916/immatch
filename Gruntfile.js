@@ -187,7 +187,7 @@ module.exports = function(grunt) {
         copy: {
             main: {
                 files: [
-                    {expand: true, src: ["dist/immatch.js"], dest: "examples/pano/js/"}
+                    {expand: true, cwd:"dist", src: ["immatch.js"], dest: "examples/pano/js/"}
                 ]
             }
         },
