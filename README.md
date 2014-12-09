@@ -11,7 +11,7 @@ imMatch Framework makes screen stitching very easy and creates amazing and inter
 ---
 * [imMatch v1.0.0](https://bitbucket.org/kf99916/immatch/downloads/)
 
-# Supported Platform #
+# Supported Platforms #
 ---
 Platforms that own a web browser supports HTML5 and WebSocket, including:
 
