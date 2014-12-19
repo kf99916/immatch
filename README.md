@@ -88,19 +88,21 @@ The built version of imMatch will be put in the ```dist/``` sub-directory, along
 # Running the examples #
 ---
 ## Panorama Viewer ##
- Running the web server:
-
-```
-#!sh
-
-cd immatch && npm run www
-```
 Running the websocket server:
 
 ```
 #!sh
 
 cd immatch && npm run ws
+```
+
+
+Running the web server:
+
+```
+#!sh
+
+cd immatch && npm run www
 ```
 
 Browse [Panorama Viewer](http://localhost:8000/pano).
