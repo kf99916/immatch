@@ -2,7 +2,7 @@
   "name": "immatch",
   "title": "imMatch",
   "description": "Framework for screen stitching in multi-touch mobile devices",
-  "version": "1.0.1pre",
+  "version": "1.1.0pre",
   "homepage": "https://bitbucket.org/kf99916/immatch",
   "author": {
     "name": "Zheng-Xiang Ke (Kf Ke)"
@@ -29,21 +29,22 @@
     "ws": "0.6.2"
   },
   "devDependencies": {
-    "load-grunt-tasks": "1.0.0",
-    "grunt-cli": "0.1.13",
-    "grunt-contrib-jshint": "0.10.0",
-    "grunt-contrib-uglify": "0.6.0",
-    "grunt-contrib-concat": "0.5.0",
-    "grunt-contrib-clean": "0.6.0",
-    "grunt-contrib-copy": "0.7.0",
-    "grunt-contrib-connect": "0.9.0",
-    "grunt-shell": "1.1.1",
-    "grunt-jsdoc": "0.5.7"
+    "gulp": "3.8.x",
+    "gulp-load-plugins": "0.8.x",
+    "gulp-jshint": "1.9.x",
+    "jshint-stylish": "1.0.x",
+    "gulp-uglify": "1.0.2",
+    "gulp-concat": "2.4.x",
+    "gulp-header": "1.2.x",
+    "gulp-rename": "1.2.x",
+    "gulp-util": "3.0.x",
+    "gulp-webserver": "0.9.x",
+    "gulp-nodemon": "1.0.x",
+    "del": "1.1.x"
   },
   "scripts": {
-    "build": "npm install && grunt",
-    "start_http": "npm install && grunt watch_http",
-    "start_ws": "npm install && grunt watch_ws",
-    "docs": "npm install && grunt docs"
+    "build": "npm install && gulp",
+    "www": "npm install && gulp webserver",
+    "ws": "npm install && gulp websocketserver"
   }
 }

@@ -1,12 +1,14 @@
-/*! imMatch v1.0.1pre Websocket Server
+/**
+ * imMatch v1.1.0pre Websocket Server
  * https://bitbucket.org/kf99916/immatch
  *
- * Copyright 2012 Zheng-Xiang Ke (Kf Ke)
+ * Copyright 2012, 2014 Zheng-Xiang Ke (Kf Ke)
  * Released under the MIT license
  * https://bitbucket.org/kf99916/immatch/wiki/MIT%20LICENSE
  *
- * Date: 2014-12-09
+ * Date: 2014-12-19
  */
+
 (function(global, factory) {
 
     factory(global);
@@ -114,6 +116,11 @@ window = require("jsdom").jsdom().parentWindow;
 
 var jQuery = require("jquery/dist/jquery")(window),
     ws = require("ws");
+/**
+ * Common global variables
+ * @module Common Global Variables
+ */
+
 function returnTrue() {
     return true;
 }
@@ -148,6 +155,22 @@ var document = window.document,
      * @namespace imMatch
      */
     imMatch = jQuery({});
+/**
+ * Create a AffineTransform object: <br>
+ * [  m00  m01  m02  ] <br>
+ * [  m10  m11  m12  ] <br>
+ * [   0    0    1   ] <br>
+ * {@link https://github.com/google/closure-library/blob/master/closure/goog/math/affinetransform.js|Reference}
+ * @class
+ * @classdesc AffineTransform helper.
+ * @constructor
+ * @param {Float} m00
+ * @param {Float} m10
+ * @param {Float} m01
+ * @param {Float} m11
+ * @param {Float} m02
+ * @param {Float} m12
+ */
 imMatch.AffineTransform = function(m00, m10, m01, m11, m02, m12) {
     // Allow instantiation without the 'new' keyword
     if ( !(this instanceof imMatch.AffineTransform) ) {
@@ -532,6 +555,12 @@ imMatch.AffineTransform.prototype = {
         window.console.log();
     }
 };
+/**
+ * Creates a cache to store data from the WebSocket server.
+ * @class
+ * @classdesc A cache which is easy to query and store data from the WebSocket server.
+ * @constructor
+ */
 imMatch.Cache = function() {
     // Allow instantiation without the 'new' keyword
     if ( !(this instanceof imMatch.Cache) ) {
@@ -640,6 +669,10 @@ imMatch.Cache.prototype = {
         return removeItems;
     }
 };
+/**
+ * Core module
+ * @module Core Module
+ */
 jQuery.extend(imMatch, {
     isReady: returnFalse,
 
@@ -706,6 +739,10 @@ jQuery.extend(imMatch, {
         return object;
     }
 });
+/**
+ * Log module
+ * @module Log Module
+ */
 window.console = window.console || {};
 window.console.log = console.log || function() {return arguments;};
 window.console.debug = console.debug || function() {window.console.log.apply(window.console, arguments);};
@@ -817,6 +854,10 @@ jQuery.extend(imMatch, {
     logLevel: imMatch.errorLevel
 });
 
+/**
+ * Math module
+ * @module Math Module
+ */
 jQuery.extend(imMatch, {
     /**
      * Rotates the given point by rad with a specified point as the anchor point.
@@ -965,6 +1006,13 @@ jQuery.extend(imMatch, {
      */
     lifetimeCandidate: 2000
 });
+/**
+ * Creates a Device object.
+ * @class
+ * @classdesc Device represents a device.
+ * @constructor
+ * @param {Object} webSocet The WebSocket of the device
+ */
 imMatch.Device = function(webSocket) {
     // Allow instantiation without the 'new' keyword
     if ( !(this instanceof imMatch.Device) ) {
@@ -1129,6 +1177,12 @@ imMatch.Group.prototype = {
         return true;
     }
 };
+/**
+ *
+ * @class
+ * @classdesc The WebSocket server
+ * @name ws.Server
+ */
 jQuery.extend(ws.Server.prototype, {
     /**
      * The stitching groups. Each group shares the sanme virtual space.

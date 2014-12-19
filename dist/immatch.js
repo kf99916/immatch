@@ -1,12 +1,14 @@
-/*! imMatch v1.0.1pre Client Javascript Framework
+/**
+ * imMatch v1.1.0pre Client Javascript Framework
  * https://bitbucket.org/kf99916/immatch
  *
  * Copyright 2012, 2014 Zheng-Xiang Ke (Kf Ke)
  * Released under the MIT license
  * https://bitbucket.org/kf99916/immatch/wiki/MIT%20LICENSE
  *
- * Date: 2014-12-09
+ * Date: 2014-12-19
  */
+
 (function(global, factory) {
 
     factory(global);
@@ -16006,6 +16008,106 @@ return jQuery;
 
 }));
 
+/* *******************************************
+// Copyright 2010-2013, Anthony Hand
+//
+// BETA NOTICE
+// Previous versions of the JavaScript code for MobileESP were 'regular' 
+// JavaScript. The strength of it was that it was really easy to code and use.
+// Unfortunately, regular JavaScript means that all variables and functions
+// are in the global namespace. There can be collisions with other code libraries
+// which may have similar variable or function names. Collisions cause bugs as each
+// library changes a variable's definition or functionality unexpectedly.
+// As a result, we thought it wise to switch to an "object oriented" style of code.
+// This 'literal notation' technique keeps all MobileESP variables and functions fully self-contained.
+// It avoids potential for collisions with other JavaScript libraries.
+// This technique allows the developer continued access to any desired function or property.
+//
+// Please send feedback to project founder Anthony Hand: anthony.hand@gmail.com
+//
+// File version 2013.10.27 (October 27, 2013)
+//	Updates:
+//	- Made minor update to the InitDeviceScan. Should check Tablet Tier first, then iPhone Tier, then Quick Mobile. 
+//
+// File version 2013.08.01 (August 1, 2013)
+//	Updates:
+//	- Updated DetectMobileQuick(). Moved the 'Exclude Tablets' logic to the top of the method to fix a logic bug.
+//
+// File version 2013.07.13 (July 13, 2013)
+//	Updates:
+//	- Added support for Tizen: variable and DetectTizen().
+//	- Added support for Meego: variable and DetectMeego().
+//	- Added support for Windows Phone 8: variable and DetectWindowsPhone8().
+//	- Added a generic Windows Phone method: DetectWindowsPhone().
+//	- Added support for BlackBerry 10 OS: variable and DetectBlackBerry10Phone().
+//	- Added support for PlayStation Vita handheld: variable and DetectGamingHandheld().
+//	- Updated DetectTierIphone(). Added Tizen; updated the Windows Phone, BB10, and PS Vita support.
+//	- Updated DetectWindowsMobile(). Uses generic DetectWindowsPhone() method rather than WP7.
+//	- Updated DetectSmartphone(). Uses the IsTierIphone variable.
+//	- Updated DetectSonyMylo() with more efficient code.
+//	- Removed DetectGarminNuvifone() from DetectTierIphone(). How many are left in market in 2013? It is detected as a RichCSS Tier device.
+//	- Removed the deviceXoom variable. It was unused.
+//	- Added detection support for the OpenWeb transcoding engine to DetectMobileQuick().
+//
+// File version 2012.07.22  (July 22, 2012)
+//	- Switched to an Object-Oriented programming model using the literal notation technique.  
+//	- NOTE: The literal notation technique allows only 1 instance of this object per web page.  
+//	- Named the JavaScript object "MobileEsp" rather than the old "mDetect."
+//	- Applied many small tweaks and a few refactorings. The most notable ones are listed here...
+//	- Added a variable for Obigo, an embedded browser. Added a lookup for Obigo to DetectMobileQuick().
+//	- Added global variables for quick access to these very useful Boolean values:
+//		- isWebkit, isMobilePhone, isIphone, isAndroid, isAndroidPhone, isTierTablet, isTierIphone, isTierRichCss, isTierGenericMobile
+//	- Updated & simplified DetectSonyMylo(). Updated the variable mylocom2's value to handle both versions. 
+//	- Removed the variable qtembedded, which was only used in Mylo and unnecessary.  
+//	- Simplified OperaMobile().  
+//	- Reorganized DetectMobileQuick().
+//	- Moved the following from DetectMobileQuick() to DetectMobileLong():
+//		- DetectDangerHiptop(), DetectMaemoTablet(), DetectGarminNuvifone(), devicePda  
+//	- Added DetectBada(). Added it to DetectSmartphone & iPhone Tier, too.
+//	- Updated DetectSymbian() to support Opera Mobile 10.
+//	- Removed variable for OpenWeb. Removed its detection from DetectMobileQuick().
+//		It's not clear whether Sprint is still using the OpenWeb transcoding service from OpenWave.
+//
+//
+//
+// LICENSE INFORMATION
+// Licensed under the Apache License, Version 2.0 (the "License"); 
+// you may not use this file except in compliance with the License. 
+// You may obtain a copy of the License at 
+//        http://www.apache.org/licenses/LICENSE-2.0 
+// Unless required by applicable law or agreed to in writing, 
+// software distributed under the License is distributed on an 
+// "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, 
+// either express or implied. See the License for the specific 
+// language governing permissions and limitations under the License. 
+//
+//
+// ABOUT THIS PROJECT
+//   Project Owner: Anthony Hand
+//   Email: anthony.hand@gmail.com
+//   Web Site: http://www.mobileesp.com
+//   Source Files: http://code.google.com/p/mobileesp/
+//   
+//   Versions of this code are available for:
+//      PHP, JavaScript, Java, ASP.NET (C#), Ruby and others
+//
+//
+// WARNING: 
+//   These JavaScript-based device detection features may ONLY work 
+//   for the newest generation of smartphones, such as the iPhone, 
+//   Android and Palm WebOS devices.
+//   These device detection features may NOT work for older smartphones 
+//   which had poor support for JavaScript, including 
+//   older BlackBerry, PalmOS, and Windows Mobile devices. 
+//   Additionally, because JavaScript support is extremely poor among 
+//   'feature phones', these features may not work at all on such devices.
+//   For better results, consider using a server-based version of this code, 
+//   such as Java, APS.NET, PHP, or Ruby.
+//
+// *******************************************
+*/
+
+
 var MobileEsp = {
 
 	//GLOBALLY USEFUL VARIABLES
@@ -16991,6 +17093,11 @@ MobileEsp.InitDeviceScan();
             clearTimeout(id);
         };
 }());
+/**
+ * Checks all the libraries imMatch SDK needs are ready or not.
+ * @module Check Libraries Module
+ */
+
 // 1. jQuery library
 if (jQuery === undefined) {
     window.alert("jQuery library is not found." +
@@ -17017,6 +17124,11 @@ if (!jQuery.isFunction(Math.uuidFast)) {
         "Please include it before using imMatch. http://www.broofa.com/Tools/Math.uuid.js");
     window.stop();
 }
+/**
+ * Common global variables
+ * @module Common Global Variables
+ */
+
 function returnTrue() {
     return true;
 }
@@ -17051,6 +17163,22 @@ var document = window.document,
      * @namespace imMatch
      */
     imMatch = jQuery({});
+/**
+ * Create a AffineTransform object: <br>
+ * [  m00  m01  m02  ] <br>
+ * [  m10  m11  m12  ] <br>
+ * [   0    0    1   ] <br>
+ * {@link https://github.com/google/closure-library/blob/master/closure/goog/math/affinetransform.js|Reference}
+ * @class
+ * @classdesc AffineTransform helper.
+ * @constructor
+ * @param {Float} m00
+ * @param {Float} m10
+ * @param {Float} m01
+ * @param {Float} m11
+ * @param {Float} m02
+ * @param {Float} m12
+ */
 imMatch.AffineTransform = function(m00, m10, m01, m11, m02, m12) {
     // Allow instantiation without the 'new' keyword
     if ( !(this instanceof imMatch.AffineTransform) ) {
@@ -17435,6 +17563,12 @@ imMatch.AffineTransform.prototype = {
         window.console.log();
     }
 };
+/**
+ * Creates a cache to store data from the WebSocket server.
+ * @class
+ * @classdesc A cache which is easy to query and store data from the WebSocket server.
+ * @constructor
+ */
 imMatch.Cache = function() {
     // Allow instantiation without the 'new' keyword
     if ( !(this instanceof imMatch.Cache) ) {
@@ -17543,6 +17677,10 @@ imMatch.Cache.prototype = {
         return removeItems;
     }
 };
+/**
+ * Core module
+ * @module Core Module
+ */
 jQuery.extend(imMatch, {
     isReady: returnFalse,
 
@@ -17609,6 +17747,10 @@ jQuery.extend(imMatch, {
         return object;
     }
 });
+/**
+ * Log module
+ * @module Log Module
+ */
 window.console = window.console || {};
 window.console.log = console.log || function() {return arguments;};
 window.console.debug = console.debug || function() {window.console.log.apply(window.console, arguments);};
@@ -17720,6 +17862,10 @@ jQuery.extend(imMatch, {
     logLevel: imMatch.errorLevel
 });
 
+/**
+ * Math module
+ * @module Math Module
+ */
 jQuery.extend(imMatch, {
     /**
      * Rotates the given point by rad with a specified point as the anchor point.
@@ -17857,6 +18003,10 @@ jQuery.extend(imMatch, {
     }
 });
 /**
+ * Global variables
+ * @module Global Variables
+ */
+    /**
      * Records the order of touch events.
      * It is reset if there is no any touchMouseEvent in cache.
      * @see imMatch.gestureRecognizer
@@ -17972,6 +18122,11 @@ imMatch.mode = {
 
     stitched: imMatch.makeMode(imMatch.mainMode.stitched)
 };
+/**
+ * Defines interface of a transformable object
+ * @default
+ * @namespace
+ */
 imMatch.transformable = {
     members: {
         x: 0,
@@ -18170,6 +18325,13 @@ imMatch.transformable.prototype = {
         this.shearFactor.y += shearFactor.y || 0;
     }
 };
+/**
+ * Defines size and resolution specification of the known devices.
+ * @readonly
+ * @constant
+ * @default
+ * @namespace
+ */
 imMatch.deviceHelper = {
     MacBookPro: function() {
         return {ppi: 113,
@@ -18256,6 +18418,13 @@ jQuery.extend(imMatch.device, {
         return this;
     }
 });
+/**
+ * Creates a Viewport object.
+ * @class
+ * @classdesc Viewport is a transformable object and it represents the region a user can see.
+ * @see imMatch.transformable
+ * @constructor
+ */
 imMatch.Viewport = function() {
     // Allow instantiation without the 'new' keyword
     if ( !(this instanceof imMatch.Viewport) ) {
@@ -18370,6 +18539,13 @@ jQuery.extend(imMatch.Viewport.prototype, imMatch.transformable.prototype, {
  * @memberof! imMatch#
  */
 imMatch.viewport = new imMatch.Viewport();
+/**
+ * Creates a cursor object.
+ * @class
+ * @classdesc A cursor constists of all touchMouseEvent which is the same ID.
+ * @constructor
+ * @param {Object} touchMouseEvent A touchMouseEvent
+ */
 imMatch.Cursor = function(touchMouseEvent) {
     // Allow instantiation without the 'new' keyword
     if ( !(this instanceof imMatch.Cursor) ) {
@@ -19070,6 +19246,11 @@ imMatch.syncGesture = {
         return this;
     }
 };
+/**
+ * Bind window's touch or mouse events
+ * @module Bind Toch Event
+ */
+
 jQuery.extend(imMatch, {
     /**
      * Determines whether touches are supported in the device.
@@ -19274,6 +19455,14 @@ jQuery.extend(imMatch, {
         }
     }
 });
+/**
+ * Creates a CanvasAdapter object.
+ * @class
+ * @classdesc It helps draw all elements which are located in the global coordinate.
+ * @constructor
+ * @param {String} canvasID The default vaule is "canvas".
+ * CanvasAdapter trys to create a canvas element with canvasID if canvasID is not found (Optional).
+ */
 imMatch.CanvasAdapter = function CanvasAdapter(canvasID) {
     // Allow instantiation without the 'new' keyword
     if ( !(this instanceof imMatch.CanvasAdapter) ) {
@@ -19421,6 +19610,10 @@ imMatch.CanvasAdapter.prototype = {
         this.context.restore();
     }
 };
+/**
+ * Manages imMatch SDK client.
+ * @namespace
+ */
 imMatch.engine = {
     /**
      * Returns true if the engine is ready to run; otherwise, false.
@@ -19802,6 +19995,11 @@ jQuery.extend(imMatch, {
         return this;
     }
 });
+/**
+ * Event
+ * @module Event
+ */
+
 jQuery.extend(imMatch, {
     fixTouchMouseEvent: function(event, touchMouse) {
         var jQueryEvent;
@@ -19896,6 +20094,10 @@ imMatch.noConflict = function(deep) {
 
 // Expose imMatch and $im identifiers
 window.imMatch = window.$im = imMatch;
+/**
+ * Takes responsibility for recognizing the synchrouous gestures and the local gestures
+ * @namespace
+ */
 imMatch.gestureRecognizer = {
     /**
      * Recognizes the synchrouous gestures and the local gestures
@@ -19948,6 +20150,10 @@ imMatch.gestureRecognizer = {
         return touchedSprites;
     }
 };
+/**
+ * Takes responsibility for loading all the defined images.
+ * @namespace
+ */
 imMatch.loader = {
     /**
      * Loads load-list.json. It will start to load all the defined images if it succeeded to load the json; otherwise, throw a exception.
@@ -20037,6 +20243,10 @@ imMatch.loader = {
         });
     }
 };
+/**
+ * Recognizes which sprtie performs the local gesture.
+ * @namespace
+ */
 imMatch.localGesture = {
     /**
      * Stores sprite with touch ID key. {touchMouseEvent.id: sprite}
@@ -20159,6 +20369,14 @@ imMatch.localGesture = {
         return result;
     }
 };
+/**
+ * Creates a Scene object.
+ * @class
+ * @classdesc Scene is a transformable object and owns sprites.
+ * @see imMatch.transformable
+ * @constructor
+ * @param {Boolean} incrementSceneZ Indicates whether sceneZ is incresed.
+ */
 imMatch.Scene = function(incrementSceneZ) {
     // Allow instantiation without the 'new' keyword
     if ( !(this instanceof imMatch.Scene) ) {
@@ -20369,6 +20587,13 @@ jQuery.extend(imMatch, {
         return this;
     }
 });
+/**
+ * Creates a SocketClient object.
+ * @class
+ * @classdesc SocketClient is a client of the WebSocket.
+ * @constructor
+ * @param {String} webSocketServerURL URL of the WebSocket server. The default vaule is "ws://127.0.0.1:8080"
+ */
 imMatch.SocketClient = function(webSocketServerURL) {
     // Allow instantiation without the 'new' keyword
     if ( !(this instanceof imMatch.SocketClient) ) {
@@ -20558,6 +20783,13 @@ imMatch.SocketClient.prototype = {
         }
     }
 };
+/**
+ * Creates a Sprite object.
+ * @class
+ * @classdesc Sprite is a transformable object and it is a basic element in imMatch SDK.
+ * @see imMatch.transformable
+ * @constructor
+ */
 imMatch.Sprite = function() {
     // Allow instantiation without the 'new' keyword
     if ( !(this instanceof imMatch.Sprite) ) {
