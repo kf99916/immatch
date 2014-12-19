@@ -11,7 +11,7 @@ imMatch Framework makes screen stitching very easy and creates amazing and inter
 # Release Notes #
 ---
 ## [imMatch v1.0.0](https://bitbucket.org/kf99916/immatch/downloads/imMatch-v1.0.0.zip) ##
-## [imMatch v1.0.1](https://bitbucket.org/kf99916/immatch/downloads/imMatch-v1.0.0.zip) ##
+## [imMatch v1.0.1](https://bitbucket.org/kf99916/immatch/downloads/imMatch-v1.0.1.zip) ##
 
 ### Bug Fixes ###
 
