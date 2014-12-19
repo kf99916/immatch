@@ -6,10 +6,18 @@ imMatch Framework makes screen stitching very easy and creates amazing and inter
 ---
 * 2014.06.02: imMatch v1.0.0
 * 2012.10.26: imMatch v1.0.0 kicks off
+* 2012.12.19: imMatch v1.0.1
 
-# Version #
+# Release Notes #
 ---
-* [imMatch v1.0.0](https://bitbucket.org/kf99916/immatch/downloads/)
+## [imMatch v1.0.0](https://bitbucket.org/kf99916/immatch/downloads/imMatch-v1.0.0.zip) ##
+## [imMatch v1.0.1](https://bitbucket.org/kf99916/immatch/downloads/imMatch-v1.0.1.zip) ##
+
+### Bug Fixes ###
+
+* Support iOS 8.1
+
+      (fixes #1 - JavaScript error message "Typerror: Attempted to assign to readonly property." on iOS 8.1) 
 
 # Supported Platforms #
 ---
@@ -80,19 +88,21 @@ The built version of imMatch will be put in the ```dist/``` sub-directory, along
 # Running the examples #
 ---
 ## Panorama Viewer ##
- Running the http server:
-
-```
-#!sh
-
-cd immatch && npm run start_http
-```
 Running the websocket server:
 
 ```
 #!sh
 
-cd immatch && npm run start_ws
+cd immatch && npm run ws
+```
+
+
+Running the web server:
+
+```
+#!sh
+
+cd immatch && npm run www
 ```
 
 Browse [Panorama Viewer](http://localhost:8000/pano).
