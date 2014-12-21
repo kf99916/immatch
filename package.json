@@ -1,7 +1,7 @@
 {
   "name": "immatch",
   "title": "imMatch",
-  "description": "Framework for screen stitching in multi-touch mobile devices",
+  "description": "imMatch is a JavaScript framework for everyone who wants to tile multiple screens to create big tablets on multi-touch mobile devices",
   "version": "1.1.0pre",
   "homepage": "https://bitbucket.org/kf99916/immatch",
   "author": {

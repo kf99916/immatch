@@ -1,6 +1,6 @@
 ![icon.png](https://bitbucket.org/repo/oRzpRo/images/2891484701-icon.png)
 
-imMatch Framework makes screen stitching very easy and creates amazing and interesting interaction. It supports different multi-touch mobile devices, resolutions, and platforms.
+imMatch is a JavaScript framework for everyone who wants to tile multiple screens to create big tablets on multi-touch mobile devices. It supports different multi-touch mobile devices, resolutions, and platforms.
 
 # News #
 ---
@@ -17,7 +17,7 @@ imMatch Framework makes screen stitching very easy and creates amazing and inter
 
 * Support iOS 8.1
 
-      (fixes #1 - JavaScript error message "Typerror: Attempted to assign to readonly property." on iOS 8.1) 
+      (fixes #1 - JavaScript error message "Typerror: Attempted to assign to readonly property." on iOS 8.1)
 
 # Supported Platforms #
 ---
@@ -57,7 +57,7 @@ Download and install [Node.js](http://nodejs.org/).
 
 Clone a copy of the main imMatch git repo by running:
 ```
-#!sh 
+#!sh
 git clone https://bitbucket.org/kf99916/immatch.git
 ```
 

@@ -47,7 +47,7 @@ gulp.task('jshint', function() {
 
 gulp.task('client-scripts', function() {
     var banner = ['/**',
-            ' * <%= pkg.title %> v<%= pkg.version %> Client Javascript Framework',
+            ' * <%= pkg.title %> v<%= pkg.version %> Client JavaScript Framework',
             ' * <%= pkg.homepage %>',
             ' *',
             ' * Copyright 2012, <%= today.year %> <%= pkg.author.name %>',
@@ -58,7 +58,7 @@ gulp.task('client-scripts', function() {
             ' */',
             ''].join('\n'),
         minBanner = ['/**',
-            ' * <%= pkg.title %> v<%= pkg.version %> Client Javascript Framework <%= pkg.homepage %> | <%= pkg.licenses[0].type %> license',
+            ' * <%= pkg.title %> v<%= pkg.version %> Client JavaScript Framework <%= pkg.homepage %> | <%= pkg.licenses[0].type %> license',
             ' */',
             ''].join('\n');
 
