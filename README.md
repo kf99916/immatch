@@ -56,31 +56,25 @@ This is a multi-player tower defense game. One device, one tower. Players can us
 Download and install [Node.js](http://nodejs.org/).
 
 Clone a copy of the main imMatch git repo by running:
-```
-#!sh
+```sh
 git clone https://bitbucket.org/kf99916/immatch.git
 ```
 
 Enter the imMatch directory and install libraries:
-```
-#!sh
+```sh
 cd immatch && npm install
 ```
 
 # How to build your own imMatch Framework #
 ---
 Clone a copy of the main imMatch git repo by running:
-```
-#!sh
-
+```sh
 git clone https://bitbucket.org/kf99916/immatch.git
 ```
 
 Enter the imMatch directory and run the build script:
 
-```
-#!sh
-
+```sh
 cd immatch && npm run build
 ```
 The built version of imMatch will be put in the ```dist/``` sub-directory, along with the minified copy and associated map file.
@@ -90,18 +84,14 @@ The built version of imMatch will be put in the ```dist/``` sub-directory, along
 ## Panorama Viewer ##
 Running the websocket server:
 
-```
-#!sh
-
+```sh
 cd immatch && npm run ws
 ```
 
 
 Running the web server:
 
-```
-#!sh
-
+```sh
 cd immatch && npm run www
 ```
 
@@ -111,12 +101,6 @@ Browse [Panorama Viewer](http://localhost:8000/pano).
 ---
 * [imMatch WebSocket Client](https://www.googledrive.com/host/0B5EDyG5SmMfOa3kzMWNrYzI2aEk)
 * [imMatch WebSocket Server](https://www.googledrive.com/host/0B5EDyG5SmMfOSm1WOXdGLXpkMlU)
-
-# License #
----
-You use imMatch project under the terms of the MIT License.
-
-Please visit [MIT License](https://bitbucket.org/kf99916/immatch/src/d927b6694feed5b84c323bcd636fdbe14cf07d3a/MIT-LICENSE.txt?at=master) to get more details.
 
 # About #
 ---
